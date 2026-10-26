@@ -1,10 +1,10 @@
 """Typed contracts for synthetic AML investigation records."""
 
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 # Shared field types
@@ -16,6 +16,11 @@ Money = Annotated[
 Currency = Annotated[
     str,
     Field(pattern=r"^[A-Z]{3}$"),
+]
+
+TransactionAmount = Annotated[
+    Decimal,
+    Field(gt=0, allow_inf_nan=False, decimal_places=2),
 ]
 
 
@@ -84,3 +89,29 @@ class Account(BaseModel):
     account_type: str = Field(min_length=1)
     currency: Currency
     opened_at: date
+
+
+class Transaction(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    transaction_id: str = Field(min_length=1)
+    account_id: str = Field(min_length=1)
+    transaction_type: Literal[
+        "cash_deposit",
+        "domestic_transfer",
+        "international_transfer",
+    ]
+    direction: Literal["credit", "debit"]
+    amount: TransactionAmount
+    currency: Currency
+    occurred_at: datetime
+    counterparty_id: str | None = Field(min_length=1)
+    description: str | None
+
+    @field_validator("occurred_at")
+    @classmethod
+    def require_timezone(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("transaction timestamp must include a timezone")
+
+        return value

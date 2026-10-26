@@ -4,7 +4,7 @@ import json
 import unittest
 
 from copy import deepcopy
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 
@@ -13,6 +13,7 @@ from pydantic import ValidationError
 from aml_triage.contracts import (
     Account,
     Customer,
+    Transaction,
 )
 
 
@@ -149,6 +150,127 @@ class TestCustomerAccountContracts(unittest.TestCase):
 
         with self.assertRaises(ValidationError):
             Customer.model_validate(data["customer"])
+
+
+class TestTransactionContracts(unittest.TestCase):
+
+    def test_all_transactions_in_five_golden_cases(self):
+        """Every transaction in the valid synthetic fixtures must validate."""
+
+        for case_id in ("G01", "G02", "G03", "G04", "G05"):
+
+            with self.subTest(case=case_id):
+
+                data = load_case(case_id)
+
+                for transaction_data in data["transactions"]:
+
+                    transaction = Transaction.model_validate(
+                        transaction_data
+                    )
+
+                    self.assertEqual(
+                        transaction.transaction_id,
+                        transaction_data["transaction_id"],
+                    )
+
+    def test_amount_and_timestamp_have_correct_types(self):
+        """Amounts become Decimal and timestamps become aware datetimes."""
+
+        transaction_data = load_case("G01")["transactions"][0]
+        transaction = Transaction.model_validate(transaction_data)
+
+        self.assertIsInstance(transaction.amount, Decimal)
+        self.assertIsInstance(transaction.occurred_at, datetime)
+        self.assertIsNotNone(transaction.occurred_at.utcoffset())
+
+    def test_invalid_amounts_are_rejected(self):
+        """Transaction amounts must be positive, finite, and cent-precision."""
+
+        for amount in ("0", "-1.00", "NaN", "Infinity", "-Infinity", "1.001"):
+
+            with self.subTest(amount=amount):
+
+                transaction_data = deepcopy(load_case("G01")["transactions"][0])
+                transaction_data["amount"] = amount
+
+                with self.assertRaises(ValidationError):
+                    Transaction.model_validate(transaction_data)
+
+    def test_invalid_currency_and_direction_are_rejected(self):
+        """Currency and direction must use their supported formats."""
+
+        for field, value in (("currency", "usd"), ("direction", "outgoing")):
+
+            with self.subTest(field=field):
+
+                transaction_data = deepcopy(load_case("G01")["transactions"][0])
+                transaction_data[field] = value
+
+                with self.assertRaises(ValidationError):
+                    Transaction.model_validate(transaction_data)
+
+    def test_unsupported_transaction_type_is_rejected(self):
+        transaction_data = deepcopy(load_case("G01")["transactions"][0])
+        transaction_data["transaction_type"] = "crypto_transfer"
+
+        with self.assertRaises(ValidationError):
+            Transaction.model_validate(transaction_data)
+
+    def test_naive_timestamp_is_rejected(self):
+        transaction_data = deepcopy(load_case("G01")["transactions"][0])
+        transaction_data["occurred_at"] = "2026-10-12T10:00:00"
+
+        with self.assertRaises(ValidationError):
+            Transaction.model_validate(transaction_data)
+
+    def test_missing_required_fields_are_rejected(self):
+        """All declared transaction fields, including nullable fields, are required."""
+
+        for field in (
+            "transaction_id",
+            "account_id",
+            "transaction_type",
+            "direction",
+            "amount",
+            "currency",
+            "occurred_at",
+            "counterparty_id",
+            "description",
+        ):
+
+            with self.subTest(field=field):
+
+                transaction_data = deepcopy(load_case("G01")["transactions"][0])
+                transaction_data.pop(field)
+
+                with self.assertRaises(ValidationError):
+                    Transaction.model_validate(transaction_data)
+
+    def test_nullable_fields_accept_explicit_null(self):
+        transaction_data = load_case("G01")["transactions"][0]
+        transaction = Transaction.model_validate(transaction_data)
+
+        self.assertIsNone(transaction.counterparty_id)
+        self.assertIsNone(transaction.description)
+
+    def test_empty_identifiers_and_counterparty_are_rejected(self):
+        for field in ("transaction_id", "account_id", "counterparty_id"):
+
+            with self.subTest(field=field):
+
+                transaction_data = deepcopy(load_case("G02")["transactions"][0])
+                transaction_data[field] = ""
+
+                with self.assertRaises(ValidationError):
+                    Transaction.model_validate(transaction_data)
+
+    def test_unknown_field_is_rejected(self):
+        transaction_data = deepcopy(load_case("G01")["transactions"][0])
+        transaction_data["unknown_field"] = "unexpected value"
+
+        with self.assertRaises(ValidationError):
+            Transaction.model_validate(transaction_data)
 
 
 if __name__ == "__main__":
