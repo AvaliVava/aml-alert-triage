@@ -20,12 +20,18 @@ Synthetic data; no real-bank decisions or filing; three *recommended* actions; d
 All remain experiments, not accomplishments.
 
 ## Phase 1 closeout checklist
-- [x] Consolidated learning manual created.
-- [x] Engineering reference drafts prepared.
-- [ ] Review the drafts against the existing GitHub charter and current project files.
-- [ ] Record approved decisions and unresolved questions in the canonical decision log.
-- [ ] Commit agreed files to GitHub and verify commit and passing tests.
-- [ ] Update project status to mark Phase 1 complete.
+
+- [x] Complete AML domain studies.
+- [x] Prepare the Phase 1 learning manual.
+- [x] Create six engineering reference documents.
+- [x] Review documentation against the project charter and roadmap.
+- [x] Update PROJECT_STATUS.md and reconcile the roadmap and charter.
+- [x] Commit documentation and verify the GitHub Actions foundation checks.
+- [x] Merge Pull Request #1 into main.
+
+**Final status:** Phase 1 completed on October 26, 2026.
+
+**Next phase:** Phase 2 — Specifications, Data Contracts, Labeling Rubric, Golden Cases, and Evaluation Design.
 
 **Repository review note (26 October 2026):** Public `main` contains `PROJECT_CHARTER.md` and `PROJECT_STATUS.md`. The charter aligns with the synthetic-data, human-review, baseline-first scope. `PROJECT_STATUS.md` still describes the GitHub repository as not created and only old local Python verification; this conflicts with the confirmed public repository and reported later Python 3.11 testing. Verify actual current tests and commit status, then correct those stale statements without guessing implementation progress.
 
