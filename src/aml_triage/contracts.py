@@ -115,3 +115,46 @@ class Transaction(BaseModel):
             raise ValueError("transaction timestamp must include a timezone")
 
         return value
+
+
+class Counterparty(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    counterparty_id: str = Field(min_length=1)
+    display_name: str = Field(min_length=1)
+    relationship_status: str
+
+
+class Alert(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    alert_id: str = Field(min_length=1)
+    customer_id: str = Field(min_length=1)
+    rule_id: str = Field(min_length=1)
+    created_at: datetime
+    transaction_ids: list[Annotated[str, Field(min_length=1)]] = Field(min_length=1)
+
+    @field_validator("created_at")
+    @classmethod
+    def require_timezone(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("alert timestamp must include a timezone")
+
+        return value
+
+
+class CaseMetadata(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    case_id: str = Field(min_length=1)
+    primary_alert_id: str = Field(min_length=1)
+    opened_at: datetime
+    policy_id: str = Field(min_length=1)
+
+    @field_validator("opened_at")
+    @classmethod
+    def require_timezone(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("case timestamp must include a timezone")
+
+        return value

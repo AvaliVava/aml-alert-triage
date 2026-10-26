@@ -1,10 +1,10 @@
-"""Tests for AML customer and account data contracts."""
+"""Tests for synthetic AML record contracts."""
 
 import json
 import unittest
 
 from copy import deepcopy
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone, tzinfo
 from decimal import Decimal
 from pathlib import Path
 
@@ -12,6 +12,9 @@ from pydantic import ValidationError
 
 from aml_triage.contracts import (
     Account,
+    Alert,
+    CaseMetadata,
+    Counterparty,
     Customer,
     Transaction,
 )
@@ -271,6 +274,272 @@ class TestTransactionContracts(unittest.TestCase):
 
         with self.assertRaises(ValidationError):
             Transaction.model_validate(transaction_data)
+
+
+class TestCounterpartyContracts(unittest.TestCase):
+
+    def test_all_counterparties_in_five_golden_cases(self):
+        for case_id in ("G01", "G02", "G03", "G04", "G05"):
+
+            with self.subTest(case=case_id):
+                for record in load_case(case_id)["counterparties"]:
+                    counterparty = Counterparty.model_validate(record)
+                    self.assertEqual(counterparty.model_dump(), record)
+
+    def test_missing_required_fields_are_rejected(self):
+        for field in ("counterparty_id", "display_name", "relationship_status"):
+
+            with self.subTest(field=field):
+                record = load_case("G02")["counterparties"][0]
+                record.pop(field)
+
+                with self.assertRaises(ValidationError):
+                    Counterparty.model_validate(record)
+
+    def test_empty_identifier_and_name_are_rejected(self):
+        for field in ("counterparty_id", "display_name"):
+
+            with self.subTest(field=field):
+                record = load_case("G02")["counterparties"][0]
+                record[field] = ""
+
+                with self.assertRaises(ValidationError):
+                    Counterparty.model_validate(record)
+
+    def test_incorrect_field_types_are_rejected(self):
+        for field in ("counterparty_id", "display_name", "relationship_status"):
+            for value in (None, 123, True, [], {}):
+
+                with self.subTest(field=field, value=value):
+                    record = load_case("G02")["counterparties"][0]
+                    record[field] = value
+
+                    with self.assertRaises(ValidationError):
+                        Counterparty.model_validate(record)
+
+    def test_unknown_field_is_rejected(self):
+        record = load_case("G02")["counterparties"][0]
+        record["verified"] = True
+
+        with self.assertRaises(ValidationError):
+            Counterparty.model_validate(record)
+
+    def test_unverified_relationship_is_preserved(self):
+        record = load_case("G02")["counterparties"][0]
+        counterparty = Counterparty.model_validate(record)
+
+        self.assertEqual(counterparty.relationship_status, "unverified")
+        self.assertEqual(counterparty.model_dump(), record)
+
+    def test_relationship_status_vocabulary_is_open(self):
+        record = load_case("G02")["counterparties"][0]
+        record["relationship_status"] = "pending_relationship_review"
+
+        counterparty = Counterparty.model_validate(record)
+
+        self.assertEqual(counterparty.relationship_status, record["relationship_status"])
+
+
+class TestAlertCaseMetadataContracts(unittest.TestCase):
+
+    def test_alert_and_case_metadata_in_five_golden_cases(self):
+        for case_id in ("G01", "G02", "G03", "G04", "G05"):
+
+            with self.subTest(case=case_id):
+                data = load_case(case_id)
+                alert = Alert.model_validate(data["alert"])
+                metadata = CaseMetadata.model_validate(data["case"])
+
+                self.assertEqual(alert.alert_id, data["alert"]["alert_id"])
+                self.assertEqual(alert.customer_id, data["alert"]["customer_id"])
+                self.assertEqual(alert.rule_id, data["alert"]["rule_id"])
+                self.assertEqual(alert.transaction_ids, data["alert"]["transaction_ids"])
+                self.assertEqual(metadata.case_id, data["case"]["case_id"])
+                self.assertEqual(metadata.primary_alert_id, data["case"]["primary_alert_id"])
+                self.assertEqual(metadata.policy_id, data["case"]["policy_id"])
+
+                for timestamp in (alert.created_at, metadata.opened_at):
+                    self.assertIsInstance(timestamp, datetime)
+                    self.assertIsNotNone(timestamp.tzinfo)
+                    self.assertIsNotNone(timestamp.utcoffset())
+
+    def test_cases_without_counterparties_are_accepted(self):
+        for case_id in ("G01", "G05"):
+
+            with self.subTest(case=case_id):
+                data = load_case(case_id)
+                counterparties = [
+                    Counterparty.model_validate(record)
+                    for record in data["counterparties"]
+                ]
+
+                self.assertEqual(counterparties, [])
+                self.assertIsInstance(Alert.model_validate(data["alert"]), Alert)
+                self.assertIsInstance(CaseMetadata.model_validate(data["case"]), CaseMetadata)
+
+    def test_missing_required_fields_are_rejected(self):
+        for model, key, fields in (
+            (Alert, "alert", ("alert_id", "customer_id", "rule_id", "created_at", "transaction_ids")),
+            (CaseMetadata, "case", ("case_id", "primary_alert_id", "opened_at", "policy_id")),
+        ):
+            for field in fields:
+
+                with self.subTest(model=model.__name__, field=field):
+                    record = load_case("G01")[key]
+                    record.pop(field)
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_empty_identifiers_are_rejected(self):
+        for model, key, fields in (
+            (Alert, "alert", ("alert_id", "customer_id", "rule_id")),
+            (CaseMetadata, "case", ("case_id", "primary_alert_id", "policy_id")),
+        ):
+            for field in fields:
+
+                with self.subTest(model=model.__name__, field=field):
+                    record = load_case("G01")[key]
+                    record[field] = ""
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_incorrect_identifier_types_are_rejected(self):
+        for model, key, fields in (
+            (Alert, "alert", ("alert_id", "customer_id", "rule_id")),
+            (CaseMetadata, "case", ("case_id", "primary_alert_id", "policy_id")),
+        ):
+            for field in fields:
+                for value in (None, 123, True, [], {}):
+
+                    with self.subTest(model=model.__name__, field=field, value=value):
+                        record = load_case("G01")[key]
+                        record[field] = value
+
+                        with self.assertRaises(ValidationError):
+                            model.model_validate(record)
+
+    def test_invalid_or_naive_timestamps_are_rejected(self):
+        class NoOffsetTimezone(tzinfo):
+            def utcoffset(self, dt):
+                return None
+
+        for model, key, field in (
+            (Alert, "alert", "created_at"),
+            (CaseMetadata, "case", "opened_at"),
+        ):
+            for value in (
+                "not-a-timestamp",
+                "2026-02-30T10:00:00Z",
+                "2026-10-16T10:00:00",
+                "2026-10-16",
+                datetime(2026, 10, 16, 10),
+                datetime(2026, 10, 16, 10, tzinfo=NoOffsetTimezone()),
+            ):
+
+                with self.subTest(model=model.__name__, value=value):
+                    record = load_case("G01")[key]
+                    record[field] = value
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_incorrect_timestamp_types_are_rejected(self):
+        for model, key, field in (
+            (Alert, "alert", "created_at"),
+            (CaseMetadata, "case", "opened_at"),
+        ):
+            for value in (None, True, [], {}, date(2026, 10, 16)):
+
+                with self.subTest(model=model.__name__, value=value):
+                    record = load_case("G01")[key]
+                    record[field] = value
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_timezone_offsets_and_aware_datetimes_are_accepted(self):
+        expected = datetime(2026, 10, 16, 13, tzinfo=timezone(timedelta(hours=3)))
+
+        for model, key, field in (
+            (Alert, "alert", "created_at"),
+            (CaseMetadata, "case", "opened_at"),
+        ):
+            for value in ("2026-10-16T13:00:00+03:00", expected):
+
+                with self.subTest(model=model.__name__, value=value):
+                    record = load_case("G01")[key]
+                    record[field] = value
+                    timestamp = getattr(model.model_validate(record), field)
+
+                    self.assertIsInstance(timestamp, datetime)
+                    self.assertEqual(timestamp, expected)
+                    self.assertEqual(timestamp.utcoffset(), timedelta(hours=3))
+
+    def test_empty_alert_transaction_list_is_rejected(self):
+        record = load_case("G01")["alert"]
+        record["transaction_ids"] = []
+
+        with self.assertRaises(ValidationError):
+            Alert.model_validate(record)
+
+    def test_empty_alert_transaction_identifier_is_rejected(self):
+        for value in ([""], ["TX-G01-01", ""]):
+
+            with self.subTest(value=value):
+                record = load_case("G01")["alert"]
+                record["transaction_ids"] = value
+
+                with self.assertRaises(ValidationError):
+                    Alert.model_validate(record)
+
+    def test_incorrect_alert_transaction_list_types_are_rejected(self):
+        for value in (None, "TX-G01-01", 123, True, {"TX-G01-01": True}):
+
+            with self.subTest(value=value):
+                record = load_case("G01")["alert"]
+                record["transaction_ids"] = value
+
+                with self.assertRaises(ValidationError):
+                    Alert.model_validate(record)
+
+    def test_incorrect_alert_transaction_identifier_types_are_rejected(self):
+        for value in (None, 123, True, [], {}):
+
+            with self.subTest(value=value):
+                record = load_case("G01")["alert"]
+                record["transaction_ids"] = ["TX-G01-01", value]
+
+                with self.assertRaises(ValidationError):
+                    Alert.model_validate(record)
+
+    def test_unknown_fields_are_rejected(self):
+        for model, key in ((Alert, "alert"), (CaseMetadata, "case")):
+
+            with self.subTest(model=model.__name__):
+                record = load_case("G01")[key]
+                record["unknown_field"] = "unexpected value"
+
+                with self.assertRaises(ValidationError):
+                    model.model_validate(record)
+
+    def test_identifiers_are_not_resolved_against_other_records(self):
+        data = load_case("G01")
+        data["alert"]["customer_id"] = "CUST-NOT-SUPPLIED"
+        data["alert"]["rule_id"] = "RULE-NOT-SPECIFIED"
+        data["alert"]["transaction_ids"] = ["TX-NOT-SUPPLIED"]
+        data["case"]["primary_alert_id"] = "ALT-NOT-SUPPLIED"
+        data["case"]["policy_id"] = "POLICY-NOT-SPECIFIED"
+
+        alert = Alert.model_validate(data["alert"])
+        metadata = CaseMetadata.model_validate(data["case"])
+
+        self.assertEqual(alert.customer_id, "CUST-NOT-SUPPLIED")
+        self.assertEqual(alert.rule_id, "RULE-NOT-SPECIFIED")
+        self.assertEqual(alert.transaction_ids, ["TX-NOT-SUPPLIED"])
+        self.assertEqual(metadata.primary_alert_id, "ALT-NOT-SUPPLIED")
+        self.assertEqual(metadata.policy_id, "POLICY-NOT-SPECIFIED")
 
 
 if __name__ == "__main__":
