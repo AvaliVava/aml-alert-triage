@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "case": {
+    "case_id": "CASE-G03",
+    "primary_alert_id": "ALT-G03",
+    "opened_at": "2026-10-16T10:00:00Z",
+    "policy_id": "POLICY-AML-V1"
+  },
+  "customer": {
+    "customer_id": "CUST-G03",
+    "name": "Northbridge Trading Ltd",
+    "customer_type": "business",
+    "industry": "import_export",
+    "onboarding_date": "2023-03-15",
+    "profile_last_verified": "2026-09-10",
+    "expected_monthly_activity": {
+      "minimum": "20000.00",
+      "maximum": "60000.00",
+      "currency": "USD"
+    }
+  },
+  "accounts": [
+    {
+      "account_id": "ACC-G03",
+      "customer_id": "CUST-G03",
+      "account_type": "business_current",
+      "currency": "USD",
+      "opened_at": "2023-03-15"
+    }
+  ],
+  "counterparties": [
+    {
+      "counterparty_id": "CP-G03-01",
+      "display_name": "Mason Supply Partner",
+      "relationship_status": "documented_supplier"
+    }
+  ],
+  "transactions": [
+    {
+      "transaction_id": "TX-G03-01",
+      "account_id": "ACC-G03",
+      "transaction_type": "international_transfer",
+      "direction": "debit",
+      "amount": "18000.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-13T09:00:00Z",
+      "counterparty_id": "CP-G03-01",
+      "description": "Supplier settlement"
+    },
+    {
+      "transaction_id": "TX-G03-02",
+      "account_id": "ACC-G03",
+      "transaction_type": "international_transfer",
+      "direction": "debit",
+      "amount": "17500.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-14T09:00:00Z",
+      "counterparty_id": "CP-G03-01",
+      "description": "Supplier settlement"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-G03",
+    "customer_id": "CUST-G03",
+    "rule_id": "REPEATED_PAYEE_EXCEPTION",
+    "created_at": "2026-10-16T09:30:00Z",
+    "transaction_ids": [
+      "TX-G03-01",
+      "TX-G03-02"
+    ]
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-G03-01",
+      "evidence_type": "supplier_authorization_register",
+      "source": "synthetic_procurement_registry",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G03-01",
+        "TX-G03-02"
+      ],
+      "facts": {
+        "approved_payee_account_ref": "ACCT-G03-APPROVED",
+        "actual_payee_account_ref": "ACCT-G03-UNAPPROVED",
+        "authorized_change_recorded": false
+      }
+    },
+    {
+      "evidence_id": "EV-G03-02",
+      "evidence_type": "supplier_instruction_notice",
+      "source": "synthetic_internal_case_log",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G03-01",
+        "TX-G03-02"
+      ],
+      "facts": {
+        "issued_at": "2026-10-12T14:00:00Z",
+        "instruction": "Transfers to ACCT-G03-UNAPPROVED require senior review before release",
+        "delivery_status": "recorded"
+      }
+    },
+    {
+      "evidence_id": "EV-G03-03",
+      "evidence_type": "payment_record",
+      "source": "synthetic_bank_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G03-01",
+        "TX-G03-02"
+      ],
+      "facts": {
+        "payee_account_ref": "ACCT-G03-UNAPPROVED",
+        "total_amount": "35500.00",
+        "currency": "USD"
+      }
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-G03-01",
+      "check_type": "recipient_authorization",
+      "status": "contradicted",
+      "subject_evidence_ids": [
+        "EV-G03-01",
+        "EV-G03-03"
+      ],
+      "findings": [
+        "Actual payee account is absent from approved supplier register; no authorized amendment is recorded"
+      ]
+    },
+    {
+      "check_id": "CHK-G03-02",
+      "check_type": "post_notice_payments",
+      "status": "escalation_condition_met",
+      "subject_evidence_ids": [
+        "EV-G03-02",
+        "EV-G03-03"
+      ],
+      "findings": [
+        "Two transfers were recorded after the documented internal instruction, both to the non-approved account"
+      ]
+    }
+  ]
+}

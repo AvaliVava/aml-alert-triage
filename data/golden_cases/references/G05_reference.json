@@ -1,0 +1,36 @@
+{
+  "case_id": "CASE-G05",
+  "rubric_version": "1.0",
+  "expected_action": "investigate",
+  "label_status": "provisional",
+  "escalation_criteria_met": [],
+  "required_findings": [
+    {
+      "statement": "A USD 27,000.00 outgoing transfer is recorded with beneficiary account information unavailable.",
+      "transaction_ids": [
+        "TX-G05-01"
+      ],
+      "evidence_ids": [
+        "EV-G05-01"
+      ],
+      "check_ids": []
+    },
+    {
+      "statement": "The request for missing beneficiary information has no received response.",
+      "transaction_ids": [
+        "TX-G05-01"
+      ],
+      "evidence_ids": [
+        "EV-G05-02"
+      ],
+      "check_ids": [
+        "CHK-G05-01"
+      ]
+    }
+  ],
+  "material_unresolved_questions": [
+    "Obtain the beneficiary account details and supporting relationship records."
+  ],
+  "reference_rationale": "The input is structurally valid, but material beneficiary information is unavailable; no defined escalation criterion is supplied.",
+  "human_review_required": true
+}

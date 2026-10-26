@@ -1,0 +1,235 @@
+{
+  "schema_version": "1.0",
+  "case": {
+    "case_id": "CASE-G04",
+    "primary_alert_id": "ALT-G04",
+    "opened_at": "2026-10-16T10:00:00Z",
+    "policy_id": "POLICY-AML-V1"
+  },
+  "customer": {
+    "customer_id": "CUST-021",
+    "name": "Meridian Electronics Ltd",
+    "customer_type": "business",
+    "industry": "electronics_retail",
+    "onboarding_date": "2023-03-15",
+    "profile_last_verified": "2026-07-10",
+    "expected_monthly_activity": {
+      "minimum": "45000.00",
+      "maximum": "65000.00",
+      "currency": "USD",
+      "typical_daily_cash_deposit_min": "1000.00",
+      "typical_daily_cash_deposit_max": "3000.00"
+    }
+  },
+  "accounts": [
+    {
+      "account_id": "ACC-G04",
+      "customer_id": "CUST-021",
+      "account_type": "business_current",
+      "currency": "USD",
+      "opened_at": "2023-03-15"
+    }
+  ],
+  "counterparties": [
+    {
+      "counterparty_id": "CP-G04-01",
+      "display_name": "Overseas inventory payee",
+      "relationship_status": "unverified"
+    }
+  ],
+  "transactions": [
+    {
+      "transaction_id": "TX-101",
+      "account_id": "ACC-G04",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "9200.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-12T09:30:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-102",
+      "account_id": "ACC-G04",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "9400.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-13T09:35:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-103",
+      "account_id": "ACC-G04",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "9100.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-14T09:40:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-104",
+      "account_id": "ACC-G04",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "9600.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-15T09:45:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-105",
+      "account_id": "ACC-G04",
+      "transaction_type": "international_transfer",
+      "direction": "debit",
+      "amount": "32000.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-15T14:30:00Z",
+      "counterparty_id": "CP-G04-01",
+      "description": "Inventory supplier payment"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-G04",
+    "customer_id": "CUST-021",
+    "rule_id": "UNUSUAL_CASH_INCREASE",
+    "created_at": "2026-10-16T09:30:00Z",
+    "transaction_ids": [
+      "TX-101",
+      "TX-102",
+      "TX-103",
+      "TX-104"
+    ]
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-001",
+      "evidence_type": "transaction_extract",
+      "source": "synthetic_bank_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-101",
+        "TX-102",
+        "TX-103",
+        "TX-104",
+        "TX-105"
+      ],
+      "facts": {
+        "total_cash_deposits": "37300.00",
+        "international_transfer": "32000.00",
+        "currency": "USD"
+      }
+    },
+    {
+      "evidence_id": "EV-002",
+      "evidence_type": "partial_sales_records",
+      "source": "customer_supplied",
+      "verification_status": "received",
+      "related_transaction_ids": [
+        "TX-101",
+        "TX-102",
+        "TX-103",
+        "TX-104"
+      ],
+      "facts": {
+        "coverage": "partial",
+        "independent_reconciliation": false
+      }
+    },
+    {
+      "evidence_id": "EV-003",
+      "evidence_type": "promotion_notice",
+      "source": "customer_supplied",
+      "verification_status": "received",
+      "related_transaction_ids": [],
+      "facts": {
+        "claim": "October customer promotion"
+      }
+    },
+    {
+      "evidence_id": "EV-004",
+      "evidence_type": "supplier_invoice",
+      "source": "customer_supplied",
+      "verification_status": "received",
+      "related_transaction_ids": [
+        "TX-105"
+      ],
+      "facts": {
+        "invoice_total": "32000.00",
+        "currency": "USD",
+        "beneficiary_account_ref": "SUPPLIER-ACC-A"
+      }
+    },
+    {
+      "evidence_id": "EV-005",
+      "evidence_type": "wire_payment_record",
+      "source": "synthetic_bank_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-105"
+      ],
+      "facts": {
+        "wire_amount": "32000.00",
+        "currency": "USD",
+        "beneficiary_account_ref": "BENEFICIARY-ACC-B"
+      }
+    },
+    {
+      "evidence_id": "EV-006",
+      "evidence_type": "beneficial_ownership_check",
+      "source": "synthetic_verification_log",
+      "verification_status": "unavailable",
+      "related_transaction_ids": [
+        "TX-105"
+      ],
+      "facts": {
+        "beneficiary_relationship_verified": false
+      }
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-G04-01",
+      "check_type": "sales_deposit_reconciliation",
+      "status": "unresolved",
+      "subject_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003"
+      ],
+      "findings": [
+        "Supplied sales material does not reconcile all four deposits"
+      ]
+    },
+    {
+      "check_id": "CHK-G04-02",
+      "check_type": "beneficiary_account_comparison",
+      "status": "contradicted",
+      "subject_evidence_ids": [
+        "EV-004",
+        "EV-005"
+      ],
+      "findings": [
+        "Invoice beneficiary account differs from payment beneficiary account"
+      ]
+    },
+    {
+      "check_id": "CHK-G04-03",
+      "check_type": "beneficiary_relationship",
+      "status": "unresolved",
+      "subject_evidence_ids": [
+        "EV-004",
+        "EV-005",
+        "EV-006"
+      ],
+      "findings": [
+        "No verified relationship is supplied between the invoiced supplier and actual receiving account"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "case_id": "CASE-G03",
+  "rubric_version": "1.0",
+  "expected_action": "escalate",
+  "label_status": "provisional",
+  "escalation_criteria_met": [
+    "REF-01"
+  ],
+  "required_findings": [
+    {
+      "statement": "The two outgoing transfers total USD 35,500.00 and use the same payee account.",
+      "transaction_ids": [
+        "TX-G03-01",
+        "TX-G03-02"
+      ],
+      "evidence_ids": [
+        "EV-G03-03"
+      ],
+      "check_ids": []
+    },
+    {
+      "statement": "The payee account differs from the documented approved account with no authorized change recorded.",
+      "transaction_ids": [
+        "TX-G03-01",
+        "TX-G03-02"
+      ],
+      "evidence_ids": [
+        "EV-G03-01",
+        "EV-G03-03"
+      ],
+      "check_ids": [
+        "CHK-G03-01"
+      ]
+    },
+    {
+      "statement": "Both payments were recorded after a documented instruction requiring senior review for that account.",
+      "transaction_ids": [
+        "TX-G03-01",
+        "TX-G03-02"
+      ],
+      "evidence_ids": [
+        "EV-G03-02",
+        "EV-G03-03"
+      ],
+      "check_ids": [
+        "CHK-G03-02"
+      ]
+    }
+  ],
+  "material_unresolved_questions": [
+    "Establish why the two recorded transfers proceeded despite the internal review instruction."
+  ],
+  "reference_rationale": "The supplied fictional policy mandates referral for two or more post-notice outgoing payments to a specifically non-approved supplier account. This is not proof of fraud.",
+  "human_review_required": true
+}

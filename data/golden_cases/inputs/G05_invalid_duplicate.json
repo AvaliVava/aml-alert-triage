@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "case": {
+    "case_id": "CASE-G05",
+    "primary_alert_id": "ALT-G05",
+    "opened_at": "2026-10-16T10:00:00Z",
+    "policy_id": "POLICY-AML-V1"
+  },
+  "customer": {
+    "customer_id": "CUST-G05",
+    "name": "Bayside Office Supplies Ltd",
+    "customer_type": "business",
+    "industry": "office_supplies",
+    "onboarding_date": "2023-03-15",
+    "profile_last_verified": "2026-08-20",
+    "expected_monthly_activity": {
+      "minimum": "10000.00",
+      "maximum": "25000.00",
+      "currency": "USD"
+    }
+  },
+  "accounts": [
+    {
+      "account_id": "ACC-G05",
+      "customer_id": "CUST-G05",
+      "account_type": "business_current",
+      "currency": "USD",
+      "opened_at": "2023-03-15"
+    }
+  ],
+  "counterparties": [],
+  "transactions": [
+    {
+      "transaction_id": "TX-G05-01",
+      "account_id": "ACC-G05",
+      "transaction_type": "international_transfer",
+      "direction": "debit",
+      "amount": "27000.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-14T13:00:00Z",
+      "counterparty_id": null,
+      "description": "Supplier remittance"
+    },
+    {
+      "transaction_id": "TX-G05-01",
+      "account_id": "ACC-G05",
+      "transaction_type": "international_transfer",
+      "direction": "debit",
+      "amount": "27000.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-14T13:00:00Z",
+      "counterparty_id": null,
+      "description": "Supplier remittance"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-G05",
+    "customer_id": "CUST-G05",
+    "rule_id": "BENEFICIARY_INFORMATION_INCOMPLETE",
+    "created_at": "2026-10-16T09:30:00Z",
+    "transaction_ids": [
+      "TX-G05-01"
+    ]
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-G05-01",
+      "evidence_type": "payment_record",
+      "source": "synthetic_bank_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G05-01"
+      ],
+      "facts": {
+        "amount": "27000.00",
+        "currency": "USD",
+        "beneficiary_account_ref": null
+      }
+    },
+    {
+      "evidence_id": "EV-G05-02",
+      "evidence_type": "information_request",
+      "source": "synthetic_case_log",
+      "verification_status": "received",
+      "related_transaction_ids": [
+        "TX-G05-01"
+      ],
+      "facts": {
+        "requested_field": "beneficiary_account_reference",
+        "response_status": "not_received"
+      }
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-G05-01",
+      "check_type": "beneficiary_information",
+      "status": "unresolved",
+      "subject_evidence_ids": [
+        "EV-G05-01",
+        "EV-G05-02"
+      ],
+      "findings": [
+        "Beneficiary account reference is unavailable in supplied records"
+      ]
+    }
+  ]
+}

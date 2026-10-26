@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0",
+  "case": {
+    "case_id": "CASE-G01",
+    "primary_alert_id": "ALT-G01",
+    "opened_at": "2026-10-16T10:00:00Z",
+    "policy_id": "POLICY-AML-V1"
+  },
+  "customer": {
+    "customer_id": "CUST-G01",
+    "name": "Harbor Retail Ltd",
+    "customer_type": "business",
+    "industry": "grocery_retail",
+    "onboarding_date": "2023-03-15",
+    "profile_last_verified": "2026-09-30",
+    "expected_monthly_activity": {
+      "minimum": "30000.00",
+      "maximum": "50000.00",
+      "currency": "USD",
+      "typical_daily_cash_deposit_min": "1000.00",
+      "typical_daily_cash_deposit_max": "3000.00"
+    }
+  },
+  "accounts": [
+    {
+      "account_id": "ACC-G01",
+      "customer_id": "CUST-G01",
+      "account_type": "business_current",
+      "currency": "USD",
+      "opened_at": "2023-03-15"
+    }
+  ],
+  "counterparties": [],
+  "transactions": [
+    {
+      "transaction_id": "TX-G01-01",
+      "account_id": "ACC-G01",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "8150.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-12T10:00:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-G01-02",
+      "account_id": "ACC-G01",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "8750.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-13T10:00:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-G01-03",
+      "account_id": "ACC-G01",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "8300.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-14T10:00:00Z",
+      "counterparty_id": null,
+      "description": null
+    },
+    {
+      "transaction_id": "TX-G01-04",
+      "account_id": "ACC-G01",
+      "transaction_type": "cash_deposit",
+      "direction": "credit",
+      "amount": "8950.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-15T10:00:00Z",
+      "counterparty_id": null,
+      "description": null
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-G01",
+    "customer_id": "CUST-G01",
+    "rule_id": "UNUSUAL_CASH_INCREASE",
+    "created_at": "2026-10-16T09:30:00Z",
+    "transaction_ids": [
+      "TX-G01-01",
+      "TX-G01-02",
+      "TX-G01-03",
+      "TX-G01-04"
+    ]
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-G01-01",
+      "evidence_type": "promotion_notice",
+      "source": "merchant_records",
+      "verification_status": "received",
+      "related_transaction_ids": [],
+      "facts": {
+        "promotion_dates": [
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15"
+        ],
+        "description": "Four-day seasonal sale"
+      }
+    },
+    {
+      "evidence_id": "EV-G01-02",
+      "evidence_type": "point_of_sale_summary",
+      "source": "synthetic_pos_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G01-01",
+        "TX-G01-02",
+        "TX-G01-03",
+        "TX-G01-04"
+      ],
+      "facts": {
+        "daily_sales": [
+          "8150.00",
+          "8750.00",
+          "8300.00",
+          "8950.00"
+        ],
+        "currency": "USD",
+        "summary_total": "34150.00"
+      }
+    },
+    {
+      "evidence_id": "EV-G01-03",
+      "evidence_type": "deposit_reconciliation",
+      "source": "synthetic_bank_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G01-01",
+        "TX-G01-02",
+        "TX-G01-03",
+        "TX-G01-04"
+      ],
+      "facts": {
+        "reconciled_deposits": "34150.00",
+        "unmatched_amount": "0.00",
+        "currency": "USD"
+      }
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-G01-01",
+      "check_type": "sales_deposit_reconciliation",
+      "status": "resolved",
+      "subject_evidence_ids": [
+        "EV-G01-02",
+        "EV-G01-03"
+      ],
+      "findings": [
+        "POS daily figures agree with cash deposit figures and total USD 34,150.00"
+      ]
+    },
+    {
+      "check_id": "CHK-G01-02",
+      "check_type": "promotion_context",
+      "status": "resolved",
+      "subject_evidence_ids": [
+        "EV-G01-01",
+        "EV-G01-02"
+      ],
+      "findings": [
+        "Promotion period agrees with flagged deposit dates"
+      ]
+    }
+  ]
+}

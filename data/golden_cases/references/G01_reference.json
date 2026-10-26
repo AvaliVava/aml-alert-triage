@@ -1,0 +1,39 @@
+{
+  "case_id": "CASE-G01",
+  "rubric_version": "1.0",
+  "expected_action": "close",
+  "label_status": "provisional",
+  "escalation_criteria_met": [],
+  "required_findings": [
+    {
+      "statement": "Four flagged deposits total USD 34,150.00 and exceed the supplied typical daily deposit range.",
+      "transaction_ids": [
+        "TX-G01-01",
+        "TX-G01-02",
+        "TX-G01-03",
+        "TX-G01-04"
+      ],
+      "evidence_ids": [],
+      "check_ids": []
+    },
+    {
+      "statement": "POS and bank reconciliation records agree to USD 34,150.00 with no unmatched amount.",
+      "transaction_ids": [
+        "TX-G01-01",
+        "TX-G01-02",
+        "TX-G01-03",
+        "TX-G01-04"
+      ],
+      "evidence_ids": [
+        "EV-G01-02",
+        "EV-G01-03"
+      ],
+      "check_ids": [
+        "CHK-G01-01"
+      ]
+    }
+  ],
+  "material_unresolved_questions": [],
+  "reference_rationale": "Activity is anomalous, but supplied corroborated sales and deposit records resolve the material concern within the limited case scope.",
+  "human_review_required": true
+}
