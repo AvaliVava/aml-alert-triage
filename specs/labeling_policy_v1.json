@@ -1,0 +1,27 @@
+{
+  "policy_id": "POLICY-AML-V1",
+  "type": "synthetic_evaluation_policy",
+  "rubric_version": "1.0",
+  "description": "Fictional research reference rubric, not any bank regulation.",
+  "definitions": {
+    "close": "Flagged concern supported by adequate corroboration and no material unresolved question in supplied review scope.",
+    "investigate": "Material unanswered question remains without a verified policy referral condition.",
+    "escalate": "A verified fictional policy referral condition is met, regardless of other questions."
+  },
+  "referral_criteria": [
+    {
+      "id": "REF-01",
+      "description": "At least two outgoing payments to the same supplier account recorded after a documented internal instruction specifically requiring senior review for that account; supplied independent register confirms the payee is not approved and no authorized change is recorded.",
+      "required_evidence": [
+        "supplier authorization register",
+        "timestamped internal review instruction",
+        "payment ledger documenting two post-instruction transfers"
+      ]
+    }
+  ],
+  "limitations": [
+    "No automatic SAR filing or determination of financial crime",
+    "Unknown source of funds cannot be presumed from chronological proximity",
+    "Recommendations always subject to human review"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "case_id": "CASE-G04",
+  "rubric_version": "1.0",
+  "expected_action": "investigate",
+  "label_status": "provisional",
+  "escalation_criteria_met": [],
+  "required_findings": [
+    {
+      "statement": "Four cash deposits total USD 37,300.00, above the supplied typical daily cash range.",
+      "transaction_ids": [
+        "TX-101",
+        "TX-102",
+        "TX-103",
+        "TX-104"
+      ],
+      "evidence_ids": [
+        "EV-001"
+      ],
+      "check_ids": []
+    },
+    {
+      "statement": "The available sales records do not reconcile the full deposit pattern.",
+      "transaction_ids": [
+        "TX-101",
+        "TX-102",
+        "TX-103",
+        "TX-104"
+      ],
+      "evidence_ids": [
+        "EV-002",
+        "EV-003"
+      ],
+      "check_ids": [
+        "CHK-G04-01"
+      ]
+    },
+    {
+      "statement": "The beneficiary account in the invoice differs from the recorded wire beneficiary.",
+      "transaction_ids": [
+        "TX-105"
+      ],
+      "evidence_ids": [
+        "EV-004",
+        "EV-005"
+      ],
+      "check_ids": [
+        "CHK-G04-02"
+      ]
+    },
+    {
+      "statement": "The relationship between supplier and receiving account remains unverified.",
+      "transaction_ids": [
+        "TX-105"
+      ],
+      "evidence_ids": [
+        "EV-006"
+      ],
+      "check_ids": [
+        "CHK-G04-03"
+      ]
+    }
+  ],
+  "material_unresolved_questions": [
+    "Reconcile daily cash deposits with complete sales records.",
+    "Establish the payee account relationship and verify the supplier instructions."
+  ],
+  "reference_rationale": "Material accounting and beneficiary questions remain; do not infer that the wire was funded specifically by the four deposits.",
+  "human_review_required": true
+}

@@ -1,0 +1,36 @@
+{
+  "case_id": "CASE-G02",
+  "rubric_version": "1.0",
+  "expected_action": "investigate",
+  "label_status": "provisional",
+  "escalation_criteria_met": [],
+  "required_findings": [
+    {
+      "statement": "A USD 48,500.00 incoming transfer is flagged for review.",
+      "transaction_ids": [
+        "TX-G02-01"
+      ],
+      "evidence_ids": [
+        "EV-G02-01"
+      ],
+      "check_ids": []
+    },
+    {
+      "statement": "The customer explanation is not independently corroborated.",
+      "transaction_ids": [
+        "TX-G02-01"
+      ],
+      "evidence_ids": [
+        "EV-G02-02"
+      ],
+      "check_ids": [
+        "CHK-G02-01"
+      ]
+    }
+  ],
+  "material_unresolved_questions": [
+    "Obtain supporting commercial records and establish the sender relationship."
+  ],
+  "reference_rationale": "Material source and purpose questions remain unresolved; no supplied policy escalation condition is established.",
+  "human_review_required": true
+}

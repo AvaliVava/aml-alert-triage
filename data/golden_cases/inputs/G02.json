@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "case": {
+    "case_id": "CASE-G02",
+    "primary_alert_id": "ALT-G02",
+    "opened_at": "2026-10-16T10:00:00Z",
+    "policy_id": "POLICY-AML-V1"
+  },
+  "customer": {
+    "customer_id": "CUST-G02",
+    "name": "Clearwater Components Ltd",
+    "customer_type": "business",
+    "industry": "hardware_wholesale",
+    "onboarding_date": "2023-03-15",
+    "profile_last_verified": "2026-09-20",
+    "expected_monthly_activity": {
+      "minimum": "15000.00",
+      "maximum": "25000.00",
+      "currency": "USD"
+    }
+  },
+  "accounts": [
+    {
+      "account_id": "ACC-G02",
+      "customer_id": "CUST-G02",
+      "account_type": "business_current",
+      "currency": "USD",
+      "opened_at": "2023-03-15"
+    }
+  ],
+  "counterparties": [
+    {
+      "counterparty_id": "CP-G02-01",
+      "display_name": "Orchid Distribution LLC",
+      "relationship_status": "unverified"
+    },
+    {
+      "counterparty_id": "CP-G02-02",
+      "display_name": "Local trade payer",
+      "relationship_status": "unverified"
+    }
+  ],
+  "transactions": [
+    {
+      "transaction_id": "TX-G02-01",
+      "account_id": "ACC-G02",
+      "transaction_type": "domestic_transfer",
+      "direction": "credit",
+      "amount": "48500.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-13T11:00:00Z",
+      "counterparty_id": "CP-G02-01",
+      "description": "Wholesale payment"
+    },
+    {
+      "transaction_id": "TX-G02-02",
+      "account_id": "ACC-G02",
+      "transaction_type": "domestic_transfer",
+      "direction": "credit",
+      "amount": "1200.00",
+      "currency": "USD",
+      "occurred_at": "2026-10-14T12:00:00Z",
+      "counterparty_id": "CP-G02-02",
+      "description": "Other payment"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-G02",
+    "customer_id": "CUST-G02",
+    "rule_id": "UNUSUAL_INCOMING_PAYMENT",
+    "created_at": "2026-10-16T09:30:00Z",
+    "transaction_ids": [
+      "TX-G02-01"
+    ]
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-G02-01",
+      "evidence_type": "payment_record",
+      "source": "synthetic_bank_ledger",
+      "verification_status": "verified",
+      "related_transaction_ids": [
+        "TX-G02-01"
+      ],
+      "facts": {
+        "sender_reference": "CP-G02-01",
+        "recorded_amount": "48500.00",
+        "currency": "USD"
+      }
+    },
+    {
+      "evidence_id": "EV-G02-02",
+      "evidence_type": "customer_explanation",
+      "source": "customer_supplied",
+      "verification_status": "received",
+      "related_transaction_ids": [
+        "TX-G02-01"
+      ],
+      "facts": {
+        "claim": "Payment for wholesale goods",
+        "invoice_reference": null
+      }
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-G02-01",
+      "check_type": "commercial_purpose",
+      "status": "unresolved",
+      "subject_evidence_ids": [
+        "EV-G02-01",
+        "EV-G02-02"
+      ],
+      "findings": [
+        "No invoice, purchase order, or independent record corroborates the claimed purpose"
+      ]
+    }
+  ]
+}
