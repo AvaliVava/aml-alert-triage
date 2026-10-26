@@ -16,7 +16,9 @@ from aml_triage.contracts import (
     CaseMetadata,
     Counterparty,
     Customer,
+    Evidence,
     Transaction,
+    VerificationCheck,
 )
 
 
@@ -540,6 +542,277 @@ class TestAlertCaseMetadataContracts(unittest.TestCase):
         self.assertEqual(alert.transaction_ids, ["TX-NOT-SUPPLIED"])
         self.assertEqual(metadata.primary_alert_id, "ALT-NOT-SUPPLIED")
         self.assertEqual(metadata.policy_id, "POLICY-NOT-SPECIFIED")
+
+
+class TestEvidenceVerificationCheckContracts(unittest.TestCase):
+
+    def test_all_evidence_and_checks_in_five_golden_cases(self):
+        for case_id in ("G01", "G02", "G03", "G04", "G05"):
+            data = load_case(case_id)
+
+            for model, key in (
+                (Evidence, "evidence"),
+                (VerificationCheck, "verification_checks"),
+            ):
+                for index, record in enumerate(data[key]):
+
+                    with self.subTest(case=case_id, model=model.__name__, index=index):
+                        parsed = model.model_validate(record)
+                        self.assertEqual(parsed.model_dump(), record)
+                        self.assertEqual(
+                            model.model_validate_json(json.dumps(record)).model_dump(),
+                            record,
+                        )
+
+    def test_contextual_evidence_without_transaction_references_is_accepted(self):
+        for case_id, index in (("G01", 0), ("G04", 2)):
+
+            with self.subTest(case=case_id):
+                record = load_case(case_id)["evidence"][index]
+                self.assertEqual(record["related_transaction_ids"], [])
+
+                evidence = Evidence.model_validate(record)
+
+                self.assertEqual(evidence.related_transaction_ids, [])
+                self.assertEqual(evidence.model_dump(), record)
+
+    def test_heterogeneous_nested_facts_are_preserved(self):
+        record = load_case("G01")["evidence"][0]
+        record["facts"] = {
+            "text": "synthetic context",
+            "amount_text": "00100.00",
+            "integer": 2,
+            "number": 1.25,
+            "boolean": True,
+            "null": None,
+            "list": ["note", 3, 0.5, False, None, {"nested": [[], {}]}],
+            "object": {"inner": {"flag": False, "count": 0, "unknown": None}},
+        }
+
+        for method, payload in (
+            (Evidence.model_validate, record),
+            (Evidence.model_validate_json, json.dumps(record)),
+        ):
+
+            with self.subTest(method=method.__name__):
+                evidence = method(payload)
+                self.assertEqual(evidence.facts, record["facts"])
+                self.assertIs(type(evidence.facts["integer"]), int)
+                self.assertIs(type(evidence.facts["number"]), float)
+                self.assertIs(type(evidence.facts["boolean"]), bool)
+                self.assertIsNone(evidence.facts["null"])
+                self.assertEqual(
+                    json.loads(evidence.model_dump_json())["facts"], record["facts"]
+                )
+
+    def test_empty_facts_dictionary_is_accepted(self):
+        record = load_case("G01")["evidence"][0]
+        record["facts"] = {}
+
+        self.assertEqual(Evidence.model_validate(record).facts, {})
+
+    def test_missing_required_fields_are_rejected(self):
+        for model, key, fields in (
+            (Evidence, "evidence", (
+                "evidence_id", "evidence_type", "source", "verification_status",
+                "related_transaction_ids", "facts",
+            )),
+            (VerificationCheck, "verification_checks", (
+                "check_id", "check_type", "status", "subject_evidence_ids", "findings",
+            )),
+        ):
+            for field in fields:
+
+                with self.subTest(model=model.__name__, field=field):
+                    record = load_case("G01")[key][0]
+                    record.pop(field)
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_empty_required_strings_are_rejected(self):
+        for model, key, fields in (
+            (Evidence, "evidence", (
+                "evidence_id", "evidence_type", "source", "verification_status",
+            )),
+            (VerificationCheck, "verification_checks", ("check_id", "check_type", "status")),
+        ):
+            for field in fields:
+
+                with self.subTest(model=model.__name__, field=field):
+                    record = load_case("G01")[key][0]
+                    record[field] = ""
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_incorrect_string_field_types_are_rejected(self):
+        for model, key, fields in (
+            (Evidence, "evidence", (
+                "evidence_id", "evidence_type", "source", "verification_status",
+            )),
+            (VerificationCheck, "verification_checks", ("check_id", "check_type", "status")),
+        ):
+            for field in fields:
+                for value in (None, 123, 1.5, True, [], {}, b"text"):
+
+                    with self.subTest(model=model.__name__, field=field, value=value):
+                        record = load_case("G01")[key][0]
+                        record[field] = value
+
+                        with self.assertRaises(ValidationError):
+                            model.model_validate(record)
+
+    def test_invalid_reference_list_structures_are_rejected(self):
+        for model, key, field in (
+            (Evidence, "evidence", "related_transaction_ids"),
+            (VerificationCheck, "verification_checks", "subject_evidence_ids"),
+        ):
+            for value in (
+                None, "REF-1", 123, True, {}, {"REF-1": True},
+                ("REF-1",), {"REF-1"}, [None], [123], [True], [[]], [{}], [b"REF-1"],
+            ):
+
+                with self.subTest(model=model.__name__, value=value):
+                    record = load_case("G01")[key][0]
+                    record[field] = value
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_empty_reference_identifiers_are_rejected(self):
+        for model, key, field in (
+            (Evidence, "evidence", "related_transaction_ids"),
+            (VerificationCheck, "verification_checks", "subject_evidence_ids"),
+        ):
+            for value in ([""], ["REF-1", ""]):
+
+                with self.subTest(model=model.__name__, value=value):
+                    record = load_case("G01")[key][0]
+                    record[field] = value
+
+                    with self.assertRaises(ValidationError):
+                        model.model_validate(record)
+
+    def test_invalid_findings_are_rejected(self):
+        for value in (
+            None, "a recorded finding", 123, True, {}, {"finding": "text"},
+            ("text",), {"text"}, [None], [123], [True], [[]], [{}], [b"text"],
+            [""], ["a recorded finding", ""],
+        ):
+
+            with self.subTest(value=value):
+                record = load_case("G01")["verification_checks"][0]
+                record["findings"] = value
+
+                with self.assertRaises(ValidationError):
+                    VerificationCheck.model_validate(record)
+
+    def test_empty_check_lists_are_accepted(self):
+        record = load_case("G01")["verification_checks"][0]
+        record["subject_evidence_ids"] = []
+        record["findings"] = []
+
+        check = VerificationCheck.model_validate(record)
+
+        self.assertEqual(check.subject_evidence_ids, [])
+        self.assertEqual(check.findings, [])
+
+    def test_facts_must_be_a_dictionary(self):
+        for value in (None, "{}", 123, 1.5, True, [], [("key", "value")], b"{}"):
+
+            with self.subTest(value=value):
+                record = load_case("G01")["evidence"][0]
+                record["facts"] = value
+
+                with self.assertRaises(ValidationError):
+                    Evidence.model_validate(record)
+
+    def test_non_json_fact_values_are_rejected(self):
+        for value in (
+            object(), datetime(2026, 10, 16, 10), date(2026, 10, 16), Decimal("1.25"),
+            b"text", bytearray(b"text"), {1, 2}, frozenset({1, 2}), (1, 2), 1j, Ellipsis,
+        ):
+            for facts in ({"value": value}, {"nested": [{"value": value}]}):
+
+                with self.subTest(value_type=type(value).__name__, facts=facts):
+                    record = load_case("G01")["evidence"][0]
+                    record["facts"] = facts
+
+                    with self.assertRaises(ValidationError):
+                        Evidence.model_validate(record)
+
+    def test_nonfinite_fact_numbers_are_rejected(self):
+        for value in (float("nan"), float("inf"), float("-inf")):
+            for facts in ({"value": value}, {"nested": [{"value": value}]}):
+                record = load_case("G01")["evidence"][0]
+                record["facts"] = facts
+
+                for method, payload in (
+                    (Evidence.model_validate, record),
+                    (Evidence.model_validate_json, json.dumps(record)),
+                ):
+
+                    with self.subTest(value=value, facts=facts, method=method.__name__):
+                        with self.assertRaises(ValidationError):
+                            method(payload)
+
+    def test_non_string_fact_keys_are_rejected(self):
+        for facts in (
+            {1: "value"}, {None: "value"}, {b"key": "value"},
+            {"nested": {1: "value"}}, {"nested": [{False: "value"}]},
+        ):
+
+            with self.subTest(facts=facts):
+                record = load_case("G01")["evidence"][0]
+                record["facts"] = facts
+
+                with self.assertRaises(ValidationError):
+                    Evidence.model_validate(record)
+
+    def test_unknown_outer_fields_are_rejected(self):
+        for model, key in ((Evidence, "evidence"), (VerificationCheck, "verification_checks")):
+
+            with self.subTest(model=model.__name__):
+                record = load_case("G01")[key][0]
+                record["unknown_field"] = "unexpected value"
+
+                with self.assertRaises(ValidationError):
+                    model.model_validate(record)
+
+    def test_type_and_status_vocabularies_are_open(self):
+        for model, key, fields in (
+            (Evidence, "evidence", ("evidence_type", "verification_status")),
+            (VerificationCheck, "verification_checks", ("check_type", "status")),
+        ):
+            for field in fields:
+
+                with self.subTest(model=model.__name__, field=field):
+                    record = load_case("G01")[key][0]
+                    record[field] = "custom_recorded_value"
+
+                    self.assertEqual(model.model_validate(record).model_dump(), record)
+
+    def test_verified_status_is_only_preserved_as_supplied_data(self):
+        record = load_case("G01")["evidence"][1]
+        record["source"] = "customer_supplied"
+
+        evidence = Evidence.model_validate(record)
+
+        self.assertEqual(evidence.verification_status, "verified")
+        self.assertEqual(evidence.model_dump(), record)
+
+    def test_reference_identifiers_are_not_resolved(self):
+        record = load_case("G01")["evidence"][0]
+        record["related_transaction_ids"] = ["TX-NOT-SUPPLIED"]
+        check_record = load_case("G01")["verification_checks"][0]
+        check_record["subject_evidence_ids"] = ["EV-NOT-SUPPLIED"]
+
+        evidence = Evidence.model_validate(record)
+        check = VerificationCheck.model_validate(check_record)
+
+        self.assertEqual(evidence.related_transaction_ids, ["TX-NOT-SUPPLIED"])
+        self.assertEqual(check.subject_evidence_ids, ["EV-NOT-SUPPLIED"])
 
 
 if __name__ == "__main__":

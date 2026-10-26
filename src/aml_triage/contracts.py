@@ -1,10 +1,12 @@
 """Typed contracts for synthetic AML investigation records."""
 
+import json
+
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, JsonValue, field_validator, model_validator
 
 
 # Shared field types
@@ -158,3 +160,35 @@ class CaseMetadata(BaseModel):
             raise ValueError("case timestamp must include a timezone")
 
         return value
+
+
+class Evidence(BaseModel):
+    """Supplied evidence records; validation does not perform verification."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    evidence_id: str = Field(min_length=1)
+    evidence_type: str = Field(min_length=1)
+    source: str = Field(min_length=1)
+    verification_status: str = Field(min_length=1)
+    related_transaction_ids: list[Annotated[str, Field(min_length=1)]]
+    facts: dict[str, JsonValue]
+
+    @field_validator("facts")
+    @classmethod
+    def require_json_facts(cls, value: dict[str, JsonValue]) -> dict[str, JsonValue]:
+        # Reject non-finite numbers on both Python and JSON validation paths.
+        json.dumps(value, allow_nan=False)
+        return value
+
+
+class VerificationCheck(BaseModel):
+    """Recorded check results; validation does not execute a new check."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    check_id: str = Field(min_length=1)
+    check_type: str = Field(min_length=1)
+    status: str = Field(min_length=1)
+    subject_evidence_ids: list[Annotated[str, Field(min_length=1)]]
+    findings: list[Annotated[str, Field(min_length=1)]]
