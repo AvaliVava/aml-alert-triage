@@ -15,6 +15,21 @@
 | 7 | Dec 7–13 | Held-out evaluation and safety/failure analysis | Reproducible quantitative report and limitations |
 | 8 | Dec 14–20 | Release and recruiter-ready case study | CI checks, README, tagged release, demo and technical report |
 
+## Current roadmap progress
+
+Phase 1 is complete; its documentation review and merge are recorded in PR #1 (`a5c68d0`). Phase 2 has started, and its input-contract implementation is complete at `1375d9f`. The sequence and planning dates above remain unchanged; milestone verification governs progression.
+
+- [x] Create five synthetic golden-case inputs and five separate reference-answer artifacts, merged through PR #2 (`db212d4`); see [golden cases](data/golden_cases/).
+- [x] Implement individual Pydantic V2 input contracts and the `ExpectedMonthlyActivity` helper in [contracts.py](src/aml_triage/contracts.py).
+- [x] Implement the complete `InvestigationInput` contract using those records, with duplicate-ID, duplicate-reference, and explicit cross-record relationship validation.
+- [x] Accept all five valid cases through Python and JSON validation and reject the intentionally invalid [duplicate-transaction fixture](data/golden_cases/inputs/G05_invalid_duplicate.json).
+- [x] Verify **99 passing tests** in the local readiness audit at `1375d9f`; see [contract tests](tests/test_contracts.py) and the verification record in [PROJECT_STATUS.md](PROJECT_STATUS.md).
+- [ ] Define and review Phase 2 output contracts; no final output schema is implemented.
+- [ ] Define the formal evaluation protocol.
+- [ ] Review the fictional [labeling vocabulary](specs/labeling_policy_v1.json) (`close`, `investigate`, `escalate`) and provisional [golden-case labels](data/golden_cases/references/).
+
+Phase 2 as a whole remains incomplete. Remote GitHub Actions results for `feature/phase-2-pydantic-contracts` remain unverified; the local audit is not evidence of successful remote CI. Later generator, baseline, LLM, integration, and evaluation work remains in the planned sequence above.
+
 ## Development rhythm
 
 1. Start by reading `PROJECT_STATUS.md`, `DECISIONS.md`, applicable code/tests and the current issue.
@@ -23,7 +38,7 @@
 4. Update `WORKLOG.md` and `PROJECT_STATUS.md` after accepted work.
 5. Use reviewed commits/PRs as evidence; don't claim a feature works without verification.
 
-### Phase 1 documentation checkpoint — October 26, 2026
+### Historical Phase 1 documentation checkpoint — October 26, 2026
 
 - [x] Establish the project charter and roadmap.
 - [x] Create and publish the GitHub repository.
@@ -36,4 +51,5 @@
 - [ ] Merge the approved documentation pull request.
 - [ ] Verify the repository and formally close Phase 1.
 - [ ] Begin Phase 2 specifications and evaluation design.
-The unchecked tasks are not claimed completed.
+
+This pre-review checklist is retained as a historical snapshot. The Phase 1 review and merge steps were subsequently completed, and Phase 2 began with golden-case artifacts and input contracts. The formal evaluation protocol remains pending, as shown in the current progress section above.
