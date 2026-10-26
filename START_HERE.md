@@ -1,25 +1,58 @@
-# Start here — Week 1, Day 1
+# Start here — existing repository workflow
 
-This is a **project foundation**, not an AI classifier. Use it to create a stable source of truth before implementation.
+Open this repository as an existing synthetic AML investigation engineering project. Phase 1 is complete. Phase 2 input contracts are implemented and locally tested; output contracts and a formal evaluation protocol remain pending. There is no implemented AML decision engine or investigation agent.
 
-## Part A — verify the local foundation
+Read [README.md](README.md) for the overview and [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current milestone, implementation checkpoint, and verification limits.
 
-1. Unzip the starter project. Open a terminal in the `aml-alert-triage` folder.
-2. Confirm Python version (`python --version`). The foundation supports 3.11–3.13; the recommended starting version is 3.11.
-3. Run:
+## Part A — set up and verify the existing repository
 
-   ```bash
-   python scripts/check_setup.py
-   python -m unittest discover -s tests -v
-   ```
+Open a terminal in the existing `aml-alert-triage` checkout. If you do not have a local checkout, clone the existing repository into a new directory:
 
-4. Read `PROJECT_STATUS.md` and record your own environment and test results when you push the first commit.
+```bash
+git clone https://github.com/AvaliVava/aml-alert-triage.git
+cd aml-alert-triage
+```
 
-No API keys or installation of LLM libraries are needed for Week 1 Day 1.
+Existing contributors should reuse their checkout. Do not recreate the repository, reinitialize Git, or replace the existing remote configuration. Confirm the working branch and pending changes before starting an authorized task:
 
-## Part B — study the domain
+```bash
+git branch --show-current
+git status --short
+```
 
-Read [the FFIEC suspicious activity reporting section](https://bsaaml.ffiec.gov/manual/AssessingComplianceWithBSARegulatoryRequirements/04), especially **Managing Alerts** and **SAR Decision Making**. Then open `specs/aml_workflow.md`.
+Confirm your interpreter with `python --version` (or `python3 --version` on Linux/macOS). Supported versions are **3.11–3.13**; the repository's starting version is 3.11. Pydantic V2 is an application dependency and is installed by the editable-install command below. Create the virtual environment once if it does not already exist; otherwise reuse it.
+
+Windows PowerShell, from the repository root:
+
+```powershell
+# Run this creation step only if .venv does not already exist.
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe scripts\check_setup.py
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+If the `python` command is unavailable, use `py -3.11 -m venv .venv` for the creation step instead, provided the Windows Python launcher and Python 3.11 are installed. Reuse an existing `.venv` without recreating it.
+
+Linux/macOS, using a supported `python3` interpreter:
+
+```bash
+# Run this creation step only if .venv does not already exist.
+python3 -m venv .venv
+./.venv/bin/python -m pip install -e .
+./.venv/bin/python scripts/check_setup.py
+./.venv/bin/python -m unittest discover -s tests -v
+```
+
+Using the virtual environment's Python directly avoids requiring shell activation. In an already activated environment or configured Linux CI, the equivalent commands are `python -m pip install -e .`, `python scripts/check_setup.py`, and `python -m unittest discover -s tests -v`.
+
+The smoke check exercises the original CLI; its historical `week-1-foundation` phase label does not describe the current milestone. The test command runs the complete suite. The verified local baseline at implementation checkpoint `1375d9f` is **99 passing tests**; remote feature-branch GitHub Actions results remain unverified. These checks need no API keys and do not perform AML analysis, execute verification activities, or call an LLM.
+
+## Part B — historical Phase 1 domain exercise
+
+The following learning exercise is retained from the October 26, 2026 project foundation. It is background for contributors, not a requirement to repeat Phase 1 before working on the current task.
+
+Read [the FFIEC suspicious activity reporting section](https://bsaaml.ffiec.gov/manual/AssessingComplianceWithBSARegulatoryRequirements/04), especially **Managing Alerts** and **SAR Decision Making**. Then open [specs/aml_workflow.md](specs/aml_workflow.md).
 
 Answer, in your own words:
 
@@ -34,24 +67,14 @@ A synthetic small business typically deposits between USD 3,000 and USD 6,000 pe
 
 **Question:** What additional records or questions would you need before recommending closure, more investigation or escalation? Do not classify the customer as guilty or the activity as proven suspicious.
 
-## Part C — make it durable on GitHub
+## Part C — current contribution workflow
 
-GitHub repo creation is **not completed** in this downloaded starter. After reviewing these files:
+Historical context: the original Day 1 starter asked the owner to create and publish the repository. That project-creation exercise has been completed. It is not the setup procedure for this checkout; [WORKLOG.md](WORKLOG.md) retains the foundation history.
 
-1. Create a new, **empty** GitHub repository named `aml-alert-triage` (no generated README or .gitignore; those files already exist in the starter).
-2. In the project folder, run:
+1. Read [AGENTS.md](AGENTS.md), [PROJECT_STATUS.md](PROJECT_STATUS.md), [PROJECT_CHARTER.md](PROJECT_CHARTER.md), and [DECISIONS.md](DECISIONS.md), then inspect the code, tests, and specifications relevant to the authorized task. Some documents retain historical status wording; use [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current milestone.
+2. Keep changes within the task's approved file and behavior scope. Existing record contracts and aggregate validation are in [contracts.py](src/aml_triage/contracts.py); their automated tests are in [test_contracts.py](tests/test_contracts.py).
+3. Run checks relevant to the change and report the actual results. Contract work uses the complete unit-test command above. Passing local checks does not establish that GitHub Actions passed.
+4. Inspect `git diff --check`, `git status --short`, and `git diff --stat` before review. Report changed files, limitations, and checks that were not run, with reasons.
+5. Follow the current task's authorization for documentation updates and Git actions. Stage, commit, push, and merge only when those actions are authorized.
 
-   ```bash
-   git init -b main
-   git add .
-   git commit -m "chore: initialize AML research project foundation"
-   git remote add origin https://github.com/YOUR_USERNAME/aml-alert-triage.git
-   git push -u origin main
-   ```
-
-   Replace `YOUR_USERNAME`; if Git asks for authentication, use GitHub's supported sign-in mechanism instead of committing a token.
-3. Verify the first GitHub Actions run and record its outcome and commit SHA in `PROJECT_STATUS.md`/`WORKLOG.md`.
-4. Open Codex with this same repository. Ask it to read `AGENTS.md`, `PROJECT_STATUS.md`, `DECISIONS.md` and tests **before making changes**.
-5. Create the two Week 1 issues in `issues_to_create.md`.
-
-**Day 1 is complete only after you have personally reviewed the domain exercise and the repository has been published and verified.**
+The implemented engineering scope currently covers input validation only. Fictional labeling terms remain provisional, and supplied synthetic verification records do not represent banking verification performed by this project.

@@ -36,3 +36,9 @@ All remain experiments, not accomplishments.
 **Repository review note (26 October 2026):** Public `main` contains `PROJECT_CHARTER.md` and `PROJECT_STATUS.md`. The charter aligns with the synthetic-data, human-review, baseline-first scope. `PROJECT_STATUS.md` still describes the GitHub repository as not created and only old local Python verification; this conflicts with the confirmed public repository and reported later Python 3.11 testing. Verify actual current tests and commit status, then correct those stale statements without guessing implementation progress.
 
 **Current status:** Documentation prepared locally; approval, status reconciliation and commit not yet completed. Do not mark Phase 1 fully closed until those steps occur.
+
+## Closeout clarification — 27 October 2026
+
+Git history confirms that Phase 1 documentation PR #1 merged into `main` on 26 October 2026 as `a5c68d0`. Phase 1 is complete. The repository-review note and "Current status" paragraph above are retained as historical pre-closeout text; their pending approval, reconciliation, and commit wording no longer describes the current repository.
+
+Phase 2 has started; see [current project status](../../PROJECT_STATUS.md) for implemented input contracts and pending output contracts and evaluation protocol. This clarification adds no approvals, test results, or CI verification. Historical checklist items are preserved; remote GitHub Actions results for the current feature branch remain unverified.
