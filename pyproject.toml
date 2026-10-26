@@ -1,0 +1,12 @@
+[project]
+name = "aml-alert-triage"
+version = "0.0.1"
+description = "Synthetic AML alert triage research prototype — foundation stage"
+requires-python = ">=3.11,<3.14"
+dependencies = []
+
+[tool.ruff]
+line-length = 100
+
+# No external runtime dependencies in Week 1.
+# A verified, pinned lockfile will be introduced when external libraries are needed.
