@@ -1,7 +1,9 @@
 # Project Charter — AML Alert Triage Agent
 
 **Created:** 2026-10-26  
-**Stage:** Phase 1 domain study completed; documentation review and formal phase closure pending.
+**Stage:** Phase 1 complete; Phase 2 started, with individual Pydantic V2 input contracts and the complete `InvestigationInput` contract implemented. Output contracts and the formal evaluation protocol remain pending.
+
+No AML classifier, investigation agent, or end-to-end triage pipeline has been implemented. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for current verification details.
 
 ## Objective
 
