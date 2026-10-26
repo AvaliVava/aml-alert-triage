@@ -1,7 +1,7 @@
 # Project Charter — AML Alert Triage Agent
 
 **Created:** 2026-10-26  
-**Stage:** Initial charter; review and improve during Week 1.
+**Stage:** Phase 1 domain study completed; documentation review and formal phase closure pending.
 
 ## Objective
 

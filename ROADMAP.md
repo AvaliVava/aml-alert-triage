@@ -1,6 +1,8 @@
 # Eight-week roadmap
 
-**Start:** Monday, 2026-10-26. **Core end:** Sunday, 2026-12-20. **Optional contingency:** 2026-12-21 through 2027-01-03.
+**Planning baseline:** October 26–December 20, 2026, with optional contingency through January 3, 2027.
+
+**Scheduling principle:** The eight-week roadmap defines the intended development sequence. Calendar dates are planning estimates, not hard deadlines. Progression depends on completing and verifying the relevant milestone.
 
 | Week | Dates | Objective | Evidence required |
 | --- | --- | --- | --- |
@@ -21,13 +23,17 @@
 4. Update `WORKLOG.md` and `PROJECT_STATUS.md` after accepted work.
 5. Use reviewed commits/PRs as evidence; don't claim a feature works without verification.
 
-### Today (Week 1, Day 1)
+### Phase 1 documentation checkpoint — October 26, 2026
 
-- [x] Draft initial charter, status, work log, research sources and AML lifecycle.
-- [x] Create dependency-free Python foundation with smoke and unit tests.
-- [ ] Project owner reviews the AML lifecycle and charter.
-- [ ] Create a GitHub repository and publish reviewed files.
-- [ ] Configure the selected Codex environment against the repository.
-- [ ] Record the first authenticated GitHub commit and issue link.
-
+- [x] Establish the project charter and roadmap.
+- [x] Create and publish the GitHub repository.
+- [x] Establish the Python 3.11 development environment.
+- [x] Pass the three initial foundation tests locally.
+- [x] Complete the Phase 1 AML domain learning sequence.
+- [x] Prepare and commit six Phase 1 engineering documents to the documentation branch.
+- [x] Update PROJECT_STATUS.md on the documentation branch.
+- [ ] Complete the Phase 1 documentation review.
+- [ ] Merge the approved documentation pull request.
+- [ ] Verify the repository and formally close Phase 1.
+- [ ] Begin Phase 2 specifications and evaluation design.
 The unchecked tasks are not claimed completed.
