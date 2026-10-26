@@ -192,3 +192,120 @@ class VerificationCheck(BaseModel):
     status: str = Field(min_length=1)
     subject_evidence_ids: list[Annotated[str, Field(min_length=1)]]
     findings: list[Annotated[str, Field(min_length=1)]]
+
+
+class InvestigationInput(BaseModel):
+    """Related synthetic records, with structural integrity and no AML decisions."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["1.0"]
+    case: CaseMetadata
+    customer: Customer
+    accounts: list[Account] = Field(strict=True)
+    counterparties: list[Counterparty] = Field(strict=True)
+    transactions: list[Transaction] = Field(strict=True)
+    alert: Alert
+    evidence: list[Evidence] = Field(strict=True)
+    verification_checks: list[VerificationCheck] = Field(strict=True)
+
+    @model_validator(mode="after")
+    def validate_relationships(self) -> Self:
+        record_ids: dict[str, set[str]] = {}
+
+        for collection, field, records in (
+            ("accounts", "account_id", self.accounts),
+            ("counterparties", "counterparty_id", self.counterparties),
+            ("transactions", "transaction_id", self.transactions),
+            ("evidence", "evidence_id", self.evidence),
+            ("verification_checks", "check_id", self.verification_checks),
+        ):
+            seen: set[str] = set()
+            for index, record in enumerate(records):
+                identifier = getattr(record, field)
+                if identifier in seen:
+                    raise ValueError(
+                        f"{collection}[{index}].{field}: duplicate identifier {identifier!r}"
+                    )
+                seen.add(identifier)
+            record_ids[collection] = seen
+
+        if self.case.primary_alert_id != self.alert.alert_id:
+            raise ValueError(
+                f"case.primary_alert_id {self.case.primary_alert_id!r} "
+                f"must match alert.alert_id {self.alert.alert_id!r}"
+            )
+        if self.alert.customer_id != self.customer.customer_id:
+            raise ValueError(
+                f"alert.customer_id {self.alert.customer_id!r} "
+                f"must match customer.customer_id {self.customer.customer_id!r}"
+            )
+
+        for index, account in enumerate(self.accounts):
+            if account.customer_id != self.customer.customer_id:
+                raise ValueError(
+                    f"accounts[{index}].customer_id {account.customer_id!r} "
+                    f"must match customer.customer_id {self.customer.customer_id!r}"
+                )
+
+        for index, transaction in enumerate(self.transactions):
+            if transaction.account_id not in record_ids["accounts"]:
+                raise ValueError(
+                    f"transactions[{index}].account_id: "
+                    f"unknown reference {transaction.account_id!r}"
+                )
+            counterparty_id = transaction.counterparty_id
+            if (
+                counterparty_id is not None
+                and counterparty_id not in record_ids["counterparties"]
+            ):
+                raise ValueError(
+                    f"transactions[{index}].counterparty_id: "
+                    f"unknown reference {counterparty_id!r}"
+                )
+
+        self._validate_references(
+            self.alert.transaction_ids, record_ids["transactions"], "alert.transaction_ids"
+        )
+        for index, evidence in enumerate(self.evidence):
+            self._validate_references(
+                evidence.related_transaction_ids,
+                record_ids["transactions"],
+                f"evidence[{index}].related_transaction_ids",
+            )
+            self._reject_evaluation_keys(evidence.facts, f"evidence[{index}].facts")
+
+        for index, check in enumerate(self.verification_checks):
+            self._validate_references(
+                check.subject_evidence_ids,
+                record_ids["evidence"],
+                f"verification_checks[{index}].subject_evidence_ids",
+            )
+
+        return self
+
+    @staticmethod
+    def _validate_references(values: list[str], target_ids: set[str], path: str) -> None:
+        seen: set[str] = set()
+        for index, identifier in enumerate(values):
+            if identifier in seen:
+                raise ValueError(f"{path}[{index}]: duplicate reference {identifier!r}")
+            if identifier not in target_ids:
+                raise ValueError(f"{path}[{index}]: unknown reference {identifier!r}")
+            seen.add(identifier)
+
+    @classmethod
+    def _reject_evaluation_keys(cls, value: JsonValue, path: str) -> None:
+        if isinstance(value, dict):
+            for key, nested in value.items():
+                nested_path = f"{path}[{key!r}]"
+                if key in (
+                    "expected_action", "recommended_action", "reference_rationale", "rubric_version",
+                ):
+                    raise ValueError(
+                        f"{nested_path}: evaluation-only key {key!r} is not allowed"
+                    )
+                cls._reject_evaluation_keys(nested, nested_path)
+        elif isinstance(value, list):
+            for index, nested in enumerate(value):
+                cls._reject_evaluation_keys(nested, f"{path}[{index}]")

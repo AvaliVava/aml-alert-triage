@@ -7,6 +7,7 @@ from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone, tzinfo
 from decimal import Decimal
 from pathlib import Path
+from unittest.mock import patch
 
 from pydantic import ValidationError
 
@@ -17,6 +18,7 @@ from aml_triage.contracts import (
     Counterparty,
     Customer,
     Evidence,
+    InvestigationInput,
     Transaction,
     VerificationCheck,
 )
@@ -813,6 +815,446 @@ class TestEvidenceVerificationCheckContracts(unittest.TestCase):
 
         self.assertEqual(evidence.related_transaction_ids, ["TX-NOT-SUPPLIED"])
         self.assertEqual(check.subject_evidence_ids, ["EV-NOT-SUPPLIED"])
+
+
+class TestInvestigationInputContracts(unittest.TestCase):
+
+    def assert_invalid_input(self, data, *message_fragments, location=None):
+        """Check both supported entry points for JSON-compatible invalid inputs."""
+        for validate, payload in (
+            (InvestigationInput.model_validate, data),
+            (InvestigationInput.model_validate_json, json.dumps(data)),
+        ):
+            with self.subTest(validation=validate.__name__):
+                with self.assertRaises(ValidationError) as caught:
+                    validate(payload)
+                for fragment in message_fragments:
+                    self.assertIn(fragment, str(caught.exception))
+                if location is not None:
+                    self.assertIn(location, [error["loc"] for error in caught.exception.errors()])
+
+    def test_all_five_golden_cases_with_python_and_json(self):
+        for case_id in ("G01", "G02", "G03", "G04", "G05"):
+            data = load_case(case_id)
+            for validate, payload in (
+                (InvestigationInput.model_validate, data),
+                (InvestigationInput.model_validate_json, json.dumps(data)),
+            ):
+                with self.subTest(case=case_id, validation=validate.__name__):
+                    investigation = validate(payload)
+                    self.assertEqual(
+                        json.loads(investigation.model_dump_json(exclude_unset=True)), data
+                    )
+                    for field, model in (
+                        ("case", CaseMetadata), ("customer", Customer), ("alert", Alert),
+                    ):
+                        self.assertIsInstance(getattr(investigation, field), model)
+                    for field, model in (
+                        ("accounts", Account), ("counterparties", Counterparty),
+                        ("transactions", Transaction), ("evidence", Evidence),
+                        ("verification_checks", VerificationCheck),
+                    ):
+                        for record in getattr(investigation, field):
+                            self.assertIsInstance(record, model)
+                    self.assertIsInstance(investigation.customer.onboarding_date, date)
+                    self.assertIsInstance(investigation.transactions[0].amount, Decimal)
+                    for timestamp in (
+                        investigation.case.opened_at, investigation.alert.created_at,
+                        investigation.transactions[0].occurred_at,
+                    ):
+                        self.assertIsInstance(timestamp, datetime)
+                        self.assertIsNotNone(timestamp.utcoffset())
+
+    def test_every_top_level_field_is_required(self):
+        for field in (
+            "schema_version", "case", "customer", "accounts", "counterparties",
+            "transactions", "alert", "evidence", "verification_checks",
+        ):
+            with self.subTest(field=field):
+                data = load_case("G01")
+                data.pop(field)
+                self.assert_invalid_input(data, location=(field,))
+
+    def test_unknown_top_level_fields_and_answer_metadata_are_rejected(self):
+        for field in (
+            "unknown_field", "expected_action", "recommended_action", "reference_rationale",
+            "rubric_version", "evaluation_label", "reference_answers",
+        ):
+            with self.subTest(field=field):
+                data = load_case("G01")
+                data[field] = "unexpected value"
+                self.assert_invalid_input(data, location=(field,))
+
+    def test_unsupported_and_incorrectly_typed_schema_versions_are_rejected(self):
+        for value in ("", "1", "2.0", "1.0 ", 1, 1.0, True, None, [], {}):
+            with self.subTest(value=value):
+                data = load_case("G01")
+                data["schema_version"] = value
+                self.assert_invalid_input(data, location=("schema_version",))
+
+        data = load_case("G01")
+        data["schema_version"] = b"1.0"
+        with self.assertRaises(ValidationError):
+            InvestigationInput.model_validate(data)
+
+    def test_collection_fields_require_actual_lists(self):
+        for field in (
+            "accounts", "counterparties", "transactions", "evidence", "verification_checks",
+        ):
+            for value in (None, {}, "[]", 123, True):
+                with self.subTest(field=field, value=value):
+                    data = load_case("G02")
+                    data[field] = value
+                    self.assert_invalid_input(data, location=(field,))
+
+            records = load_case("G02")[field]
+            for value in (tuple(records), iter(records), {"record"}, b"[]"):
+                with self.subTest(field=field, value_type=type(value).__name__):
+                    data = load_case("G02")
+                    data[field] = value
+                    with self.assertRaises(ValidationError):
+                        InvestigationInput.model_validate(data)
+
+    def test_incorrect_single_record_types_are_rejected(self):
+        for field in ("case", "customer", "alert"):
+            for value in (None, [], "record", 123, True):
+                with self.subTest(field=field, value=value):
+                    data = load_case("G01")
+                    data[field] = value
+                    self.assert_invalid_input(data, location=(field,))
+
+    def test_invalid_nested_records_are_rejected(self):
+        for field, index, nested_field, value in (
+            ("case", None, "primary_alert_id", ""),
+            ("customer", None, "name", ""),
+            ("accounts", 0, "currency", "usd"),
+            ("counterparties", 0, "display_name", ""),
+            ("transactions", 0, "amount", "-1.00"),
+            ("alert", None, "created_at", "2026-10-16T10:00:00"),
+            ("evidence", 0, "facts", []),
+            ("verification_checks", 0, "findings", [""]),
+        ):
+            with self.subTest(field=field, nested_field=nested_field):
+                data = load_case("G02")
+                record = data[field] if index is None else data[field][index]
+                record[nested_field] = value
+                self.assert_invalid_input(data)
+
+    def test_identical_and_conflicting_duplicate_record_ids_are_rejected(self):
+        for field, id_field, model, changed_field in (
+            ("accounts", "account_id", Account, "account_type"),
+            ("counterparties", "counterparty_id", Counterparty, "display_name"),
+            ("transactions", "transaction_id", Transaction, "description"),
+            ("evidence", "evidence_id", Evidence, "source"),
+            ("verification_checks", "check_id", VerificationCheck, "status"),
+        ):
+            for conflicting in (False, True):
+                with self.subTest(field=field, conflicting=conflicting):
+                    data = load_case("G02")
+                    duplicate = deepcopy(data[field][0])
+                    if conflicting:
+                        duplicate[changed_field] = "another recorded value"
+                    model.model_validate(duplicate)
+                    data[field].append(duplicate)
+                    index = len(data[field]) - 1
+                    self.assert_invalid_input(
+                        data, f"{field}[{index}].{id_field}", "duplicate identifier",
+                        duplicate[id_field],
+                    )
+
+    def test_g05_duplicate_transaction_fixture_is_rejected(self):
+        data = load_case("G05_invalid_duplicate")
+        self.assert_invalid_input(data, "transactions[1].transaction_id", "TX-G05-01")
+
+    def test_case_primary_alert_must_match(self):
+        data = load_case("G01")
+        data["case"]["primary_alert_id"] = "ALT-OTHER"
+        CaseMetadata.model_validate(data["case"])
+        self.assert_invalid_input(data, "case.primary_alert_id", "alert.alert_id", "ALT-OTHER")
+
+    def test_alert_customer_must_match(self):
+        data = load_case("G01")
+        data["alert"]["customer_id"] = "CUST-OTHER"
+        Alert.model_validate(data["alert"])
+        self.assert_invalid_input(data, "alert.customer_id", "customer.customer_id", "CUST-OTHER")
+
+    def test_every_account_must_belong_to_the_customer(self):
+        data = load_case("G01")
+        account = deepcopy(data["accounts"][0])
+        account["account_id"] = "ACC-OTHER"
+        account["customer_id"] = "CUST-OTHER"
+        Account.model_validate(account)
+        data["accounts"].append(account)
+        self.assert_invalid_input(data, "accounts[1].customer_id", "CUST-OTHER")
+
+    def test_transaction_account_references_must_resolve(self):
+        data = load_case("G02")
+        data["transactions"][1]["account_id"] = "ACC-MISSING"
+        Transaction.model_validate(data["transactions"][1])
+        self.assert_invalid_input(data, "transactions[1].account_id", "ACC-MISSING")
+
+    def test_non_null_counterparty_references_must_resolve(self):
+        data = load_case("G02")
+        data["transactions"][1]["counterparty_id"] = "CP-MISSING"
+        Transaction.model_validate(data["transactions"][1])
+        self.assert_invalid_input(data, "transactions[1].counterparty_id", "CP-MISSING")
+
+        data = load_case("G02")
+        data["counterparties"] = []
+        self.assert_invalid_input(data, "transactions[0].counterparty_id", "CP-G02-01")
+
+    def test_alert_transaction_references_must_resolve(self):
+        data = load_case("G02")
+        data["alert"]["transaction_ids"].append("TX-MISSING")
+        Alert.model_validate(data["alert"])
+        self.assert_invalid_input(data, "alert.transaction_ids[1]", "TX-MISSING")
+
+    def test_evidence_transaction_references_must_resolve(self):
+        data = load_case("G02")
+        data["evidence"][1]["related_transaction_ids"].append("TX-MISSING")
+        Evidence.model_validate(data["evidence"][1])
+        self.assert_invalid_input(data, "evidence[1].related_transaction_ids[1]", "TX-MISSING")
+
+    def test_check_evidence_references_must_resolve(self):
+        data = load_case("G01")
+        data["verification_checks"][1]["subject_evidence_ids"].append("EV-MISSING")
+        VerificationCheck.model_validate(data["verification_checks"][1])
+        self.assert_invalid_input(
+            data, "verification_checks[1].subject_evidence_ids[2]", "EV-MISSING"
+        )
+
+    def test_duplicates_within_each_reference_list_are_rejected(self):
+        for field, index, nested_field, model in (
+            ("alert", None, "transaction_ids", Alert),
+            ("evidence", 1, "related_transaction_ids", Evidence),
+            ("verification_checks", 0, "subject_evidence_ids", VerificationCheck),
+        ):
+            with self.subTest(field=field):
+                data = load_case("G02")
+                record = data[field] if index is None else data[field][index]
+                references = record[nested_field]
+                references.append(references[0])
+                model.model_validate(record)
+                path = field if index is None else f"{field}[{index}]"
+                self.assert_invalid_input(
+                    data, f"{path}.{nested_field}[{len(references) - 1}]",
+                    "duplicate reference", references[0],
+                )
+
+    def test_reserved_evaluation_keys_are_rejected_at_any_fact_depth(self):
+        for key in (
+            "expected_action", "recommended_action", "reference_rationale", "rubric_version",
+        ):
+            for facts in (
+                {key: None},
+                {"nested": {key: "value"}},
+                {"items": [True, {key: False}]},
+                {"levels": [[{"nested": [0, {key: {"anything": "value"}}]}]]},
+            ):
+                with self.subTest(key=key, facts=facts):
+                    data = load_case("G02")
+                    data["evidence"][1]["facts"] = facts
+                    # The guard belongs only to the composed investigation contract.
+                    self.assertEqual(Evidence.model_validate(data["evidence"][1]).facts, facts)
+                    self.assert_invalid_input(
+                        data, "evidence[1].facts", "evaluation-only key", key
+                    )
+
+    def test_empty_counterparties_and_explicit_null_references_are_preserved(self):
+        for case_id in ("G01", "G05"):
+            with self.subTest(case=case_id):
+                data = load_case(case_id)
+                investigation = InvestigationInput.model_validate(data)
+                self.assertEqual(investigation.counterparties, [])
+                self.assertTrue(investigation.transactions)
+                for transaction in investigation.transactions:
+                    self.assertIsNone(transaction.counterparty_id)
+
+    def test_contextual_evidence_without_transaction_references_is_preserved(self):
+        for case_id, evidence_id in (("G01", "EV-G01-01"), ("G04", "EV-003")):
+            with self.subTest(case=case_id):
+                investigation = InvestigationInput.model_validate(load_case(case_id))
+                evidence = next(
+                    record for record in investigation.evidence
+                    if record.evidence_id == evidence_id
+                )
+                self.assertEqual(evidence.related_transaction_ids, [])
+
+    def test_g04_evidence_can_reference_transactions_outside_the_alert(self):
+        investigation = InvestigationInput.model_validate(load_case("G04"))
+
+        self.assertIn("TX-105", [record.transaction_id for record in investigation.transactions])
+        self.assertNotIn("TX-105", investigation.alert.transaction_ids)
+        invoice = next(record for record in investigation.evidence if record.evidence_id == "EV-004")
+        self.assertEqual(invoice.related_transaction_ids, ["TX-105"])
+
+    def test_g05_missing_beneficiary_information_remains_valid(self):
+        investigation = InvestigationInput.model_validate(load_case("G05"))
+
+        self.assertIsNone(investigation.transactions[0].counterparty_id)
+        self.assertIsNone(investigation.evidence[0].facts["beneficiary_account_ref"])
+        self.assertEqual(investigation.verification_checks[0].status, "unresolved")
+
+    def test_empty_check_reference_and_findings_lists_remain_valid(self):
+        data = load_case("G01")
+        data["verification_checks"][0]["subject_evidence_ids"] = []
+        data["verification_checks"][0]["findings"] = []
+
+        investigation = InvestigationInput.model_validate(data)
+
+        self.assertEqual(investigation.verification_checks[0].subject_evidence_ids, [])
+        self.assertEqual(investigation.verification_checks[0].findings, [])
+
+    def test_empty_evidence_and_check_collections_are_permitted_when_references_allow(self):
+        for clear_evidence in (False, True):
+            with self.subTest(clear_evidence=clear_evidence):
+                data = load_case("G01")
+                data["verification_checks"] = []
+                if clear_evidence:
+                    data["evidence"] = []
+
+                investigation = InvestigationInput.model_validate(data)
+
+                self.assertEqual(investigation.verification_checks, [])
+                self.assertEqual(len(investigation.evidence), len(data["evidence"]))
+
+    def test_empty_accounts_or_transactions_fail_on_references(self):
+        for field, error_path in (
+            ("accounts", "transactions[0].account_id"),
+            ("transactions", "alert.transaction_ids[0]"),
+        ):
+            with self.subTest(field=field):
+                data = load_case("G01")
+                data[field] = []
+                self.assert_invalid_input(data, error_path, "unknown reference")
+
+    def test_supplied_but_unreferenced_records_and_separate_id_namespaces_are_valid(self):
+        data = load_case("G02")
+        for field, id_field in (
+            ("accounts", "account_id"), ("counterparties", "counterparty_id"),
+            ("transactions", "transaction_id"), ("evidence", "evidence_id"),
+            ("verification_checks", "check_id"),
+        ):
+            record = deepcopy(data[field][0])
+            record[id_field] = "UNREFERENCED"
+            data[field].append(record)
+
+        investigation = InvestigationInput.model_validate(data)
+
+        self.assertEqual(json.loads(investigation.model_dump_json(exclude_unset=True)), data)
+        self.assertNotIn("UNREFERENCED", investigation.alert.transaction_ids)
+        self.assertNotIn(
+            "UNREFERENCED",
+            [record.account_id for record in investigation.transactions],
+        )
+        self.assertNotIn(
+            "UNREFERENCED",
+            [record.counterparty_id for record in investigation.transactions],
+        )
+        for check in investigation.verification_checks:
+            self.assertNotIn("UNREFERENCED", check.subject_evidence_ids)
+
+    def test_references_across_separate_records_and_repeated_findings_are_valid(self):
+        data = load_case("G01")
+        evidence = deepcopy(data["evidence"][1])
+        evidence["evidence_id"] = "EV-ANOTHER"
+        data["evidence"].append(evidence)
+        check = deepcopy(data["verification_checks"][0])
+        check["check_id"] = "CHK-ANOTHER"
+        check["findings"] *= 2
+        data["verification_checks"].append(check)
+
+        investigation = InvestigationInput.model_validate(data)
+
+        self.assertEqual(
+            investigation.evidence[-1].related_transaction_ids,
+            investigation.evidence[1].related_transaction_ids,
+        )
+        self.assertEqual(
+            investigation.verification_checks[-1].subject_evidence_ids,
+            investigation.verification_checks[0].subject_evidence_ids,
+        )
+        self.assertEqual(investigation.verification_checks[-1].findings, check["findings"])
+        self.assertEqual(len(investigation.verification_checks[-1].findings), 2)
+
+    def test_submitted_order_and_nested_values_are_preserved_without_mutation(self):
+        data = load_case("G04")
+        for field, id_field in (("accounts", "account_id"), ("counterparties", "counterparty_id")):
+            record = deepcopy(data[field][0])
+            record[id_field] = "ZZ-UNREFERENCED"
+            data[field].append(record)
+        data["evidence"][0]["facts"]["nested"] = {
+            "values": ["001.00", 1, 1.25, True, None, {"items": [False, [], {}]}]
+        }
+        data["alert"]["transaction_ids"].reverse()
+        for record in data["evidence"]:
+            record["related_transaction_ids"].reverse()
+        for record in data["verification_checks"]:
+            record["subject_evidence_ids"].reverse()
+            record["findings"] += ["Recorded note B", "Recorded note A", "Recorded note B"]
+        for field in (
+            "accounts", "counterparties", "transactions", "evidence", "verification_checks",
+        ):
+            data[field].reverse()
+        original = deepcopy(data)
+
+        for validate, payload in (
+            (InvestigationInput.model_validate, data),
+            (InvestigationInput.model_validate_json, json.dumps(data)),
+        ):
+            with self.subTest(validation=validate.__name__):
+                investigation = validate(payload)
+                self.assertEqual(
+                    json.loads(investigation.model_dump_json(exclude_unset=True)), original
+                )
+                self.assertEqual(data, original)
+
+    def test_ordinary_words_and_reserved_key_text_are_not_banned(self):
+        data = load_case("G01")
+        data["evidence"][0]["facts"] = {
+            "description": "close investigate escalate expected_action recommended_action",
+            "reference_rationale_notes": "rubric_version",
+        }
+        data["verification_checks"][0]["findings"] = [
+            "The supplied text mentions close, escalate, and reference_rationale."
+        ]
+
+        investigation = InvestigationInput.model_validate(data)
+
+        self.assertEqual(investigation.evidence[0].facts, data["evidence"][0]["facts"])
+        self.assertEqual(
+            investigation.verification_checks[0].findings,
+            data["verification_checks"][0]["findings"],
+        )
+
+    def test_validation_requires_no_reference_or_policy_file_reads(self):
+        data = load_case("G01")
+        data["case"]["policy_id"] = "POLICY-NOT-IN-REPOSITORY"
+        json_payload = json.dumps(data)
+
+        with patch("builtins.open", side_effect=OSError("unexpected file read")), patch.object(
+            Path, "open", side_effect=OSError("unexpected file read")
+        ):
+            for validate, payload in (
+                (InvestigationInput.model_validate, data),
+                (InvestigationInput.model_validate_json, json_payload),
+            ):
+                with self.subTest(validation=validate.__name__):
+                    investigation = validate(payload)
+                    self.assertEqual(investigation.case.policy_id, data["case"]["policy_id"])
+
+    def test_no_additional_temporal_or_currency_relationships_are_imposed(self):
+        data = load_case("G04")
+        data["case"]["opened_at"] = "2020-01-01T00:00:00Z"
+        data["accounts"][0]["currency"] = "EUR"
+        data["customer"]["expected_monthly_activity"]["currency"] = "GBP"
+
+        investigation = InvestigationInput.model_validate(data)
+
+        self.assertEqual(investigation.case.opened_at.year, 2020)
+        self.assertEqual(investigation.accounts[0].currency, "EUR")
+        self.assertEqual(investigation.customer.expected_monthly_activity.currency, "GBP")
+        self.assertEqual(investigation.transactions[0].currency, "USD")
 
 
 if __name__ == "__main__":
