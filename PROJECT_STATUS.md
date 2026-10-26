@@ -1,18 +1,22 @@
 # Project Status — Source of Truth
 
-**Last updated:** 2026-10-26  
-**Current milestone:** Phase 1 — Documentation Review and Closeout  
-**Next milestone:** Phase 2 — Specifications, Data Contracts, Labeling, and Evaluation Design  
-**Project:** AML Alert Triage Agent  
-**Repository:** https://github.com/AvaliVava/aml-alert-triage
+- **Last updated:** 2026-10-27
+- **Current milestone:** Phase 2 — Input Contracts Implemented; Documentation Reconciliation
+- **Next milestone:** Phase 2 — Output Contracts and Formal Evaluation Protocol
+- **Project:** AML Alert Triage Agent
+- **Repository:** https://github.com/AvaliVava/aml-alert-triage
 
 ## 1. Current Project Status
 
 The foundational repository has been created and published on GitHub.
 
-Phase 1 AML domain studies have been completed. The project is currently consolidating and reviewing its documentation before formally entering Phase 2.
+Phase 1 is complete, including the domain studies and documentation closeout. The Phase 1 documentation pull request was merged into `main` as PR #1 (`a5c68d0`).
 
-The implementation remains at the foundation/scaffolding stage. No AML classifier or end-to-end triage pipeline has been implemented.
+Phase 2 has started. Its input-contract implementation is complete and locally tested: the individual record models and complete Pydantic V2 `InvestigationInput` contract are implemented in [contracts.py](src/aml_triage/contracts.py).
+
+The latest implementation checkpoint is `1375d9f` on `feature/phase-2-pydantic-contracts`, with a verified local baseline of **99 passing tests**. All five valid golden-case inputs pass validation, and the deliberately invalid duplicate-transaction fixture is rejected.
+
+Phase 2 as a whole is not complete. Output contracts and a formal evaluation protocol remain pending, and the fictional labeling vocabulary remains provisional. No AML classifier, investigation agent, or end-to-end triage pipeline has been implemented. Remote GitHub Actions results for this feature branch remain unverified.
 
 ## 2. Completed Work
 
@@ -23,9 +27,9 @@ The implementation remains at the foundation/scaffolding stage. No AML classifie
 - Project continuity and engineering decision documentation established.
 - Python 3.11.9 installed and a virtual environment created.
 - Local setup verification completed successfully using Python 3.11.
-- Three foundation unit tests passed in the local environment.
+- Historical foundation checkpoint: three unit tests passed before the contract work; the current local baseline is 99 passing tests.
 - GitHub Actions CI workflow configuration included in the repository.
-- `docs/phase-1-completion` branch created for the documentation review.
+- Historical Phase 1 workflow: `docs/phase-1-completion` was created for the documentation review and its pull request was subsequently merged.
 
 ### Phase 1 — AML Domain Understanding
 
@@ -46,28 +50,39 @@ Completed study topics include:
 
 ### Phase 1 Documentation
 
-Six engineering documents have been committed to the `docs/phase-1-completion` branch under `docs/phase-1/`:
+The six Phase 1 engineering documents were originally committed on `docs/phase-1-completion` and are now present in `main` under [docs/phase-1/](docs/phase-1/):
 
-- `AML_DOMAIN_FOUNDATIONS.md`
-- `INVESTIGATION_WORKFLOW.md`
-- `CASE_STUDY.md`
-- `PROBLEM_DEFINITION.md`
-- `DOMAIN_REQUIREMENTS.md`
-- `PHASE_1_COMPLETION.md`
+- [AML_DOMAIN_FOUNDATIONS.md](docs/phase-1/AML_DOMAIN_FOUNDATIONS.md)
+- [INVESTIGATION_WORKFLOW.md](docs/phase-1/INVESTIGATION_WORKFLOW.md)
+- [CASE_STUDY.md](docs/phase-1/CASE_STUDY.md)
+- [PROBLEM_DEFINITION.md](docs/phase-1/PROBLEM_DEFINITION.md)
+- [DOMAIN_REQUIREMENTS.md](docs/phase-1/DOMAIN_REQUIREMENTS.md)
+- [PHASE_1_COMPLETION.md](docs/phase-1/PHASE_1_COMPLETION.md)
 
-A separate Phase 1 learning manual has also been prepared.
+The historical Phase 1 record also notes preparation of a separate learning manual. This is retained as project history, not a newly verified repository artifact.
 
-These documents require final review before Phase 1 is formally closed.
+Phase 1 documentation review and closure are complete. Some historical documents still contain starter-era status wording; reconciliation of documents outside this checkpoint's three-file scope remains separate work.
+
+### Phase 2 — Input Contracts and Golden Cases
+
+- Pydantic V2 is declared as an application dependency in [pyproject.toml](pyproject.toml).
+- Individual contracts are implemented for `Customer`, `Account`, `Transaction`, `Counterparty`, `Alert`, `CaseMetadata`, `Evidence`, and `VerificationCheck`, with an `ExpectedMonthlyActivity` helper.
+- `InvestigationInput` composes the nine existing top-level fields, requires schema version `"1.0"`, forbids unknown top-level fields, and requires actual lists for collections.
+- Aggregate validation rejects duplicate record IDs, duplicate identifiers within reference lists, mismatched customer/alert relationships, and unresolved explicit record references. Standalone record models remain usable independently.
+- Evidence facts preserve heterogeneous JSON values. The aggregate contract recursively rejects the four approved evaluation-only keys inside facts; reference answers remain separate from input records.
+- All five valid inputs in [data/golden_cases/inputs/](data/golden_cases/inputs/) pass Python and JSON validation. The intentionally malformed [G05_invalid_duplicate.json](data/golden_cases/inputs/G05_invalid_duplicate.json) is rejected for its duplicate transaction ID.
+- Empty counterparty collections, explicitly null counterparty IDs, contextual evidence, and valid-but-incomplete beneficiary information remain acceptable. Supplied verification records are synthetic recorded inputs, not banking verification performed by this system.
+- The fictional [labeling policy](specs/labeling_policy_v1.json) and separate golden-case reference answers exist; their labels remain provisional pending review.
 
 ## 3. Agreed Engineering Direction
 
-The initial prototype will:
+The implemented functionality currently validates input structure and explicit record relationships. The future investigation pipeline is planned to:
 
 - Use synthetic AML alert, customer, transaction, and evidence data.
 - Implement deterministic preprocessing and a rules-based baseline before introducing LLM classification.
 - Use a single hosted LLM initially.
-- Produce structured preliminary recommendations: `close`, `investigate`, or `escalate`.
-- Assemble relevant evidence and validate references.
+- Explore structured preliminary recommendations using the current provisional rubric vocabulary: `close`, `investigate`, or `escalate`. A final output contract has not been defined.
+- Assemble relevant evidence for review, building on the implemented input-reference checks.
 - Generate factual investigation narrative drafts.
 - Preserve missing information, uncertainty, and contradictory evidence.
 - Maintain reproducible experiments and documented technical decisions.
@@ -80,10 +95,11 @@ RAG, multi-agent architectures, and additional infrastructure remain outside the
 ## 4. What Has Not Been Implemented
 
 - Synthetic AML data generator.
-- Formal customer, transaction, alert, and evidence schemas.
+- Output contracts and a finalized output schema.
+- A formal evaluation protocol.
 - Rules-based AML triage baseline.
 - Hosted LLM classifier.
-- Evidence assembly and validation pipeline.
+- End-to-end evidence assembly pipeline.
 - Investigation narrative generator.
 - End-to-end triage pipeline.
 - Held-out evaluation framework and experimental results.
@@ -92,33 +108,50 @@ No classification accuracy, real analyst time savings, or model performance resu
 
 ## 5. Verification Status
 
-Previously completed local checks:
+### Current Local Implementation Baseline
 
-```bash
+The local readiness audit at implementation checkpoint `1375d9f` verified:
+
+- Python 3.11.9 and Pydantic 2.14.1.
+- Complete unit test suite: **99 passed**.
+- Five valid golden-case inputs accepted and the duplicate-transaction fixture rejected.
+- Setup smoke check and installed dependency consistency check: passed.
+
+To reproduce the setup check and complete suite after editable installation, run from the repository root in Windows PowerShell:
+
+```powershell
 .\.venv\Scripts\python.exe scripts\check_setup.py
-
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-At the time of local verification:
+These are implementation-checkpoint results from the local readiness audit. Documentation reconciliation Checkpoint A does not rerun the suite or change the implementation. See [README.md](README.md) and [START_HERE.md](START_HERE.md) for environment creation and editable installation.
+
+### Historical Foundation Verification
+
+The October 26, 2026 foundation record reported:
 
 - Python 3.11.9 environment: working.
 - Setup check: passed.
 - Foundation tests: 3 passed.
 
-These results are historical local verification results, not a claim that the latest repository commit has been retested.
+The historical three-test result describes the initial foundation and is superseded by the 99-test implementation baseline above.
 
-The GitHub Actions workflow exists, but its latest execution status has not been independently confirmed in this update.
+### Remote Verification
+
+The [GitHub Actions workflow](.github/workflows/foundation-tests.yml) installs the project and configures Python 3.11, 3.12, and 3.13 jobs. Remote GitHub Actions results for `feature/phase-2-pydantic-contracts` remain **unverified**. Passing local tests do not establish successful remote CI.
+
+The original smoke-check CLI still reports the historical phase label `week-1-foundation`. Use this document for the current project milestone; no CLI behavior is changed by this documentation checkpoint.
 
 ## 6. Immediate Next Actions
 
-1. Review the six Phase 1 engineering documents.
-2. Confirm consistency with `PROJECT_CHARTER.md`, `ROADMAP.md`, and `DECISIONS.md`.
-3. Correct documentation omissions or contradictions without introducing unapproved architectural changes.
-4. Open a pull request from `docs/phase-1-completion` into `main`.
-5. Review and merge the documentation after approval.
-6. Mark Phase 1 formally complete.
-7. Begin Phase 2 with data contracts, labeling rules, golden cases, and the evaluation protocol.
+1. Finalize and review documentation reconciliation Checkpoint A, with any remaining documentation updates separately authorized.
+2. Push the feature branch after documentation approval.
+3. Open an input-contract pull request from `feature/phase-2-pydantic-contracts` into `main`.
+4. Check GitHub Actions for the PR and verify that all configured CI jobs succeed.
+5. Merge only after successful human review and CI.
+6. Define and review output contracts and the formal evaluation protocol.
+7. Review the provisional fictional rubric and golden-case labels; do not treat them as finalized evaluation labels.
+8. Confirm the remaining Phase 2 deliverables before formally closing Phase 2 and proceeding along the agreed roadmap.
 
 ## 7. Project Continuity Rules
 
@@ -133,9 +166,12 @@ The GitHub Actions workflow exists, but its latest execution status has not been
 
 ## 8. Current Checkpoint
 
-**Phase 1 domain learning:** Completed.  
-**Phase 1 documentation:** Created; final review pending.  
-**Phase 1 formal closure:** Pending.  
-**Phase 2:** Not yet started.
+- **Phase 1 domain learning:** Completed.
+- **Phase 1 documentation and closure:** Completed.
+- **Phase 2:** Started; input-contract implementation complete and locally tested.
+- **Implementation checkpoint:** `1375d9f` on `feature/phase-2-pydantic-contracts`.
+- **Local test baseline:** 99 passing tests.
+- **Remote feature-branch CI:** Unverified.
+- **Pending Phase 2 work:** Output contracts, formal evaluation protocol, and review of provisional labeling artifacts.
 
-**Next action:** Finish Phase 1 documentation review and open the documentation pull request.
+**Next action:** Review this documentation checkpoint and verify remote CI for the input-contract PR. Do not mark all of Phase 2 complete.

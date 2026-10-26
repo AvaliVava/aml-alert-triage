@@ -1,10 +1,10 @@
 # AML Alert Triage Agent
 
-**Status:** Week 1 — research and project foundation (started 2026-10-26)
+**Status:** Phase 2 — input contracts implemented and locally tested; output contracts and a formal evaluation protocol remain pending.
 
-An evaluation-driven **research prototype** for assisting human reviewers with synthetic anti-money-laundering (AML) transaction alerts. The intended future pipeline will produce a recommended action, supporting evidence, a factual rationale, and, when appropriate, a draft investigation narrative.
+A **synthetic AML investigation engineering project** and research prototype for assisting human reviewers with anti-money-laundering (AML) transaction alerts. Current functionality validates supplied records and their relationships. The intended future pipeline will explore preliminary review recommendations, evidence assembly, and factual narrative drafting.
 
-> **Important:** This is not a bank product, automated SAR filing system, or compliance-certified investigation tool. No real customer data is used. No classifier, evidence assembler, or narrative generator has been implemented yet.
+> **Important:** This is not a bank product, automated SAR filing system, or compliance-certified investigation tool. No real customer data is used. No AML decision engine, classifier, investigation agent, evidence assembler, or narrative generator has been implemented.
 
 ## The problem
 
@@ -12,29 +12,59 @@ Monitoring systems generate alerts that require contextual investigation. A trig
 
 Regulatory-workflow reference: [FFIEC BSA/AML Examination Manual — Suspicious Activity Reporting](https://bsaaml.ffiec.gov/manual/AssessingComplianceWithBSARegulatoryRequirements/04).
 
+## Implemented input validation
+
+The [Pydantic V2 contracts](src/aml_triage/contracts.py) include `Customer`, `Account`, `Transaction`, `Counterparty`, `Alert`, `CaseMetadata`, `Evidence`, and `VerificationCheck`, plus an `ExpectedMonthlyActivity` helper.
+
+The complete `InvestigationInput` contract composes the existing nine-field input structure. It requires schema version `"1.0"` and collection lists, rejects unexpected outer record fields and duplicate identifiers or references, and validates explicit relationships across the supplied records. Evidence facts remain heterogeneous JSON; the aggregate contract also rejects the four approved evaluation-only keys inside facts.
+
+Valid incomplete records remain acceptable: the required counterparty collection may be empty when references permit it, transaction counterparty IDs may be null, and contextual evidence may have no transaction references. Supplied verification statuses and check findings are synthetic recorded inputs, not verification performed by this system.
+
+All five valid golden cases pass validation and the intentionally invalid duplicate-transaction fixture is rejected. The [contract tests](tests/test_contracts.py) exercise individual records and aggregate validation; [golden-case documentation](data/golden_cases/README.md) explains the synthetic-data limitations. This validation does not perform an AML investigation or generate a recommendation.
+
 ## Planned scope
 
 - **Input:** Synthetic alert, customer profile, transaction history and rule metadata.
 - **Analysis:** Deterministic transaction features, then a rules baseline and structured LLM assessment.
-- **Output:** Recommendation (`recommend_close`, `investigate`, `recommend_escalation`), rationale, validated transaction references, missing information and optional narrative draft.
+- **Future output:** A preliminary review recommendation, rationale, validated transaction references, missing information and optional narrative draft. Output contracts and a final output schema remain pending.
 - **Assurance:** Contract tests, reproducible evaluation, safe failures, documented limitations and human review.
 - **Out of scope for v1:** Real bank integrations, autonomous case closure, real SAR filings, production deployment and RAG.
 
-## Try the Day 1 foundation
+The [fictional labeling rubric](specs/labeling_policy_v1.json) currently uses the provisional vocabulary `close`, `investigate`, and `escalate`. These names supersede earlier illustrative `recommend_close`/`recommend_escalation` examples; they are not a finalized output API or implemented decision logic. Reference answers remain separate from investigation inputs, and the labels still require review.
 
-Requires **Python 3.11–3.13**. The foundation has no third-party package dependencies.
+## Install and run local checks
+
+Requires **Python 3.11–3.13**. **Pydantic V2 is an application dependency**, declared in [pyproject.toml](pyproject.toml) and installed with the project. Run commands from the repository root. Reuse an existing virtual environment, or create one once before installation.
+
+Windows PowerShell:
+
+```powershell
+# Run this creation step only if .venv does not already exist.
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe scripts\check_setup.py
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+If the `python` command is unavailable, use `py -3.11 -m venv .venv` for the creation step instead, provided the Windows Python launcher and Python 3.11 are installed. Reuse an existing `.venv` without recreating it.
+
+In an activated virtual environment, or Linux CI with a configured supported Python interpreter:
 
 ```bash
+python -m pip install -e .
 python scripts/check_setup.py
 python -m unittest discover -s tests -v
 ```
 
-The first command checks the local Python environment and repository scaffolding. The second runs foundation tests. They **do not** execute AML analysis or call an LLM.
+Editable installation makes the local package and its dependency available. The smoke check exercises the original foundation CLI; the unit-test command runs the **complete suite**, including foundation, fixture-integrity, and contract tests. Neither performs AML analysis nor calls an LLM. No API keys are needed for these checks.
+
+The verified local implementation baseline at `1375d9f` is **99 passing tests**. Remote GitHub Actions results for the feature branch remain unverified. The smoke CLI's `week-1-foundation` phase label is historical; consult [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current milestone and [START_HERE.md](START_HERE.md) for detailed setup.
 
 ## Project documents
 
 | File | Why it exists |
 | --- | --- |
+| [START_HERE.md](START_HERE.md) | Setup and contribution workflow for the existing repository |
 | [PROJECT_CHARTER.md](PROJECT_CHARTER.md) | Scope, success standards and change controls |
 | [ROADMAP.md](ROADMAP.md) | Eight-week development plan |
 | [PROJECT_STATUS.md](PROJECT_STATUS.md) | Current verified state and next task |
@@ -56,7 +86,7 @@ The first command checks the local Python environment and repository scaffolding
 
 ## Current progress
 
-See [PROJECT_STATUS.md](PROJECT_STATUS.md). Week 1 foundation is in progress; this is **not** a finished AML implementation.
+Phase 1 is complete and Phase 2 is active. Input-contract implementation is complete and locally tested; output contracts, the formal evaluation protocol, and review of provisional labels remain pending. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for verified checkpoints and next actions. This is **not** a finished AML investigation system.
 
 ## References
 
