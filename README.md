@@ -1,10 +1,10 @@
 # AML Alert Triage Agent
 
-**Status:** Phase 2 — input contracts implemented and locally tested; output contracts and a formal evaluation protocol remain pending.
+**Status:** Phase 2 — input contracts merged through PR #3; output contracts implemented and committed locally, not merged. The formal evaluation protocol and provisional-label review remain pending.
 
-A **synthetic AML investigation engineering project** and research prototype for assisting human reviewers with anti-money-laundering (AML) transaction alerts. Current functionality validates supplied records and their relationships. The intended future pipeline will explore preliminary review recommendations, evidence assembly, and factual narrative drafting.
+A **synthetic AML investigation engineering project** and research prototype for assisting human reviewers with anti-money-laundering (AML) transaction alerts. Current functionality validates supplied input records, submitted preliminary output structure, and typed citation references. The intended future pipeline will explore generating preliminary review recommendations, evidence assembly, and factual narrative drafting.
 
-> **Important:** This is not a bank product, automated SAR filing system, or compliance-certified investigation tool. No real customer data is used. No AML decision engine, classifier, investigation agent, evidence assembler, or narrative generator has been implemented.
+> **Important:** This is not a bank product, automated SAR filing system, or compliance-certified investigation tool. No real customer data is used. No AML decision engine, classifier, LLM investigation agent, automated verification system, evidence assembler, or complete triage pipeline has been implemented.
 
 ## The problem
 
@@ -22,15 +22,25 @@ Valid incomplete records remain acceptable: the required counterparty collection
 
 All five valid golden cases pass validation and the intentionally invalid duplicate-transaction fixture is rejected. The [contract tests](tests/test_contracts.py) exercise individual records and aggregate validation; [golden-case documentation](data/golden_cases/README.md) explains the synthetic-data limitations. This validation does not perform an AML investigation or generate a recommendation.
 
+## Implemented preliminary output validation
+
+The [output contracts](src/aml_triage/contracts.py) add `RecordCitation`, `CitedStatement`, `Contradiction`, and `InvestigationOutput`. Outputs separate factual findings, interpretations, unresolved questions, missing information, and contradictions, using typed record citations. Every output requires `recommendation_scope="preliminary"` and `human_review_required=True`.
+
+The provisional actions are `close`, `investigate`, and `escalate`. A recommendation requires a cited rationale and at least one cited factual finding. Explicit abstention uses `assessment_status="unable_to_recommend"` and `recommended_action=null`; its rationale may be uncited and its findings empty. All factual findings, interpretations, and contradiction sides require citations; questions and missing-information statements may have none.
+
+The separate `validate_investigation_output_references` function accepts already-validated input and output models, checks exact case/alert identities, and resolves citations in all statement locations against eight supplied record namespaces: case, customer, account, counterparty, transaction, alert, evidence, and verification_check. It returns the original output without mutating either object. Resolving an identifier proves record existence only, not factual support or independent verification. No disposition is chosen and no reference answers or labeling policy are read by this validation.
+
+Input contracts were merged into `main` through PR #3 (`327e600`). The output work is committed locally at `a538063` and `ce0cd4a` on `feature/phase-2-output-contracts` and has not been merged. Candidate outputs in tests are authored independently of the separate reference answers; the contracts do not generate assessments.
+
 ## Planned scope
 
 - **Input:** Synthetic alert, customer profile, transaction history and rule metadata.
 - **Analysis:** Deterministic transaction features, then a rules baseline and structured LLM assessment.
-- **Future output:** A preliminary review recommendation, rationale, validated transaction references, missing information and optional narrative draft. Output contracts and a final output schema remain pending.
+- **Future generation:** Preliminary assessments using the implemented output contract, evidence assembly, and narrative drafting; these generation capabilities remain pending.
 - **Assurance:** Contract tests, reproducible evaluation, safe failures, documented limitations and human review.
 - **Out of scope for v1:** Real bank integrations, autonomous case closure, real SAR filings, production deployment and RAG.
 
-The [fictional labeling rubric](specs/labeling_policy_v1.json) currently uses the provisional vocabulary `close`, `investigate`, and `escalate`. These names supersede earlier illustrative `recommend_close`/`recommend_escalation` examples; they are not a finalized output API or implemented decision logic. Reference answers remain separate from investigation inputs, and the labels still require review.
+The [fictional labeling rubric](specs/labeling_policy_v1.json) uses the provisional vocabulary `close`, `investigate`, and `escalate`, now accepted by the initial output contract. These names supersede earlier illustrative `recommend_close`/`recommend_escalation` examples; accepting them does not finalize the labels or implement decision logic. Reference answers remain separate from investigation inputs and candidate outputs, and the labels still require review. No production AML policy or regulatory decision logic is asserted.
 
 ## Install and run local checks
 
@@ -58,7 +68,7 @@ python -m unittest discover -s tests -v
 
 Editable installation makes the local package and its dependency available. The smoke check exercises the original foundation CLI; the unit-test command runs the **complete suite**, including foundation, fixture-integrity, and contract tests. Neither performs AML analysis nor calls an LLM. No API keys are needed for these checks.
 
-The verified local implementation baseline at `1375d9f` is **99 passing tests**. Remote GitHub Actions results for the feature branch remain unverified. The smoke CLI's `week-1-foundation` phase label is historical; consult [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current milestone and [START_HERE.md](START_HERE.md) for detailed setup.
+The complete suite was rerun at `ce0cd4a`: **144 local tests passed**. Remote GitHub Actions results for the output-contract branch remain unverified. The smoke CLI's `week-1-foundation` phase label is historical; consult [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current milestone and [START_HERE.md](START_HERE.md) for detailed setup.
 
 ## Project documents
 
@@ -80,13 +90,13 @@ The verified local implementation baseline at `1375d9f` is **99 passing tests**.
 2. Inspect existing code and tests before changing anything.
 3. Compare the LLM against a simpler baseline; never fabricate an accuracy claim.
 4. Separate the development set from held-out evaluation cases.
-5. No unverified transaction IDs or invented evidence in accepted output.
+5. No unverified transaction IDs or invented evidence in accepted output. Current citation checks establish identifier existence only; factual support remains unevaluated.
 6. Record failed experiments, not only the successful ones.
 7. A complaint or a low score triggers **diagnosis**, not an automatic redesign.
 
 ## Current progress
 
-Phase 1 is complete and Phase 2 is active. Input-contract implementation is complete and locally tested; output contracts, the formal evaluation protocol, and review of provisional labels remain pending. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for verified checkpoints and next actions. This is **not** a finished AML investigation system.
+Phase 1 is complete and Phase 2 is active. Input contracts are merged into `main`; output contracts and input/output reference validation are implemented locally on the unmerged feature branch. The formal evaluation protocol and provisional-label review remain pending. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for verified checkpoints and next actions. This is **not** a finished AML investigation system.
 
 ## References
 

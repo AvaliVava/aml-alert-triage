@@ -129,3 +129,45 @@ The following accepted Phase 2 decisions are recorded retrospectively in Documen
 **Why:** The fixtures contain different kinds of evidence. A single mandatory facts schema would invent unsupported fields and could erase valid contextual or incomplete information.
 
 **Tradeoff:** JSON compatibility does not prove factual truth, independent verification, or domain-specific completeness. Fact-specific evidence schemas are outside the approved input-contract scope; Phase 2 output contracts remain pending.
+
+---
+
+The following records document the approved output-contract choices implemented on 2026-10-27 at `a538063` and `ce0cd4a`. They update the earlier output-contract deferral without rewriting the historical ADRs. Both checkpoints are committed locally on `feature/phase-2-output-contracts` and remain unmerged.
+
+## ADR-012 — Preliminary structured outputs with explicit abstention
+
+**Date:** 2026-10-27
+
+**Status:** Accepted; implemented at `a538063`.
+
+**Decision:** Add `RecordCitation`, `CitedStatement`, `Contradiction`, and `InvestigationOutput` in [contracts.py](src/aml_triage/contracts.py). Separate factual findings, interpretations, unresolved questions, missing information, and contradictions. Require every output field, reject unknown fields, and preserve submitted text and list order. Recommendations use the provisional actions `close`, `investigate`, or `escalate`, with a cited rationale and at least one cited factual finding. Explicit abstention uses `assessment_status="unable_to_recommend"` and required `recommended_action=null`, rather than a fourth disposition. All outputs require `recommendation_scope="preliminary"` and `human_review_required=True`.
+
+**Citation rules:** Require citations for factual findings, interpretations, and both contradiction sides. Questions, missing-information statements, and an abstention rationale may have none. Reject duplicate typed citations within one statement, but permit citation reuse across statements and contradiction sides. Do not silently trim, deduplicate, or insert data.
+
+**Why:** A shared structure makes submitted assessments inspectable while distinguishing recorded facts from interpretations and unresolved issues. Explicit abstention preserves an inability to recommend without inventing a new AML disposition. Preliminary scope and human review keep the contract within the synthetic project's decision-support boundary.
+
+**Tradeoff:** Structural and internal-consistency checks cannot establish that a rationale explains its conclusion, that a contradiction is real, or that an assessment is complete. The provisional labels still require review; no recommendation generator or finalized labeling policy is implemented.
+
+## ADR-013 — Separate typed citation resolution from output structure
+
+**Date:** 2026-10-27
+
+**Status:** Accepted; typed citations implemented at `a538063`, with contextual validation at `ce0cd4a`.
+
+**Decision:** A citation identifies a `record_type` and exact `record_id` in one of eight namespaces: case, customer, account, counterparty, transaction, alert, evidence, or verification_check. Keep standalone Pydantic output validation separate from `validate_investigation_output_references`, which takes already-validated input and output models. The function checks exact case/alert identities and every citation in the rationale, statement collections, and both contradiction sides. Contextual mismatches raise `ValueError` with field paths; success returns the original output without mutating either object.
+
+**Why:** Output structure can be validated without an investigation, while record existence requires the supplied input. Exact typed lookup avoids guessing relationships, normalizing identifiers, or substituting namespaces. The same textual ID may exist in more than one namespace.
+
+**Tradeoff:** Callers must invoke contextual validation separately when accepting an output against an investigation. It permits supplied transactions outside the alert subset, contextual evidence, nullable counterparties, uncited questions, and abstention without fabricated citations. It neither requires every record to be cited nor imposes a relationship between separately cited evidence and transactions.
+
+## ADR-014 — Citation existence does not establish factual support
+
+**Date:** 2026-10-27
+
+**Status:** Accepted; enforced as the boundary of both output checkpoints.
+
+**Decision:** Treat successful reference resolution only as evidence that a record identifier exists in the supplied investigation. Validation does not judge suspiciousness, choose or alter a disposition, verify claims or recorded verification statuses, or determine whether a citation supports a statement. It does not load reference answers or interpret the fictional labeling policy. Candidate outputs in [tests](tests/test_contracts.py) are authored independently of reference-answer labels and JSON.
+
+**Why:** Conflating existence with support would assert certainty the implemented checks cannot provide. Keeping reference answers separate also protects later evaluation from answer leakage.
+
+**Tradeoff:** A structurally valid statement with existing citations can still be unsupported or false. Substantive grounding evaluation and the formal evaluation protocol remain unimplemented. These contracts introduce no AML classifier, LLM investigation agent, automated verification system, SAR logic, or production regulatory policy.
