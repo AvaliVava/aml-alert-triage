@@ -78,3 +78,35 @@
 **Documentation checks:** `git diff --check` passed; `git status --short` and `git diff --stat` confirmed changes only in the three authorized documents. Local links resolve, and earlier ADR and worklog text is preserved.
 
 **Verification boundary:** These are documentation-only edits. The unit suite, setup check, dependency check, and remote Actions are not rerun in this checkpoint; no implementation or remote CI status is changed. Human review is required before committing this documentation checkpoint.
+
+## 2026-10-27 — Input contracts merged through PR #3
+
+**Git evidence:** PR #3 merged the input-contract branch into `main` as `327e600308874dfb1ab6394308a5e8e03998be6c` (`327e600`). This records the merge, not a newly verified GitHub Actions result.
+
+## 2026-10-27 — Output Contract Implementation Checkpoint 1
+
+**Committed checkpoint:** `a538063a47b381f74af87a6c77b7055703ced6bc` (`a538063`), `feat: add standalone AML investigation output contracts`.
+
+**Completed:** Added `RecordCitation`, `CitedStatement`, `Contradiction`, and `InvestigationOutput` in [contracts.py](src/aml_triage/contracts.py). The models separate factual findings, interpretations, unresolved questions, missing information, and contradictions. They accept the provisional actions `close`, `investigate`, and `escalate`, or explicit abstention with `assessment_status="unable_to_recommend"` and `recommended_action=null`. Every output requires preliminary scope and human review. Strict field/list validation, citation requirements, duplicate-citation rejection, and preserved text/order are covered by [contract tests](tests/test_contracts.py).
+
+**Testing history:** Added 26 test methods, expanding the 99-test baseline to the reported **125 passing local tests**. The checkpoint's Git date establishes implementation chronology, not the exact time of that earlier test run. The complete current suite is confirmed separately below.
+
+## 2026-10-27 — Output Contract Implementation Checkpoint 2
+
+**Committed checkpoint:** `ce0cd4a3edbdb5d1f9a5698639ccebe893b794d8` (`ce0cd4a`), `feat: validate AML investigation output references`.
+
+**Completed:** Added the separate `validate_investigation_output_references` function for already-validated input and output models. It checks exact case/alert identities and citations in every statement location against eight namespaces: case, customer, account, counterparty, transaction, alert, evidence, and verification_check. Contextual errors include field paths; successful validation returns the same output and mutates neither object.
+
+**Testing history:** Added 19 dedicated relationship-validation test methods, bringing the suite to **144 local tests**. Coverage includes all namespaces and statement locations, wrong or unknown references, exact matching, G04's supplied `TX-105` outside the alert subset, contextual evidence, nullable counterparties, abstention, no mutation, and no policy/reference-answer reads by contextual validation. Existing code and test assertions were preserved while adding this function and its tests.
+
+**Boundary:** Resolving a citation establishes record existence only. Neither checkpoint evaluates factual support, verifies supplied claims, generates an assessment, chooses a disposition, or implements AML/SAR decision logic. Candidate test outputs are independent of reference-answer artifacts.
+
+## 2026-10-27 — Output Contract Documentation Checkpoint
+
+**Preflight:** Confirmed a clean working tree on `feature/phase-2-output-contracts`, HEAD `ce0cd4a`, and both implementation commits present. Input contracts are merged into `main` through PR #3; both output checkpoints are committed locally and remain unmerged.
+
+**Documentation:** Reconciled [PROJECT_STATUS.md](PROJECT_STATUS.md), [README.md](README.md), [ROADMAP.md](ROADMAP.md), [DECISIONS.md](DECISIONS.md), and this worklog with the implemented output structure, separate contextual validation, and their limits. Preserved historical worklog entries, ADRs, and earlier test results.
+
+**Fresh local verification:** `.\.venv\Scripts\python.exe -m unittest discover -s tests -v` passed **144 of 144 tests** at `ce0cd4a` during this checkpoint. No code or tests were changed. Setup/dependency checks were not rerun, and remote GitHub Actions results for the output-contract branch remain **unverified**.
+
+**Still pending:** Output documentation review and the output-contract PR workflow, the formal evaluation protocol, and review of provisional labels. Phase 2 is not complete. No AML classifier, LLM investigation agent, automated verification system, or complete triage pipeline has been implemented. Stop for human review before committing these documentation changes.

@@ -17,18 +17,20 @@
 
 ## Current roadmap progress
 
-Phase 1 is complete; its documentation review and merge are recorded in PR #1 (`a5c68d0`). Phase 2 has started, and its input-contract implementation is complete at `1375d9f`. The sequence and planning dates above remain unchanged; milestone verification governs progression.
+Phase 1 is complete; its documentation review and merge are recorded in PR #1 (`a5c68d0`). Phase 2 has started. Input contracts completed at `1375d9f` were merged into `main` through PR #3 (`327e600`). Output contracts and input/output reference validation are implemented through `ce0cd4a` on the current, unmerged `feature/phase-2-output-contracts` branch. The sequence and planning dates above remain unchanged; milestone verification governs progression.
 
 - [x] Create five synthetic golden-case inputs and five separate reference-answer artifacts, merged through PR #2 (`db212d4`); see [golden cases](data/golden_cases/).
 - [x] Implement individual Pydantic V2 input contracts and the `ExpectedMonthlyActivity` helper in [contracts.py](src/aml_triage/contracts.py).
 - [x] Implement the complete `InvestigationInput` contract using those records, with duplicate-ID, duplicate-reference, and explicit cross-record relationship validation.
 - [x] Accept all five valid cases through Python and JSON validation and reject the intentionally invalid [duplicate-transaction fixture](data/golden_cases/inputs/G05_invalid_duplicate.json).
-- [x] Verify **99 passing tests** in the local readiness audit at `1375d9f`; see [contract tests](tests/test_contracts.py) and the verification record in [PROJECT_STATUS.md](PROJECT_STATUS.md).
-- [ ] Define and review Phase 2 output contracts; no final output schema is implemented.
+- [x] Verify **99 passing tests** in the historical local input-contract readiness audit at `1375d9f`; see [contract tests](tests/test_contracts.py) and the verification record in [PROJECT_STATUS.md](PROJECT_STATUS.md).
+- [x] Implement the approved preliminary output contracts at `a538063`: `RecordCitation`, `CitedStatement`, `Contradiction`, and `InvestigationOutput`, with provisional actions `close`/`investigate`/`escalate`, explicit abstention, preliminary scope, and required human review.
+- [x] Implement separate input/output reference validation at `ce0cd4a`, checking exact case/alert identities and typed citation existence in all eight record namespaces without assessing factual support.
+- [x] Confirm **144 passing local tests** at `ce0cd4a` during the output documentation checkpoint.
 - [ ] Define the formal evaluation protocol.
 - [ ] Review the fictional [labeling vocabulary](specs/labeling_policy_v1.json) (`close`, `investigate`, `escalate`) and provisional [golden-case labels](data/golden_cases/references/).
 
-Phase 2 as a whole remains incomplete. Remote GitHub Actions results for `feature/phase-2-pydantic-contracts` remain unverified; the local audit is not evidence of successful remote CI. Later generator, baseline, LLM, integration, and evaluation work remains in the planned sequence above.
+Phase 2 as a whole remains incomplete. Output implementation commits are local and have not been merged; remote GitHub Actions results for `feature/phase-2-output-contracts` remain unverified. Local tests are not evidence of successful remote CI. Later generator, baseline, LLM, integration, and evaluation work remains in the planned sequence above.
 
 ## Development rhythm
 
