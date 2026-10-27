@@ -92,10 +92,10 @@ class TestPacketAuditor(unittest.TestCase):
         self.assert_stages(report, "passed", "passed", "passed")
         self.assertEqual(set(report), {
             "report_schema_version", "auditor_version", "contracts", "artifacts", "stages",
-            "semantic_evaluation", "limitations",
+            "semantic_evaluation", "limitations", "deterministic_fact_checks",
         })
-        self.assertEqual(report["report_schema_version"], "1.0")
-        self.assertEqual(report["auditor_version"], "0.1.0")
+        self.assertEqual(report["report_schema_version"], "1.1")
+        self.assertEqual(report["auditor_version"], "0.2.0")
         versions = report["contracts"]
         self.assertEqual(versions["module"], "aml_triage.contracts")
         self.assertTrue(versions["package_version"])
@@ -489,6 +489,108 @@ class TestPacketAuditor(unittest.TestCase):
             code, report = self.run_cli(paths, directory)
         self.assertEqual(code, 2)
         self.assert_stages(report, "error", "failed", "not_evaluated")
+
+    def test_recognized_amount_results_do_not_change_mechanical_or_semantic_stages(self):
+        for amount, outcome in (("48,500.00", "matches_record"),
+                                ("99,999.00", "conflicts_with_record")):
+            with self.subTest(amount=amount):
+                self.candidate["factual_findings"][0]["statement"] = (
+                    f"The incoming transaction was USD {amount}."
+                )
+                before = deepcopy(self.candidate)
+                report = self.audit()
+                self.assert_stages(report, "passed", "passed", "passed")
+                facts = report["deterministic_fact_checks"]
+                self.assertEqual(facts["findings"][0]["outcome"], outcome)
+                self.assertEqual(facts["coverage"]["checked"], 1)
+                self.assertEqual(facts["coverage"]["not_checked"], 0)
+                self.assertEqual(self.candidate, before)
+
+    def test_deterministic_checks_report_mixed_checked_and_unchecked_coverage(self):
+        finding = deepcopy(self.candidate["factual_findings"][0])
+        self.candidate["factual_findings"] = []
+        for text in ("The incoming transaction was USD 48,500.00.",
+                     "The incoming transaction was USD 99,999.00.", "Unsupported wording."):
+            item = deepcopy(finding)
+            item["statement"] = text
+            self.candidate["factual_findings"].append(item)
+        report = self.audit()
+        self.assert_stages(report, "passed", "passed", "passed")
+        self.assertEqual(report["deterministic_fact_checks"]["coverage"], {
+            "total_findings": 3, "checked": 2, "matches_record": 1,
+            "conflicts_with_record": 1, "not_checked": 1,
+        })
+
+    def test_fact_checks_ignore_all_other_statement_locations(self):
+        statement = deepcopy(self.candidate["rationale"])
+        statement["statement"] = "The incoming transaction was USD 99,999.00."
+        self.candidate["rationale"] = deepcopy(statement)
+        for field in ("interpretations", "unresolved_questions", "missing_information"):
+            self.candidate[field] = [deepcopy(statement)]
+        self.candidate["contradictions"] = [{
+            "description": "Outside this check's scope.",
+            "left": deepcopy(statement), "right": deepcopy(statement),
+        }]
+        report = self.audit()
+        self.assert_stages(report, "passed", "passed", "passed")
+        self.assertEqual(report["deterministic_fact_checks"]["coverage"]["total_findings"], 1)
+        self.assertEqual(report["deterministic_fact_checks"]["coverage"]["checked"], 0)
+        self.assertEqual(report["deterministic_fact_checks"]["coverage"]["not_checked"], 1)
+
+    def test_fact_checker_is_skipped_for_invalid_structures_and_references(self):
+        for failure in ("input_structure", "output_structure", "contextual_references"):
+            with self.subTest(failure=failure):
+                candidate = deepcopy(self.candidate)
+                candidate["factual_findings"][0]["statement"] = (
+                    "The incoming transaction was USD 99,999.00."
+                )
+                if failure == "output_structure":
+                    candidate.pop("human_review_required")
+                elif failure == "contextual_references":
+                    candidate["factual_findings"][0]["citations"][0]["record_id"] = "MISSING"
+                with patch("aml_triage.auditor.check_transaction_amounts") as checker:
+                    report = self.audit(candidate, b"{}" if failure == "input_structure" else None)
+                checker.assert_not_called()
+                facts = report["deterministic_fact_checks"]
+                self.assertEqual(facts["status"], "not_evaluated")
+                self.assertIn(failure, facts["reason"])
+                self.assertEqual(facts["coverage"]["checked"], 0)
+                if failure == "output_structure":
+                    self.assertIsNone(facts["coverage"]["total_findings"])
+                    self.assertIsNone(facts["coverage"]["not_checked"])
+                    self.assertEqual(facts["findings"], [])
+                else:
+                    self.assertEqual(facts["coverage"]["total_findings"], 1)
+                    self.assertEqual(facts["coverage"]["not_checked"], 1)
+                    self.assertEqual(facts["findings"][0]["outcome"], "not_checked")
+                self.assertEqual(json.loads(json.dumps(report, allow_nan=False)), report)
+
+    def test_unexpected_fact_checker_error_is_isolated_from_mechanical_stages(self):
+        with patch("aml_triage.auditor.check_transaction_amounts",
+                   side_effect=RuntimeError("PRIVATE-EXCEPTION-SENTINEL")):
+            report = self.audit()
+        self.assert_stages(report, "passed", "passed", "passed")
+        facts = report["deterministic_fact_checks"]
+        self.assertEqual(facts["status"], "error")
+        self.assertEqual(facts["diagnostics"][0]["type"], "RuntimeError")
+        self.assertEqual(facts["coverage"]["checked"], 0)
+        self.assertNotIn("PRIVATE-EXCEPTION-SENTINEL", json.dumps(report))
+
+    def test_cli_factual_conflict_is_reported_with_mechanical_exit_zero(self):
+        self.candidate["factual_findings"][0]["statement"] = (
+            "The incoming transaction was USD 99,999.00."
+        )
+        with TemporaryDirectory() as directory:
+            paths = self.write_packet(directory)
+            before = [path.read_bytes() for path in paths]
+            code, report = self.run_cli(paths, directory)
+            self.assertEqual([path.read_bytes() for path in paths], before)
+        self.assertEqual(code, 0)
+        self.assert_stages(report, "passed", "passed", "passed")
+        facts = report["deterministic_fact_checks"]
+        self.assertEqual(facts["status"], "failed")
+        self.assertEqual(facts["findings"][0]["outcome"], "conflicts_with_record")
+        self.assertEqual(facts["coverage"]["conflicts_with_record"], 1)
 
 
 if __name__ == "__main__":
