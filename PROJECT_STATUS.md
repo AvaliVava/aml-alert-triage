@@ -1,12 +1,28 @@
 # Project Status — Source of Truth
 
+## Current local checkpoint — evidence relationship checks after PR #6
+
+- Base: `54b0cf8`, the merged PR #6 checkpoint on `main`; current work is uncommitted on `feature/phase-2-evidence-relation-checks`.
+- A separate [evidence relationship evaluator](src/aml_triage/evidence_relation_checks.py) compares explicitly annotated beneficiary references in G04's `EV-004` and `EV-005`, requiring their supplied `TX-105` links. It reports recorded relationship consistency separately from finding-level direct-source citation coverage.
+- Versioned annotations bind the exact case, statement index/text and investigation/candidate SHA-256 identities. They are **unreviewed development examples**, not approved AML ground truth; no prose interpretation or annotation authorship is verified.
+- Fresh local verification: **237 tests passed** (204 existing plus 33 new), and `pip check` found no broken requirements. Existing contracts, auditor reports, CLI behavior, tests and golden artifacts are unchanged.
+- No recommendation engine, LLM judge, independent authenticity verification or general semantic evaluator is added. Phase 2 is not complete; remote CI has not been checked for this branch. Independent review is next.
+
+The evidence-relationship checkpoint above is the authoritative current status. See [WORKLOG.md](WORKLOG.md) for the local checkpoint record.
+
+---
+
+## Historical checkpoint — output-contract documentation review
+
+**All sections below are a historical snapshot, not the current project state.** Their milestones, branch and merge status, test baselines, and next actions describe the earlier output-contract documentation checkpoint and are preserved for chronology.
+
 - **Last updated:** 2026-10-27
 - **Current milestone:** Phase 2 — Input and Output Contracts Implemented; Output Documentation Review
 - **Next milestone:** Output-contract PR review and CI; formal evaluation protocol and provisional-label review
 - **Project:** AML Alert Triage Agent
 - **Repository:** https://github.com/AvaliVava/aml-alert-triage
 
-## 1. Current Project Status
+## 1. Project Status at the Historical Output-Contract Checkpoint
 
 The foundational repository has been created and published on GitHub.
 
@@ -118,7 +134,7 @@ No classification accuracy, real analyst time savings, or model performance resu
 
 ## 5. Verification Status
 
-### Current Local Implementation Baseline
+### Local Implementation Baseline at the Historical Output-Contract Checkpoint
 
 At `ce0cd4a`, the complete unit suite was rerun during this output documentation checkpoint: **144 tests passed**. This includes the existing input and golden-fixture tests, 26 standalone output-contract tests, and 19 input/output reference-validation tests. No code or tests were changed for this documentation task.
 
@@ -156,7 +172,7 @@ The [GitHub Actions workflow](.github/workflows/foundation-tests.yml) installs t
 
 The original smoke-check CLI still reports the historical phase label `week-1-foundation`. Use this document for the current project milestone; no CLI behavior is changed by this documentation checkpoint.
 
-## 6. Immediate Next Actions
+## 6. Next Actions at the Historical Output-Contract Checkpoint
 
 1. Review and finalize this output-contract documentation checkpoint.
 2. Commit the approved documentation and push the output-contract feature branch when authorized.
@@ -178,7 +194,7 @@ The original smoke-check CLI still reports the historical phase label `week-1-fo
 - Do not report performance results without reproducible evidence.
 - Preserve the agreed roadmap sequence while allowing flexible time for learning and implementation.
 
-## 8. Current Checkpoint
+## 8. Historical Output-Contract Checkpoint
 
 - **Phase 1 domain learning:** Completed.
 - **Phase 1 documentation and closure:** Completed.
