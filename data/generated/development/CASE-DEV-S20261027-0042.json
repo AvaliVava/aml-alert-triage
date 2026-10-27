@@ -1,0 +1,181 @@
+{
+  "accounts": [
+    {
+      "account_id": "ACC-DEV-S20261027-0042",
+      "account_type": "business_current",
+      "currency": "GBP",
+      "customer_id": "CUST-DEV-S20261027-0042",
+      "opened_at": "2023-01-01"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-DEV-S20261027-0042",
+    "created_at": "2026-02-28T06:00:00Z",
+    "customer_id": "CUST-DEV-S20261027-0042",
+    "rule_id": "UNUSUAL_CASH_INCREASE",
+    "transaction_ids": [
+      "TX-DEV-S20261027-0042-01",
+      "TX-DEV-S20261027-0042-02",
+      "TX-DEV-S20261027-0042-03",
+      "TX-DEV-S20261027-0042-04",
+      "TX-DEV-S20261027-0042-05"
+    ]
+  },
+  "case": {
+    "case_id": "CASE-DEV-S20261027-0042",
+    "opened_at": "2026-02-28T07:00:00Z",
+    "policy_id": "POLICY-AML-V1",
+    "primary_alert_id": "ALT-DEV-S20261027-0042"
+  },
+  "counterparties": [],
+  "customer": {
+    "customer_id": "CUST-DEV-S20261027-0042",
+    "customer_type": "business",
+    "expected_monthly_activity": {
+      "currency": "GBP",
+      "maximum": "30000.00",
+      "minimum": "10000.00",
+      "typical_daily_cash_deposit_max": "3000.00",
+      "typical_daily_cash_deposit_min": "1000.00"
+    },
+    "industry": "grocery_retail",
+    "name": "Fictional Development Business DEV-S20261027-0042",
+    "onboarding_date": "2023-01-01",
+    "profile_last_verified": "2025-12-01"
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-DEV-S20261027-0042-01",
+      "evidence_type": "trading_profile",
+      "facts": {
+        "operating_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "premises": {
+          "type": "trade_unit",
+          "visit_record": null
+        },
+        "seasonal_activity_reported": true,
+        "staff_count": 14
+      },
+      "related_transaction_ids": [],
+      "source": "synthetic_profile_record",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0042-02",
+      "evidence_type": "promotion_notice",
+      "facts": {
+        "claim": "Seasonal promotion",
+        "promotion_dates": [
+          "2026-02-23",
+          "2026-02-24",
+          "2026-02-25",
+          "2026-02-26",
+          "2026-02-27"
+        ]
+      },
+      "related_transaction_ids": [],
+      "source": "customer_supplied",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0042-03",
+      "evidence_type": "deposit_reconciliation",
+      "facts": {
+        "currency": "GBP",
+        "deposit_total": "37036.79",
+        "reconciled_deposits": "0.00",
+        "source_record_dates": [],
+        "unmatched_amount": "37036.79"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0042-01",
+        "TX-DEV-S20261027-0042-02",
+        "TX-DEV-S20261027-0042-03",
+        "TX-DEV-S20261027-0042-04",
+        "TX-DEV-S20261027-0042-05"
+      ],
+      "source": "synthetic_reconciliation_record",
+      "verification_status": "recorded"
+    }
+  ],
+  "schema_version": "1.0",
+  "transactions": [
+    {
+      "account_id": "ACC-DEV-S20261027-0042",
+      "amount": "6604.34",
+      "counterparty_id": null,
+      "currency": "GBP",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-02-23T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0042-01",
+      "transaction_type": "cash_deposit"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0042",
+      "amount": "7961.28",
+      "counterparty_id": null,
+      "currency": "GBP",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-02-24T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0042-02",
+      "transaction_type": "cash_deposit"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0042",
+      "amount": "6722.93",
+      "counterparty_id": null,
+      "currency": "GBP",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-02-25T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0042-03",
+      "transaction_type": "cash_deposit"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0042",
+      "amount": "8577.40",
+      "counterparty_id": null,
+      "currency": "GBP",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-02-26T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0042-04",
+      "transaction_type": "cash_deposit"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0042",
+      "amount": "7170.84",
+      "counterparty_id": null,
+      "currency": "GBP",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-02-27T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0042-05",
+      "transaction_type": "cash_deposit"
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-DEV-S20261027-0042-01",
+      "check_type": "supplied_sales_inventory",
+      "findings": [
+        "Sales records cover 0 of 5 deposit dates; supplied unmatched amount is 37036.79 GBP."
+      ],
+      "status": "recorded",
+      "subject_evidence_ids": [
+        "EV-DEV-S20261027-0042-02",
+        "EV-DEV-S20261027-0042-03"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,513 @@
+{
+  "case_count": 50,
+  "cases": [
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0001",
+      "input_path": "CASE-DEV-S20261027-0001.json",
+      "input_sha256": "61b0ec1bd414cc62052c3f0bd57e31474d9a5e72adb455dfb296cc6e50b0e613",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_and_dispatch",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0002",
+      "input_path": "CASE-DEV-S20261027-0002.json",
+      "input_sha256": "11370ba0cd8338fc6d4884c9fc1427e7de1d7d1213d7dc7efbab899f1de5b1d2",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "complete_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0003",
+      "input_path": "CASE-DEV-S20261027-0003.json",
+      "input_sha256": "1e5995d8f46cc8828239d342669f4934529b5a7ddea0ab28d486cc01ae938240",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "after_instruction",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0004",
+      "input_path": "CASE-DEV-S20261027-0004.json",
+      "input_sha256": "5e5efdc25cf00ed67751f659a21f107339684ef88d7a18a0db504b2d97b1d49f",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_purpose",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0005",
+      "input_path": "CASE-DEV-S20261027-0005.json",
+      "input_sha256": "85d021c72ceed201dadd4f2161ce2289240743ddc003ef7e771f0e57c765424f",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "invoice_reference_absent",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0006",
+      "input_path": "CASE-DEV-S20261027-0006.json",
+      "input_sha256": "23458941c27407ed32c10b7beee8907c219227395c530a950042cf0df1f1c21d",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_only",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0007",
+      "input_path": "CASE-DEV-S20261027-0007.json",
+      "input_sha256": "d35b7a070dc25a81ff03dbf18470fc7f7808042e616affb5c128a0a0dcadfc73",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "partial_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0008",
+      "input_path": "CASE-DEV-S20261027-0008.json",
+      "input_sha256": "b5c631e0a2f68d7d8c23e38769b63fb26989e3a98639f983dc3a4e185fce8a13",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "authorized_change",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0009",
+      "input_path": "CASE-DEV-S20261027-0009.json",
+      "input_sha256": "225e695782654934397f713cae6a13ae04621157e667fcfec3c0b7c6f9cc7b87",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_both",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0010",
+      "input_path": "CASE-DEV-S20261027-0010.json",
+      "input_sha256": "2d1736f8491a4a0e25d79428f4261c2d66fe9ed5d5f9b2eeef29b87dcd3d0f8c",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "equal_references",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0011",
+      "input_path": "CASE-DEV-S20261027-0011.json",
+      "input_sha256": "b36f4363b51a8bd105a29733bfc41d1002850d1dcfa7a6378933c844a8201b84",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "explanation_only",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0012",
+      "input_path": "CASE-DEV-S20261027-0012.json",
+      "input_sha256": "f66ebe3575b280a4bcdf083e0b265a8f0702530279afa9415b591058ebb466ef",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "no_sales_records",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0013",
+      "input_path": "CASE-DEV-S20261027-0013.json",
+      "input_sha256": "b3dd9ba6b7b8bb6ec3ebb3d759a21896e6ddf5576e45e18c1b4f7b162060ef77",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "split_timing",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0014",
+      "input_path": "CASE-DEV-S20261027-0014.json",
+      "input_sha256": "93476ae3565c88c6bd0ef799527b634325bf542839f32c9f8cd889801c0428b2",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "partial_reply",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0015",
+      "input_path": "CASE-DEV-S20261027-0015.json",
+      "input_sha256": "403a906508faf771f62bc9e61a9d6cf9261c3a1733bca1a607cc37bdb9a8cfbb",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "different_references",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0016",
+      "input_path": "CASE-DEV-S20261027-0016.json",
+      "input_sha256": "6d5326d65bfe850bdcf7607c81b354075fe69ebddce35d064d26952b307be07b",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_and_dispatch",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0017",
+      "input_path": "CASE-DEV-S20261027-0017.json",
+      "input_sha256": "082504c56c08c37a26ff6835e9f9c0e528dd923246455fbce27f61c8fddd0de9",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "complete_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0018",
+      "input_path": "CASE-DEV-S20261027-0018.json",
+      "input_sha256": "31d50e487a9e787126250ad6a09c29b75d3b80f9b5f9841df81c720962e657bf",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "different_accounts_same_supplier",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0019",
+      "input_path": "CASE-DEV-S20261027-0019.json",
+      "input_sha256": "ad6e63913d4d1334795dc242c48c29fa00f874b55492cf160d35a93b85597860",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_account",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0020",
+      "input_path": "CASE-DEV-S20261027-0020.json",
+      "input_sha256": "9702af1bfe9a659c6be4be31a1b1b2cd218f5a7031f5625890e46992b464adb3",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "invoice_reference_absent",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0021",
+      "input_path": "CASE-DEV-S20261027-0021.json",
+      "input_sha256": "2309fdc757d7fc6727b094f33b33a111bc5b3f7f2e57209a9c12d663c53fd07d",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_only",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0022",
+      "input_path": "CASE-DEV-S20261027-0022.json",
+      "input_sha256": "bfa23f86b329ae06308b476363f46a5f00352f681cb9748251d6b64a358a19b4",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "partial_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0023",
+      "input_path": "CASE-DEV-S20261027-0023.json",
+      "input_sha256": "bf61e16aaa8b2546e91103fc5caedd516db54ee59bc662f8f045412086a33762",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "before_instruction",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0024",
+      "input_path": "CASE-DEV-S20261027-0024.json",
+      "input_sha256": "40114de8cf3b0296d65416940192de6e157e402d074df7db0dee90e577117f95",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_purpose",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0025",
+      "input_path": "CASE-DEV-S20261027-0025.json",
+      "input_sha256": "228eaeb0ac832672a51a337e9c714ae8b5e63f05ae7ecf8506ab3861a287887d",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "equal_references",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0026",
+      "input_path": "CASE-DEV-S20261027-0026.json",
+      "input_sha256": "8577ce44b56cead9ac2d3b2d8119d1d76ef496844b13e86138d7d3d8fadce784",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "explanation_only",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0027",
+      "input_path": "CASE-DEV-S20261027-0027.json",
+      "input_sha256": "f2ca37145da84c63327af44341bb566d9c0699858bdd9c21e6f58b8d91542694",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "no_sales_records",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0028",
+      "input_path": "CASE-DEV-S20261027-0028.json",
+      "input_sha256": "e9025743cf765a25d6ceaa5795f0235bfafac7ee03626462891576e7f91f1af4",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "after_instruction",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0029",
+      "input_path": "CASE-DEV-S20261027-0029.json",
+      "input_sha256": "cdf8c2458250728082e5bc4543a012d7922aa098f8135d111b60be508630acfb",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_both",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0030",
+      "input_path": "CASE-DEV-S20261027-0030.json",
+      "input_sha256": "4aa5c755d328db6c705d6d9f235ea634fb08cfd85caf17039d4af5ad66b0faee",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "different_references",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0031",
+      "input_path": "CASE-DEV-S20261027-0031.json",
+      "input_sha256": "8d808bfa287a6d2eec9c4ec9ee502295700b3233ba25bcdc14a225daf82940c0",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_and_dispatch",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0032",
+      "input_path": "CASE-DEV-S20261027-0032.json",
+      "input_sha256": "86f81320a308fae90fb4cc8854785586f02014b2df34f964c001152e5c161dbd",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "complete_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0033",
+      "input_path": "CASE-DEV-S20261027-0033.json",
+      "input_sha256": "3481708f9969066bbf1b14db49334e96d892edcbefa6de354b5178e32dbbb17d",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "authorized_change",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0034",
+      "input_path": "CASE-DEV-S20261027-0034.json",
+      "input_sha256": "6bf46c177a36127ee9472e71972f024a340938f380c5459471c0551f0eccd765",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "partial_reply",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0035",
+      "input_path": "CASE-DEV-S20261027-0035.json",
+      "input_sha256": "67eca5cfdc98ac4f36dce622b10228e6fbe6910f86d92eb93306146d62244a31",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "invoice_reference_absent",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0036",
+      "input_path": "CASE-DEV-S20261027-0036.json",
+      "input_sha256": "d9dd74682dd1bb94ae2a4a5cb4582210a552da8204188ce401e7d64889ad6eef",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_only",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0037",
+      "input_path": "CASE-DEV-S20261027-0037.json",
+      "input_sha256": "3b8fb6fb537ce2338187f9c873b2b060be3c2bf98e968d20b66a306569a9f99c",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "partial_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0038",
+      "input_path": "CASE-DEV-S20261027-0038.json",
+      "input_sha256": "4af71f81314cd2738cf5ed2c548a2886537eec992cb4648e767b9e97b484f620",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "split_timing",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0039",
+      "input_path": "CASE-DEV-S20261027-0039.json",
+      "input_sha256": "7aa6828abce8a9174d75c918c0ede512435bab2f59234e1486390affc0f75f76",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_account",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0040",
+      "input_path": "CASE-DEV-S20261027-0040.json",
+      "input_sha256": "ae46b37eeca9263875b76efe0edfd9a62a820be715c803486c9bded0270d813c",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "equal_references",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0041",
+      "input_path": "CASE-DEV-S20261027-0041.json",
+      "input_sha256": "7162c928dcce9a5a1aa803257626ca3c61c25973fb994e4bd32a6f46a126c0c2",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "explanation_only",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0042",
+      "input_path": "CASE-DEV-S20261027-0042.json",
+      "input_sha256": "7f91de576395695f7960ef59a3f90486b30de04ff47936bba02593d3cddd1438",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "no_sales_records",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0043",
+      "input_path": "CASE-DEV-S20261027-0043.json",
+      "input_sha256": "fd090f78c566d23fb7050ef00e2942478150a8909d1e9106cb1d328f979c8a86",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "different_accounts_same_supplier",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0044",
+      "input_path": "CASE-DEV-S20261027-0044.json",
+      "input_sha256": "7c17086211af27a9494f59436f74c715e2866dd25de6c496f0fd589453458448",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_purpose",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0045",
+      "input_path": "CASE-DEV-S20261027-0045.json",
+      "input_sha256": "7793505ba769e438bc9cb40c2c084ff441014e3c246dda065a6120d9fabc85f0",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "different_references",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incoming_transfer-v1.0",
+      "case_id": "CASE-DEV-S20261027-0046",
+      "input_path": "CASE-DEV-S20261027-0046.json",
+      "input_sha256": "f24adb1063736f3cdc21d3283810e98e9fae37186412a0b2229c0571f6b1c484",
+      "scenario_family_id": "incoming_transfer",
+      "source_condition": "invoice_and_dispatch",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-cash_sales-v1.0",
+      "case_id": "CASE-DEV-S20261027-0047",
+      "input_path": "CASE-DEV-S20261027-0047.json",
+      "input_sha256": "65dd2f6f71826bf09191eb31dc9546c39e9b70dfa26f95169d7660b525cc4031",
+      "scenario_family_id": "cash_sales",
+      "source_condition": "complete_sales",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-supplier_authorization-v1.0",
+      "case_id": "CASE-DEV-S20261027-0048",
+      "input_path": "CASE-DEV-S20261027-0048.json",
+      "input_sha256": "965acfd282034cac9c3e44d3ffbe4d794e1822726ec40736ff9f3c0602f9360a",
+      "scenario_family_id": "supplier_authorization",
+      "source_condition": "before_instruction",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-incomplete_outgoing-v1.0",
+      "case_id": "CASE-DEV-S20261027-0049",
+      "input_path": "CASE-DEV-S20261027-0049.json",
+      "input_sha256": "5e54f5bb5bdc5b1a9e8cccf8a16168e64cb29db311b56dbedb95d12e321d084d",
+      "scenario_family_id": "incomplete_outgoing",
+      "source_condition": "missing_both",
+      "template_version": "1.0"
+    },
+    {
+      "case_family_id": "development-beneficiary_comparison-v1.0",
+      "case_id": "CASE-DEV-S20261027-0050",
+      "input_path": "CASE-DEV-S20261027-0050.json",
+      "input_sha256": "3db4656fda9ed15af87544018cba4d98d032a6aded4d62a2110dc1b374942463",
+      "scenario_family_id": "beneficiary_comparison",
+      "source_condition": "invoice_reference_absent",
+      "template_version": "1.0"
+    }
+  ],
+  "dataset_partition": "development",
+  "generator_version": "1.0.0",
+  "input_schema_version": "1.0",
+  "lineage": {
+    "adjudicated_labels_included": false,
+    "description": "New fictional templates inspired by exposed development inputs; instances share family lineage and are not held-out examples.",
+    "independently_authored_cases": false,
+    "reference_answers_used": false,
+    "shared_generator_templates": true,
+    "templates": [
+      {
+        "conceptual_source_inputs": [
+          "data/golden_cases/inputs/G02.json"
+        ],
+        "scenario_family_id": "incoming_transfer",
+        "template_version": "1.0"
+      },
+      {
+        "conceptual_source_inputs": [
+          "data/golden_cases/inputs/G01.json",
+          "data/golden_cases/inputs/G04.json"
+        ],
+        "scenario_family_id": "cash_sales",
+        "template_version": "1.0"
+      },
+      {
+        "conceptual_source_inputs": [
+          "data/golden_cases/inputs/G03.json"
+        ],
+        "scenario_family_id": "supplier_authorization",
+        "template_version": "1.0"
+      },
+      {
+        "conceptual_source_inputs": [
+          "data/golden_cases/inputs/G05.json"
+        ],
+        "scenario_family_id": "incomplete_outgoing",
+        "template_version": "1.0"
+      },
+      {
+        "conceptual_source_inputs": [
+          "data/golden_cases/inputs/G04.json"
+        ],
+        "scenario_family_id": "beneficiary_comparison",
+        "template_version": "1.0"
+      }
+    ]
+  },
+  "manifest_schema_version": "1.0",
+  "scenario_family_counts": {
+    "beneficiary_comparison": 10,
+    "cash_sales": 10,
+    "incoming_transfer": 10,
+    "incomplete_outgoing": 10,
+    "supplier_authorization": 10
+  },
+  "seed": 20261027,
+  "usage": "Supply only an investigation file to a candidate; keep this manifest separate."
+}

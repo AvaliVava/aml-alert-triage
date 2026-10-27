@@ -1,0 +1,175 @@
+{
+  "accounts": [
+    {
+      "account_id": "ACC-DEV-S20261027-0037",
+      "account_type": "business_current",
+      "currency": "EUR",
+      "customer_id": "CUST-DEV-S20261027-0037",
+      "opened_at": "2023-01-01"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-DEV-S20261027-0037",
+    "created_at": "2026-04-29T06:00:00Z",
+    "customer_id": "CUST-DEV-S20261027-0037",
+    "rule_id": "UNUSUAL_CASH_INCREASE",
+    "transaction_ids": [
+      "TX-DEV-S20261027-0037-01",
+      "TX-DEV-S20261027-0037-02",
+      "TX-DEV-S20261027-0037-03"
+    ]
+  },
+  "case": {
+    "case_id": "CASE-DEV-S20261027-0037",
+    "opened_at": "2026-04-29T07:00:00Z",
+    "policy_id": "POLICY-AML-V1",
+    "primary_alert_id": "ALT-DEV-S20261027-0037"
+  },
+  "counterparties": [],
+  "customer": {
+    "customer_id": "CUST-DEV-S20261027-0037",
+    "customer_type": "business",
+    "expected_monthly_activity": {
+      "currency": "EUR",
+      "maximum": "30000.00",
+      "minimum": "10000.00",
+      "typical_daily_cash_deposit_max": "3000.00",
+      "typical_daily_cash_deposit_min": "1000.00"
+    },
+    "industry": "grocery_retail",
+    "name": "Fictional Development Business DEV-S20261027-0037",
+    "onboarding_date": "2023-01-01",
+    "profile_last_verified": "2025-12-01"
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-DEV-S20261027-0037-01",
+      "evidence_type": "trading_profile",
+      "facts": {
+        "operating_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "premises": {
+          "type": "trade_unit",
+          "visit_record": null
+        },
+        "seasonal_activity_reported": true,
+        "staff_count": 23
+      },
+      "related_transaction_ids": [],
+      "source": "synthetic_profile_record",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0037-02",
+      "evidence_type": "promotion_notice",
+      "facts": {
+        "claim": "Seasonal promotion",
+        "promotion_dates": [
+          "2026-04-26",
+          "2026-04-27",
+          "2026-04-28"
+        ]
+      },
+      "related_transaction_ids": [],
+      "source": "customer_supplied",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0037-03",
+      "evidence_type": "point_of_sale_summary",
+      "facts": {
+        "currency": "EUR",
+        "daily_sales": [
+          "8899.61",
+          "8772.98"
+        ],
+        "summary_total": "17672.59"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0037-01",
+        "TX-DEV-S20261027-0037-02"
+      ],
+      "source": "synthetic_merchant_record",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0037-04",
+      "evidence_type": "deposit_reconciliation",
+      "facts": {
+        "currency": "EUR",
+        "deposit_total": "24645.14",
+        "reconciled_deposits": "17672.59",
+        "source_record_dates": [
+          "2026-04-26",
+          "2026-04-27"
+        ],
+        "unmatched_amount": "6972.55"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0037-01",
+        "TX-DEV-S20261027-0037-02",
+        "TX-DEV-S20261027-0037-03"
+      ],
+      "source": "synthetic_reconciliation_record",
+      "verification_status": "recorded"
+    }
+  ],
+  "schema_version": "1.0",
+  "transactions": [
+    {
+      "account_id": "ACC-DEV-S20261027-0037",
+      "amount": "8899.61",
+      "counterparty_id": null,
+      "currency": "EUR",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-04-26T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0037-01",
+      "transaction_type": "cash_deposit"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0037",
+      "amount": "8772.98",
+      "counterparty_id": null,
+      "currency": "EUR",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-04-27T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0037-02",
+      "transaction_type": "cash_deposit"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0037",
+      "amount": "6972.55",
+      "counterparty_id": null,
+      "currency": "EUR",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-04-28T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0037-03",
+      "transaction_type": "cash_deposit"
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-DEV-S20261027-0037-01",
+      "check_type": "supplied_sales_inventory",
+      "findings": [
+        "Sales records cover 2 of 3 deposit dates; supplied unmatched amount is 6972.55 EUR."
+      ],
+      "status": "recorded",
+      "subject_evidence_ids": [
+        "EV-DEV-S20261027-0037-02",
+        "EV-DEV-S20261027-0037-03",
+        "EV-DEV-S20261027-0037-04"
+      ]
+    }
+  ]
+}
