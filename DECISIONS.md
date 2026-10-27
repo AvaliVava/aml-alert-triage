@@ -171,3 +171,15 @@ The following records document the approved output-contract choices implemented 
 **Why:** Conflating existence with support would assert certainty the implemented checks cannot provide. Keeping reference answers separate also protects later evaluation from answer leakage.
 
 **Tradeoff:** A structurally valid statement with existing citations can still be unsupported or false. Substantive grounding evaluation and the formal evaluation protocol remain unimplemented. These contracts introduce no AML classifier, LLM investigation agent, automated verification system, SAR logic, or production regulatory policy.
+
+## ADR-015 — Begin evaluation with a thin mechanical candidate-packet auditor
+
+**Date:** 2026-10-27
+
+**Status:** Accepted implementation scope; documentation consolidated, auditor not yet implemented.
+
+**Decision:** The first auditor will take explicitly supplied investigation and candidate output payloads, apply existing `InvestigationInput` and `InvestigationOutput` validation independently where possible, and invoke `validate_investigation_output_references` only when both validate. Produce a separate machine-readable report with artifact/version identities, available diagnostics and `passed`, `failed`, `not_evaluated` or `error` stage statuses. Preserve fail-fast limitations, distinguish expected rejection from evaluator errors, and mark semantic dimensions `not_evaluated` with reasons. See the [protocol's mechanical-auditor contract](docs/phase-2/EVALUATION_PROTOCOL_DRAFT.md#81-accepted-first-implementation-thin-candidate-packet-auditor).
+
+**Why:** Existing contracts provide a bounded, testable foundation while closure corroboration, grounding, completeness, abstention and alternative actions still need adjudication. Mechanical reporting can proceed without pretending these semantic decisions are settled.
+
+**Limits and tradeoffs:** The auditor will not access reference answers, adjudication annotations or the fictional policy, change contracts, interpret policy, or judge claim support. Valid identifiers can accompany false claims. No overall semantic score, unqualified assessment pass, exhaustive-error promise or inferred generation/retry counts is approved. D-01 through D-08 have accepted working directions, not complete semantic adjudication; labels, semantic scoring, held-out design and any LLM judge remain unapproved. This documentation checkpoint adds no code, tests, dependencies, fixtures, model calls or performance claims and does not complete Phase 2.
