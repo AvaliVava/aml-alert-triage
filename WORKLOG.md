@@ -110,3 +110,15 @@
 **Fresh local verification:** `.\.venv\Scripts\python.exe -m unittest discover -s tests -v` passed **144 of 144 tests** at `ce0cd4a` during this checkpoint. No code or tests were changed. Setup/dependency checks were not rerun, and remote GitHub Actions results for the output-contract branch remain **unverified**.
 
 **Still pending:** Output documentation review and the output-contract PR workflow, the formal evaluation protocol, and review of provisional labels. Phase 2 is not complete. No AML classifier, LLM investigation agent, automated verification system, or complete triage pipeline has been implemented. Stop for human review before committing these documentation changes.
+
+## Local Phase 2 checkpoint — evidence relationships after PR #6
+
+**Preflight:** Clean working tree on `feature/phase-2-evidence-relation-checks` at `54b0cf87b78763ddb21a593a2678925137cb7acc`, the PR #6 merge commit also identified by local `main` and `origin/main`.
+
+**Implemented:** Added the standalone [evidence relationship evaluator](src/aml_triage/evidence_relation_checks.py) and [33 development tests](tests/test_evidence_relation_checks.py). Reused existing input/output contracts and contextual citation validation. The restricted predicate compares the actual beneficiary-reference fields in `EV-004` and `EV-005`, checks evidence types and their explicit `TX-105` links, and independently reports consistency with the annotated equality/difference proposition and citation coverage of both direct records.
+
+**Annotation boundary:** Version 1.0 evaluation-only annotations are supplied separately and bound to exact payload digests, case identity, finding index and statement text. They remain unreviewed development examples. Invalid or stale annotation configuration, ineligible sources and unannotated findings produce no factual judgment. Candidate prose is not interpreted, and annotation authorship is not authenticated. Check-record citations do not replace the two direct sources under this narrow policy.
+
+**Fresh local verification:** The complete unittest suite passed **237 tests**, including all 204 existing tests and 33 new tests. `python -m pip check` reported no broken requirements. Existing source files, tests, golden artifacts, dependencies, auditor reports and CLI exit codes are unchanged. No policy, reference-answer or LLM access is used by the evaluator; no new fixtures or finalized annotations were created.
+
+**State and limits:** Implementation is uncommitted and awaiting independent review. These comparisons establish neither authenticity, fraud, fund tracing, violated supplier instructions nor recommendation quality. No remote GitHub Actions result or model-performance result is claimed, and Phase 2 remains open. Earlier worklog entries are retained as historical records.
