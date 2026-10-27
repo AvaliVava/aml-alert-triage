@@ -1,6 +1,22 @@
 # Project Status — Source of Truth
 
-## Current local checkpoint — Week 3 synthetic generator after PR #7
+## Current local checkpoint — Week 3 deterministic baseline after PR #8
+
+- Preflight: clean working tree on `feature/week-3-deterministic-baseline` at `eeef96f`, the merged PR #8 generator checkpoint. This baseline work is uncommitted and awaiting independent review.
+- Added [deterministic_baseline.py](src/aml_triage/deterministic_baseline.py), [run_baseline.py](scripts/run_baseline.py) and [55 baseline tests](tests/test_deterministic_baseline.py). The public function accepts a validated `InvestigationInput`, returns the unchanged `InvestigationOutput` structure, and runs contextual citation validation before returning. Outputs separate factual findings, interpretations, questions, missing information and supported beneficiary-reference contradictions; all are preliminary and require human review.
+- Fixed rules cover scoped missing payment information and linked supporting documents (`MI-01/02`), exact invoice/wire beneficiary comparisons (`BEN-01/02`), flagged cash sums and individual profile-range comparisons plus supplied reconciliation/sales gaps (`CASH-01/02/03`), and a restricted literal fictional supplier referral (`REF-01`). Rule IDs are included in existing statement text, without new contract fields. Decimal sums and aware timestamp comparisons use actual supplied records.
+- REF-01 supports the original aggregate payee record and generated payment-row format. It requires linked qualifying outgoing transfers to the same recorded account after the supported internal review instruction, a recognized supplied procurement register recording nonapproval, and no recorded authorized change. Recognized synthetic provenance is a source-reliance assumption, not independent authentication. Check-status labels do not determine actions; completed senior review is not an added exception, and bypass is not alleged. Multiple instructions, mixed/conflicting formats, unsupported source/timestamp fields and authorization snapshot ambiguity cannot establish referral in this version.
+- Review correction: directly linked `synthetic_bank_ledger` wire-payment beneficiary references are reconciled with qualifying payment-ledger mappings. A disagreement blocks referral and produces a question citing the wire, ledger and affected transfer. Wires cannot independently establish mappings; unrelated wires and invoice instructions do not override recorded recipients. Eight added counterfactual tests cover both existing ledger formats and exact account matching.
+- Recommendation priority is supported preliminary escalation, then investigation for a specific supported material question, otherwise explicit abstention (`BASE-01`). No automatic `close` is implemented. Arithmetic agreement, equal beneficiary references and a documented authorized change do not certify an investigation as resolved. The formal semantic protocol, closure criteria and provisional-label adjudication remain open.
+- Actual CLI demonstrations: G03 escalated; generated authorized-change case `0008` abstained; partial-sales case `0007`, beneficiary mismatch `0015` and incomplete-beneficiary case `0009` recommended investigation. Complete local candidate JSON artifacts were produced separately under ignored `outputs/baseline-v0.1.0-development/`. The existing auditor CLI accepted G03's output mechanically while all nine broad semantic dimensions remained `not_evaluated`. These are regression/smoke results, not measured classification accuracy.
+- Fresh local verification after the review correction: **324 tests passed** (269 pre-baseline tests plus 55 baseline tests); dependency verification found no broken requirements. The five original CLI demonstrations reproduced unchanged outputs; a conflicting-wire G03 counterfactual recommended investigation with direct-source citations. All five golden inputs and 50 generated development inputs produce structurally valid, citation-resolved outputs. Existing contracts, prior test assertions, auditor/checker interfaces, inputs, reference answers, manifest, policy and dependencies are unchanged. The CLI requires an explicit new destination and publishes complete validated bytes through an atomic no-overwrite hard link; unsupported filesystems fail without a partial output.
+- No LLM, RAG, agents, general policy engine, semantic evaluator, real verification or production AML/SAR decision logic is added. The historical foundation status command retains its original flags. Remote CI is unverified, and Phase 2 is not declared complete. Stop for independent review before staging or committing.
+
+This baseline checkpoint is authoritative. Earlier checkpoint sections below are retained as historical records.
+
+---
+
+## Historical checkpoint — Week 3 synthetic generator after PR #7
 
 - Base: `d0b8a6a`, the merged PR #7 checkpoint. The working tree was clean on `main`; the requested `feature/week-3-synthetic-generator` branch was created from that base before editing. Current work is uncommitted.
 - Added a seeded [synthetic generator](src/aml_triage/synthetic_generator.py), [generation CLI](scripts/generate_dev_cases.py), and [32 generator tests](tests/test_synthetic_generator.py). Count and output directory are configurable. Generation uses a local random instance, decimal money, stable identifiers and deterministic UTF-8 JSON bytes; every input passes the unchanged `InvestigationInput` contract before publication.
@@ -10,7 +26,7 @@
 - Fresh local verification: **269 tests passed** (237 existing plus 32 new), and `pip check` found no broken requirements. Existing contracts, tests, golden artifacts, auditor behavior, dependencies and evaluation policy are unchanged. The old foundation status CLI retains its historical flags; use the generation CLI for this checkpoint.
 - No classifier, recommendation baseline, LLM calls, real verification or general evaluation scoring is added. The Week 3 deterministic recommendation baseline remains pending; the formal evaluation protocol is still a draft and provisional-label adjudication remains open. Remote CI has not been verified for this branch. Stop for independent review before committing.
 
-The Week 3 checkpoint above is authoritative. Earlier checkpoint sections below are retained as historical records.
+This generator checkpoint is historical; PR #8 subsequently merged it as `eeef96f`. Current status is recorded in the deterministic-baseline checkpoint above.
 
 ---
 
