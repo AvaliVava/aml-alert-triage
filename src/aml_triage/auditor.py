@@ -1,6 +1,6 @@
 """Mechanical audits of explicitly supplied investigation/candidate JSON pairs.
 
-Report schema 1.0 (a JSON-serializable dictionary):
+Report schema 1.1 (a JSON-serializable dictionary):
 * report_schema_version, auditor_version: versions of this report and adapter.
 * contracts: module, package/Pydantic versions and unavailable source revision.
 * artifacts: input/candidate identity, SHA-256, digest basis, digest-unavailability
@@ -8,6 +8,9 @@ Report schema 1.0 (a JSON-serializable dictionary):
   original bytes; string payload digests cover UTF-8. No Git or policy lookup occurs.
 * stages: input_structure, output_structure, contextual_references. Each has
   status, reason, phase and diagnostics. Status is passed/failed/not_evaluated/error.
+* deterministic_fact_checks: restricted transaction-amount findings and coverage,
+  evaluated only after all three mechanical stages pass. Its status applies only
+  to those comparisons; the CLI still derives exit codes solely from stages.
 * semantic_evaluation: named, unimplemented dimensions, always not_evaluated.
 * limitations: scope and diagnostic limitations, never an overall quality score.
 
@@ -31,13 +34,19 @@ from aml_triage.contracts import (
     InvestigationOutput,
     validate_investigation_output_references,
 )
+from aml_triage.transaction_amount_checks import (
+    check_transaction_amounts,
+    skipped_transaction_amount_checks,
+)
 
 
-REPORT_SCHEMA_VERSION = "1.0"
-AUDITOR_VERSION = "0.1.0"
+REPORT_SCHEMA_VERSION = "1.1"
+AUDITOR_VERSION = "0.2.0"
 
 _SEMANTIC_REASONS = {
-    "factual_input_support": "Not implemented: cited records are not checked for claim support.",
+    "factual_input_support": (
+        "Not implemented: restricted field comparisons do not assess general claim grounding."
+    ),
     "submitted_citation_adequacy": (
         "Not implemented: citation existence does not establish adequacy."
     ),
@@ -173,6 +182,27 @@ def _audit(investigation: _Artifact, candidate: _Artifact) -> dict[str, Any]:
                 "passed", "Case/alert identities and typed citations resolve.", "references",
             )
 
+    mechanical_stages = {
+        "input_structure": input_stage,
+        "output_structure": output_stage,
+        "contextual_references": context_stage,
+    }
+    fact_blockers = [
+        name for name, stage in mechanical_stages.items() if stage["status"] != "passed"
+    ]
+    if fact_blockers:
+        fact_checks = skipped_transaction_amount_checks(
+            parsed_output, "Prerequisites did not pass: " + ", ".join(fact_blockers) + ".",
+        )
+    else:
+        try:
+            fact_checks = check_transaction_amounts(parsed_input, parsed_output)
+        except Exception as error:
+            fact_checks = skipped_transaction_amount_checks(
+                parsed_output, "No completed deterministic comparison results are available.",
+            )
+            fact_checks.update(_unexpected_error(error, "deterministic_fact_checks"))
+
     return {
         "report_schema_version": REPORT_SCHEMA_VERSION,
         "auditor_version": AUDITOR_VERSION,
@@ -188,17 +218,15 @@ def _audit(investigation: _Artifact, candidate: _Artifact) -> dict[str, Any]:
             "input": _artifact_metadata(investigation, parsed_input),
             "candidate": _artifact_metadata(candidate, parsed_output),
         },
-        "stages": {
-            "input_structure": input_stage,
-            "output_structure": output_stage,
-            "contextual_references": context_stage,
-        },
+        "stages": mechanical_stages,
+        "deterministic_fact_checks": fact_checks,
         "semantic_evaluation": {
             name: _stage("not_evaluated", reason, "semantic")
             for name, reason in _SEMANTIC_REASONS.items()
         },
         "limitations": [
-            "Mechanical structure and identity checks only; no semantic quality judgment.",
+            "Mechanical validation and restricted transaction-field comparisons only; "
+            "no general semantic quality judgment.",
             "Existing relationship/reference validators may stop at the first mismatch; "
             "diagnostics are not exhaustive.",
             "No reference answers, adjudication annotations or fictional policy are loaded.",
@@ -210,7 +238,7 @@ def audit_packet(
     investigation_json: str | bytes, candidate_json: str | bytes,
     *, input_identity: str | None = None, candidate_identity: str | None = None,
 ) -> dict[str, Any]:
-    """Audit original JSON payloads without file access, repairs or semantic scoring.
+    """Audit JSON and recognized amount claims without file access, repairs or semantic scoring.
 
     Optional identities are caller-supplied labels, not inferred case identifiers.
     Strings are hashed as UTF-8; bytes are hashed exactly as supplied.
