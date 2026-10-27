@@ -441,3 +441,50 @@ class InvestigationOutput(BaseModel):
                         f"{field}[{index}].citations must contain at least one citation"
                     )
         return self
+
+
+def validate_investigation_output_references(
+    investigation: InvestigationInput, output: InvestigationOutput,
+) -> InvestigationOutput:
+    """Resolve identities in validated models; this does not establish claim support."""
+    if output.case_id != investigation.case.case_id:
+        raise ValueError(
+            f"case_id: {output.case_id!r} must match "
+            f"investigation.case.case_id {investigation.case.case_id!r}"
+        )
+    if output.alert_id != investigation.alert.alert_id:
+        raise ValueError(
+            f"alert_id: {output.alert_id!r} must match "
+            f"investigation.alert.alert_id {investigation.alert.alert_id!r}"
+        )
+
+    record_ids = {
+        "case": {investigation.case.case_id},
+        "customer": {investigation.customer.customer_id},
+        "account": {record.account_id for record in investigation.accounts},
+        "counterparty": {record.counterparty_id for record in investigation.counterparties},
+        "transaction": {record.transaction_id for record in investigation.transactions},
+        "alert": {investigation.alert.alert_id},
+        "evidence": {record.evidence_id for record in investigation.evidence},
+        "verification_check": {record.check_id for record in investigation.verification_checks},
+    }
+
+    def validate_statement(statement: CitedStatement, path: str) -> None:
+        for index, citation in enumerate(statement.citations):
+            if citation.record_id not in record_ids[citation.record_type]:
+                raise ValueError(
+                    f"{path}.citations[{index}]: unknown {citation.record_type} "
+                    f"identifier {citation.record_id!r}"
+                )
+
+    validate_statement(output.rationale, "rationale")
+    for field in (
+        "factual_findings", "interpretations", "unresolved_questions", "missing_information",
+    ):
+        for index, statement in enumerate(getattr(output, field)):
+            validate_statement(statement, f"{field}[{index}]")
+    for index, contradiction in enumerate(output.contradictions):
+        validate_statement(contradiction.left, f"contradictions[{index}].left")
+        validate_statement(contradiction.right, f"contradictions[{index}].right")
+
+    return output
