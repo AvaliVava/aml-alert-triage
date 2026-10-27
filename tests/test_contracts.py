@@ -15,10 +15,14 @@ from aml_triage.contracts import (
     Account,
     Alert,
     CaseMetadata,
+    CitedStatement,
+    Contradiction,
     Counterparty,
     Customer,
     Evidence,
     InvestigationInput,
+    InvestigationOutput,
+    RecordCitation,
     Transaction,
     VerificationCheck,
 )
@@ -1255,6 +1259,416 @@ class TestInvestigationInputContracts(unittest.TestCase):
         self.assertEqual(investigation.accounts[0].currency, "EUR")
         self.assertEqual(investigation.customer.expected_monthly_activity.currency, "GBP")
         self.assertEqual(investigation.transactions[0].currency, "USD")
+
+
+class TestInvestigationOutputContracts(unittest.TestCase):
+
+    def citation(self, record_type="transaction", record_id="TX-OUTPUT-01"):
+        return {"record_type": record_type, "record_id": record_id}
+
+    def statement(self, text="A synthetic ledger row records a transfer.", citations=None):
+        return {
+            "statement": text,
+            "citations": [self.citation()] if citations is None else citations,
+        }
+
+    def contradiction(self):
+        return {
+            "description": "Two supplied notes describe different destinations.",
+            "left": self.statement(
+                "The first note names destination A.", [self.citation("evidence", "EV-OUT-A")]
+            ),
+            "right": self.statement(
+                "The second note names destination B.", [self.citation("evidence", "EV-OUT-B")]
+            ),
+        }
+
+    def candidate_output(self, action="investigate"):
+        """Author candidate data independently of golden inputs and reference answers."""
+        return {
+            "schema_version": "1.0",
+            "case_id": "CASE-OUTPUT-01",
+            "alert_id": "ALERT-OUTPUT-01",
+            "assessment_status": "recommendation_provided",
+            "recommended_action": action,
+            "rationale": self.statement("A preliminary recommendation is submitted for review."),
+            "factual_findings": [self.statement()],
+            "interpretations": [self.statement("The recorded destination needs clarification.")],
+            "unresolved_questions": [],
+            "missing_information": [],
+            "contradictions": [],
+            "recommendation_scope": "preliminary",
+            "human_review_required": True,
+        }
+
+    def abstention(self):
+        data = self.candidate_output()
+        data.update(
+            assessment_status="unable_to_recommend",
+            recommended_action=None,
+            rationale=self.statement("The available context cannot support a recommendation.", []),
+            factual_findings=[],
+            interpretations=[],
+        )
+        return data
+
+    def assert_valid_record(self, model, data):
+        for validate, payload in (
+            (model.model_validate, data),
+            (model.model_validate_json, json.dumps(data)),
+        ):
+            with self.subTest(model=model.__name__, validation=validate.__name__):
+                parsed = validate(payload)
+                self.assertEqual(parsed.model_dump(), data)
+                self.assertEqual(json.loads(parsed.model_dump_json()), data)
+        return parsed
+
+    def assert_invalid_record(self, model, data, *message_fragments):
+        for validate, payload in (
+            (model.model_validate, data),
+            (model.model_validate_json, json.dumps(data)),
+        ):
+            with self.subTest(model=model.__name__, validation=validate.__name__):
+                with self.assertRaises(ValidationError) as caught:
+                    validate(payload)
+                for fragment in message_fragments:
+                    self.assertIn(fragment, str(caught.exception))
+
+    def test_all_record_namespaces_are_accepted(self):
+        for namespace in (
+            "case", "customer", "account", "counterparty", "transaction", "alert",
+            "evidence", "verification_check",
+        ):
+            with self.subTest(namespace=namespace):
+                self.assert_valid_record(RecordCitation, self.citation(namespace, "RECORD-01"))
+
+    def test_preliminary_dispositions_are_accepted(self):
+        for action in ("close", "investigate", "escalate"):
+            with self.subTest(action=action):
+                data = self.candidate_output(action)
+                parsed = self.assert_valid_record(InvestigationOutput, data)
+                self.assertIsInstance(parsed.rationale, CitedStatement)
+                self.assertIsInstance(parsed.factual_findings[0].citations[0], RecordCitation)
+                self.assertIs(parsed.human_review_required, True)
+
+    def test_abstention_accepts_null_action_and_uncited_rationale(self):
+        data = self.abstention()
+        self.assert_valid_record(InvestigationOutput, data)
+        data["factual_findings"] = [self.statement()]
+        data["interpretations"] = [self.statement("The supplied context has limits.")]
+        self.assert_valid_record(InvestigationOutput, data)
+
+    def test_every_field_is_required_at_each_model_level(self):
+        for model, original in (
+            (RecordCitation, self.citation()),
+            (CitedStatement, self.statement()),
+            (Contradiction, self.contradiction()),
+            (InvestigationOutput, self.candidate_output()),
+            (InvestigationOutput, self.abstention()),
+        ):
+            for field in original:
+                with self.subTest(model=model.__name__, field=field):
+                    data = deepcopy(original)
+                    data.pop(field)
+                    self.assert_invalid_record(model, data, field, "Field required")
+
+    def test_unknown_fields_are_rejected_at_every_model_level(self):
+        for model, original in (
+            (RecordCitation, self.citation()),
+            (CitedStatement, self.statement()),
+            (Contradiction, self.contradiction()),
+            (InvestigationOutput, self.candidate_output()),
+        ):
+            data = deepcopy(original)
+            data["unexpected"] = "extra supplied value"
+            self.assert_invalid_record(model, data, "unexpected", "Extra inputs")
+
+        for field in (
+            "confidence", "final_decision", "escalation_criteria_met", "narrative",
+            "execution_metadata", "expected_action", "reference_rationale", "rubric_version",
+        ):
+            data = self.candidate_output()
+            data[field] = "unexpected"
+            self.assert_invalid_record(InvestigationOutput, data, field, "Extra inputs")
+
+        for path in (
+            ("rationale",), ("rationale", "citations", 0), ("factual_findings", 0),
+            ("contradictions", 0), ("contradictions", 0, "left"),
+            ("contradictions", 0, "right", "citations", 0),
+        ):
+            data = self.candidate_output()
+            data["contradictions"] = [self.contradiction()]
+            nested = data
+            for part in path:
+                nested = nested[part]
+            nested["unexpected"] = "extra nested value"
+            self.assert_invalid_record(InvestigationOutput, data, "unexpected", "Extra inputs")
+
+    def test_identifiers_require_strict_non_whitespace_strings(self):
+        for model, original, field in (
+            (RecordCitation, self.citation(), "record_id"),
+            (InvestigationOutput, self.candidate_output(), "case_id"),
+            (InvestigationOutput, self.candidate_output(), "alert_id"),
+        ):
+            for value in ("", " \t\r\n", "\u00a0\u2003", "\x1c", None, 1, 1.5, True, [], {}):
+                with self.subTest(model=model.__name__, field=field, value=value):
+                    data = deepcopy(original)
+                    data[field] = value
+                    self.assert_invalid_record(model, data, field)
+
+    def test_statements_and_descriptions_require_non_whitespace_strings(self):
+        for model, original, field in (
+            (CitedStatement, self.statement(), "statement"),
+            (Contradiction, self.contradiction(), "description"),
+        ):
+            for value in ("", " \t\r\n", "\u00a0\u2003", "\x1c", None, 1, 1.5, True, [], {}):
+                with self.subTest(model=model.__name__, field=field, value=value):
+                    data = deepcopy(original)
+                    data[field] = value
+                    self.assert_invalid_record(model, data, field)
+
+        for status_data in (self.candidate_output(), self.abstention()):
+            status_data["rationale"]["statement"] = " \n"
+            self.assert_invalid_record(InvestigationOutput, status_data, "rationale", "statement")
+
+    def test_unsupported_record_namespaces_are_rejected(self):
+        for value in ("", "policy", "Transaction", "transaction ", None, 1, True, [], {}):
+            with self.subTest(value=value):
+                data = self.citation()
+                data["record_type"] = value
+                self.assert_invalid_record(RecordCitation, data, "record_type")
+
+    def test_unsupported_statuses_and_actions_are_rejected(self):
+        for field, values in (
+            ("assessment_status", ("", "complete", "recommendation_provided ", None, 1, True, [])),
+            ("recommended_action", ("", "abstain", "sar", "Close", "close ", "null", 1, True, {})),
+        ):
+            for value in values:
+                with self.subTest(field=field, value=value):
+                    data = self.candidate_output()
+                    data[field] = value
+                    self.assert_invalid_record(InvestigationOutput, data, field)
+
+    def test_invalid_status_action_combinations_are_rejected(self):
+        data = self.candidate_output()
+        data["recommended_action"] = None
+        self.assert_invalid_record(InvestigationOutput, data, "recommended_action")
+        for action in ("close", "investigate", "escalate"):
+            with self.subTest(action=action):
+                data = self.abstention()
+                data["recommended_action"] = action
+                self.assert_invalid_record(InvestigationOutput, data, "recommended_action", "null")
+
+    def test_schema_version_requires_exact_string(self):
+        for value in ("", "1", "2.0", "1.0 ", 1, 1.0, True, None, [], {}):
+            with self.subTest(value=value):
+                data = self.candidate_output()
+                data["schema_version"] = value
+                self.assert_invalid_record(InvestigationOutput, data, "schema_version")
+
+    def test_human_review_requires_exact_boolean_true(self):
+        for original in (self.candidate_output(), self.abstention()):
+            for value in (False, 1, 1.0, 0, -1, "true", "True", "", None, [], {}):
+                with self.subTest(status=original["assessment_status"], value=value):
+                    data = deepcopy(original)
+                    data["human_review_required"] = value
+                    self.assert_invalid_record(InvestigationOutput, data, "human_review_required")
+
+    def test_recommendation_scope_requires_preliminary(self):
+        for original in (self.candidate_output(), self.abstention()):
+            for value in ("", "final", "Preliminary", "preliminary ", True, 1, None, [], {}):
+                with self.subTest(status=original["assessment_status"], value=value):
+                    data = deepcopy(original)
+                    data["recommendation_scope"] = value
+                    self.assert_invalid_record(InvestigationOutput, data, "recommendation_scope")
+
+    def test_collection_fields_require_actual_lists(self):
+        for model, original, fields in (
+            (CitedStatement, self.statement(), ("citations",)),
+            (InvestigationOutput, self.candidate_output(), (
+                "factual_findings", "interpretations", "unresolved_questions",
+                "missing_information", "contradictions",
+            )),
+        ):
+            for field in fields:
+                for value in (None, "[]", 1, True, {}, [None], [1], ["text"], [[]]):
+                    with self.subTest(model=model.__name__, field=field, value=value):
+                        data = deepcopy(original)
+                        data[field] = value
+                        self.assert_invalid_record(model, data, field)
+
+                for value in (tuple(original[field]), iter(original[field]), {"item"}, b"[]"):
+                    with self.subTest(model=model.__name__, field=field, type=type(value).__name__):
+                        data = deepcopy(original)
+                        data[field] = value
+                        with self.assertRaises(ValidationError):
+                            model.model_validate(data)
+
+    def test_python_only_incorrect_scalar_types_are_rejected(self):
+        for model, original, fields in (
+            (RecordCitation, self.citation(), ("record_type", "record_id")),
+            (CitedStatement, self.statement(), ("statement",)),
+            (Contradiction, self.contradiction(), ("description",)),
+            (InvestigationOutput, self.candidate_output(), (
+                "schema_version", "case_id", "alert_id", "assessment_status",
+                "recommended_action", "recommendation_scope", "human_review_required",
+            )),
+        ):
+            for field in fields:
+                for value in (b"text", bytearray(b"text"), Decimal("1"), object()):
+                    with self.subTest(model=model.__name__, field=field, type=type(value).__name__):
+                        data = deepcopy(original)
+                        data[field] = value
+                        with self.assertRaises(ValidationError):
+                            model.model_validate(data)
+
+    def test_invalid_nested_records_are_rejected(self):
+        for value in (None, "text", 1, True, [], {}):
+            data = self.candidate_output()
+            data["rationale"] = value
+            self.assert_invalid_record(InvestigationOutput, data, "rationale")
+
+        for side in ("left", "right"):
+            for value in (None, "text", 1, True, [], {}):
+                data = self.contradiction()
+                data[side] = value
+                self.assert_invalid_record(Contradiction, data, side)
+
+        for path, value in (
+            (("rationale", "citations", 0, "record_type"), "invented_namespace"),
+            (("factual_findings", 0, "citations", 0, "record_id"), " \t"),
+            (("interpretations", 0, "statement"), ""),
+            (("unresolved_questions", 0, "statement"), None),
+            (("missing_information", 0, "citations"), {}),
+            (("contradictions", 0, "right", "statement"), " \n"),
+        ):
+            data = self.candidate_output()
+            data["unresolved_questions"] = [self.statement("What is the destination?", [])]
+            data["missing_information"] = [self.statement("Destination details are missing.", [])]
+            data["contradictions"] = [self.contradiction()]
+            nested = data
+            for part in path[:-1]:
+                nested = nested[part]
+            nested[path[-1]] = value
+            self.assert_invalid_record(InvestigationOutput, data, str(path[0]))
+
+    def test_factual_findings_and_interpretations_always_require_citations(self):
+        for original in (self.candidate_output(), self.abstention()):
+            for field in ("factual_findings", "interpretations"):
+                data = deepcopy(original)
+                data[field] = [self.statement(), self.statement("An uncited assertion.", [])]
+                self.assert_invalid_record(InvestigationOutput, data, f"{field}[1].citations")
+
+    def test_recommendations_require_at_least_one_factual_finding(self):
+        for action in ("close", "investigate", "escalate"):
+            data = self.candidate_output(action)
+            data["factual_findings"] = []
+            self.assert_invalid_record(InvestigationOutput, data, "factual_findings")
+
+    def test_recommendation_rationale_requires_citations(self):
+        for action in ("close", "investigate", "escalate"):
+            data = self.candidate_output(action)
+            data["rationale"]["citations"] = []
+            self.assert_invalid_record(InvestigationOutput, data, "rationale.citations")
+
+    def test_contradiction_sides_require_citations(self):
+        for sides in (("left",), ("right",), ("left", "right")):
+            data = self.contradiction()
+            for side in sides:
+                data[side]["citations"] = []
+            self.assert_invalid_record(Contradiction, data, f"{sides[0]}.citations")
+            output = self.candidate_output()
+            output["contradictions"] = [data]
+            self.assert_invalid_record(InvestigationOutput, output, "contradictions")
+
+    def test_duplicate_citations_within_a_statement_are_rejected(self):
+        data = self.statement(citations=[self.citation(), self.citation()])
+        self.assert_invalid_record(CitedStatement, data, "citations[1]", "duplicate citation")
+        output = self.candidate_output()
+        output["rationale"] = data
+        self.assert_invalid_record(InvestigationOutput, output, "rationale", "duplicate citation")
+
+    def test_citation_reuse_and_exact_identifier_namespaces_are_preserved(self):
+        citations = [
+            self.citation("transaction", "SHARED"), self.citation("evidence", "SHARED"),
+            self.citation("transaction", " SHARED "), self.citation("transaction", "shared"),
+        ]
+        statement = self.statement(citations=citations)
+        self.assert_valid_record(CitedStatement, statement)
+        data = self.candidate_output()
+        data["rationale"] = deepcopy(statement)
+        data["factual_findings"] = [deepcopy(statement), deepcopy(statement)]
+        data["interpretations"] = [deepcopy(statement)]
+        data["contradictions"] = [{
+            "description": "Two accounts cite different portions of the same records.",
+            "left": deepcopy(statement),
+            "right": deepcopy(statement),
+        }]
+        self.assert_valid_record(InvestigationOutput, data)
+
+    def test_questions_and_missing_information_may_be_uncited(self):
+        self.assert_valid_record(CitedStatement, self.statement("An unanswered question.", []))
+        for data in (self.candidate_output("escalate"), self.abstention()):
+            data["unresolved_questions"] = [self.statement("Why do the notes differ?", [])]
+            data["missing_information"] = [
+                self.statement("The destination details are absent.", [])
+            ]
+            self.assert_valid_record(InvestigationOutput, data)
+
+        data = self.candidate_output()
+        data["interpretations"] = []
+        self.assert_valid_record(InvestigationOutput, data)
+
+    def test_text_order_and_submitted_data_are_preserved(self):
+        data = self.candidate_output()
+        data["case_id"] = "  CASE-OUTPUT-01  "
+        data["alert_id"] = "\tALERT-OUTPUT-01 "
+        statement = self.statement(
+            "  Supplied note: caf\u00e9\nSecond line.  ",
+            [self.citation("evidence", " EV-OUT-B "), self.citation("transaction", "TX-OUTPUT-01")],
+        )
+        data["rationale"] = deepcopy(statement)
+        data["factual_findings"] = [self.statement("Recorded observation B."), deepcopy(statement)]
+        data["interpretations"] = [self.statement("Possible explanation B."), deepcopy(statement)]
+        data["unresolved_questions"] = [self.statement("Question B?", []), self.statement("A?", [])]
+        data["missing_information"] = [self.statement("Missing B.", []), self.statement("A.", [])]
+        first = self.contradiction()
+        second = self.contradiction()
+        first["description"] = "  Conflicting notes B.\n"
+        second["description"] = "Conflicting notes A."
+        data["contradictions"] = [first, second]
+        original = deepcopy(data)
+        self.assert_valid_record(InvestigationOutput, data)
+        self.assertEqual(data, original)
+
+    def test_existing_nested_model_instances_are_accepted(self):
+        citation = RecordCitation.model_validate(self.citation())
+        statement = CitedStatement(statement="A supplied statement.", citations=[citation])
+        contradiction = Contradiction(
+            description="Two recorded views.", left=statement, right=statement
+        )
+        data = self.candidate_output()
+        data["rationale"] = statement
+        data["factual_findings"] = [statement]
+        data["contradictions"] = [contradiction]
+        parsed = InvestigationOutput.model_validate(data)
+        self.assertIsInstance(parsed.rationale, CitedStatement)
+        self.assertEqual(parsed.rationale.citations[0].record_id, citation.record_id)
+
+    def test_validation_does_not_resolve_citations_or_read_files(self):
+        data = self.candidate_output()
+        data["case_id"] = "CASE-NOT-RESOLVED"
+        data["alert_id"] = "ALERT-NOT-RESOLVED"
+        data["rationale"]["citations"] = [self.citation("evidence", "EVIDENCE-NOT-RESOLVED")]
+        json_payload = json.dumps(data)
+        with patch("builtins.open", side_effect=OSError("unexpected file read")), patch.object(
+            Path, "open", side_effect=OSError("unexpected file read")
+        ):
+            for validate, payload in (
+                (InvestigationOutput.model_validate, data),
+                (InvestigationOutput.model_validate_json, json_payload),
+            ):
+                self.assertEqual(validate(payload).model_dump(), data)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,15 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, JsonValue, field_validator, model_validator
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    ConfigDict,
+    Field,
+    JsonValue,
+    field_validator,
+    model_validator,
+)
 
 
 # Shared field types
@@ -309,3 +317,127 @@ class InvestigationInput(BaseModel):
         elif isinstance(value, list):
             for index, nested in enumerate(value):
                 cls._reject_evaluation_keys(nested, f"{path}[{index}]")
+
+
+def _require_output_text(value: str) -> str:
+    if not value.strip():
+        raise ValueError("must contain non-whitespace text")
+    return value
+
+
+_OutputText = Annotated[
+    str,
+    Field(strict=True, min_length=1),
+    AfterValidator(_require_output_text),
+]
+
+
+class RecordCitation(BaseModel):
+    """A record reference; this model does not resolve its identifier."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    record_type: Literal[
+        "case", "customer", "account", "counterparty", "transaction", "alert",
+        "evidence", "verification_check",
+    ]
+    record_id: _OutputText
+
+
+class CitedStatement(BaseModel):
+    """Supplied text and ordered citations, without factual verification."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    statement: _OutputText
+    citations: list[RecordCitation]
+
+    @model_validator(mode="after")
+    def validate_citations(self) -> Self:
+        seen: set[tuple[str, str]] = set()
+        for index, citation in enumerate(self.citations):
+            reference = (citation.record_type, citation.record_id)
+            if reference in seen:
+                raise ValueError(f"citations[{index}]: duplicate citation {reference!r}")
+            seen.add(reference)
+        return self
+
+
+class Contradiction(BaseModel):
+    """Two cited statements; no semantic contradiction detection is performed."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    description: _OutputText
+    left: CitedStatement
+    right: CitedStatement
+
+    @model_validator(mode="after")
+    def require_cited_sides(self) -> Self:
+        for side, statement in (("left", self.left), ("right", self.right)):
+            if not statement.citations:
+                raise ValueError(f"{side}.citations must contain at least one citation")
+        return self
+
+
+class InvestigationOutput(BaseModel):
+    """Preliminary output structure; cited records and claims are not verified."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    schema_version: Literal["1.0"]
+    case_id: _OutputText
+    alert_id: _OutputText
+    assessment_status: Literal["recommendation_provided", "unable_to_recommend"]
+    recommended_action: Literal["close", "investigate", "escalate"] | None
+    rationale: CitedStatement
+    factual_findings: list[CitedStatement]
+    interpretations: list[CitedStatement]
+    unresolved_questions: list[CitedStatement]
+    missing_information: list[CitedStatement]
+    contradictions: list[Contradiction]
+    recommendation_scope: Literal["preliminary"]
+    human_review_required: Literal[True]
+
+    @field_validator("human_review_required", mode="before")
+    @classmethod
+    def require_human_review(cls, value: object) -> bool:
+        # Literal[True] alone also accepts the numeric value 1.
+        if value is not True:
+            raise ValueError("human_review_required must be boolean True")
+        return value
+
+    @model_validator(mode="after")
+    def validate_assessment(self) -> Self:
+        if self.assessment_status == "recommendation_provided":
+            if self.recommended_action is None:
+                raise ValueError(
+                    "recommended_action must be close, investigate, or escalate "
+                    "when assessment_status is recommendation_provided"
+                )
+            if not self.factual_findings:
+                raise ValueError(
+                    "factual_findings must contain at least one cited factual finding "
+                    "when assessment_status is recommendation_provided"
+                )
+            if not self.rationale.citations:
+                raise ValueError(
+                    "rationale.citations must contain at least one citation "
+                    "when assessment_status is recommendation_provided"
+                )
+        elif self.recommended_action is not None:
+            raise ValueError(
+                "recommended_action must be null "
+                "when assessment_status is unable_to_recommend"
+            )
+
+        for field, statements in (
+            ("factual_findings", self.factual_findings),
+            ("interpretations", self.interpretations),
+        ):
+            for index, statement in enumerate(statements):
+                if not statement.citations:
+                    raise ValueError(
+                        f"{field}[{index}].citations must contain at least one citation"
+                    )
+        return self
