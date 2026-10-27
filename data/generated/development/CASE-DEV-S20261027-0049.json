@@ -1,0 +1,127 @@
+{
+  "accounts": [
+    {
+      "account_id": "ACC-DEV-S20261027-0049",
+      "account_type": "business_current",
+      "currency": "USD",
+      "customer_id": "CUST-DEV-S20261027-0049",
+      "opened_at": "2023-01-01"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-DEV-S20261027-0049",
+    "created_at": "2026-04-29T06:00:00Z",
+    "customer_id": "CUST-DEV-S20261027-0049",
+    "rule_id": "BENEFICIARY_INFORMATION_INCOMPLETE",
+    "transaction_ids": [
+      "TX-DEV-S20261027-0049-01"
+    ]
+  },
+  "case": {
+    "case_id": "CASE-DEV-S20261027-0049",
+    "opened_at": "2026-04-29T07:00:00Z",
+    "policy_id": "POLICY-AML-V1",
+    "primary_alert_id": "ALT-DEV-S20261027-0049"
+  },
+  "counterparties": [],
+  "customer": {
+    "customer_id": "CUST-DEV-S20261027-0049",
+    "customer_type": "business",
+    "expected_monthly_activity": {
+      "currency": "USD",
+      "maximum": "30000.00",
+      "minimum": "10000.00"
+    },
+    "industry": "trade_supplies",
+    "name": "Fictional Development Business DEV-S20261027-0049",
+    "onboarding_date": "2023-01-01",
+    "profile_last_verified": "2025-12-01"
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-DEV-S20261027-0049-01",
+      "evidence_type": "trading_profile",
+      "facts": {
+        "operating_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "premises": {
+          "type": "trade_unit",
+          "visit_record": null
+        },
+        "seasonal_activity_reported": true,
+        "staff_count": 17
+      },
+      "related_transaction_ids": [],
+      "source": "synthetic_profile_record",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0049-02",
+      "evidence_type": "payment_record",
+      "facts": {
+        "amount": "23409.04",
+        "beneficiary_account_ref": null,
+        "commercial_purpose": null,
+        "currency": "USD"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0049-01"
+      ],
+      "source": "synthetic_bank_ledger",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0049-03",
+      "evidence_type": "information_request",
+      "facts": {
+        "requested_at": "2026-04-28T11:00:00Z",
+        "requested_fields": [
+          "beneficiary_account_reference",
+          "commercial_purpose"
+        ],
+        "response_status": "not_received",
+        "supplied_fields": []
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0049-01"
+      ],
+      "source": "synthetic_case_log",
+      "verification_status": "recorded"
+    }
+  ],
+  "schema_version": "1.0",
+  "transactions": [
+    {
+      "account_id": "ACC-DEV-S20261027-0049",
+      "amount": "23409.04",
+      "counterparty_id": null,
+      "currency": "USD",
+      "description": "Fictional trade transaction",
+      "direction": "debit",
+      "occurred_at": "2026-04-28T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0049-01",
+      "transaction_type": "international_transfer"
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-DEV-S20261027-0049-01",
+      "check_type": "supplied_information_inventory",
+      "findings": [
+        "Null fields indicate information absent from this supplied record set."
+      ],
+      "status": "recorded",
+      "subject_evidence_ids": [
+        "EV-DEV-S20261027-0049-02",
+        "EV-DEV-S20261027-0049-03"
+      ]
+    }
+  ]
+}

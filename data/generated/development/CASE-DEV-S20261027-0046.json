@@ -1,0 +1,175 @@
+{
+  "accounts": [
+    {
+      "account_id": "ACC-DEV-S20261027-0046",
+      "account_type": "business_current",
+      "currency": "EUR",
+      "customer_id": "CUST-DEV-S20261027-0046",
+      "opened_at": "2023-01-01"
+    }
+  ],
+  "alert": {
+    "alert_id": "ALT-DEV-S20261027-0046",
+    "created_at": "2026-05-25T08:00:00Z",
+    "customer_id": "CUST-DEV-S20261027-0046",
+    "rule_id": "UNUSUAL_INCOMING_PAYMENT",
+    "transaction_ids": [
+      "TX-DEV-S20261027-0046-01"
+    ]
+  },
+  "case": {
+    "case_id": "CASE-DEV-S20261027-0046",
+    "opened_at": "2026-05-25T09:00:00Z",
+    "policy_id": "POLICY-AML-V1",
+    "primary_alert_id": "ALT-DEV-S20261027-0046"
+  },
+  "counterparties": [
+    {
+      "counterparty_id": "CP-DEV-S20261027-0046-01",
+      "display_name": "Fictional Trade Contact DEV-S20261027-0046",
+      "relationship_status": "recorded_contact"
+    }
+  ],
+  "customer": {
+    "customer_id": "CUST-DEV-S20261027-0046",
+    "customer_type": "business",
+    "expected_monthly_activity": {
+      "currency": "EUR",
+      "maximum": "30000.00",
+      "minimum": "10000.00"
+    },
+    "industry": "trade_supplies",
+    "name": "Fictional Development Business DEV-S20261027-0046",
+    "onboarding_date": "2023-01-01",
+    "profile_last_verified": "2025-12-01"
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-DEV-S20261027-0046-01",
+      "evidence_type": "trading_profile",
+      "facts": {
+        "operating_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "premises": {
+          "type": "trade_unit",
+          "visit_record": null
+        },
+        "seasonal_activity_reported": true,
+        "staff_count": 17
+      },
+      "related_transaction_ids": [],
+      "source": "synthetic_profile_record",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0046-02",
+      "evidence_type": "payment_record",
+      "facts": {
+        "currency": "EUR",
+        "recorded_amount": "28294.90",
+        "sender_reference": "CP-DEV-S20261027-0046-01"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0046-01"
+      ],
+      "source": "synthetic_bank_ledger",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0046-03",
+      "evidence_type": "customer_explanation",
+      "facts": {
+        "claim": "Wholesale goods",
+        "invoice_reference": "INV-DEV-S20261027-0046"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0046-01"
+      ],
+      "source": "customer_supplied",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0046-04",
+      "evidence_type": "supplier_invoice",
+      "facts": {
+        "currency": "EUR",
+        "description": "Wholesale goods",
+        "invoice_reference": "INV-DEV-S20261027-0046",
+        "invoice_total": "28294.90"
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0046-01"
+      ],
+      "source": "customer_supplied",
+      "verification_status": "recorded"
+    },
+    {
+      "evidence_id": "EV-DEV-S20261027-0046-05",
+      "evidence_type": "dispatch_record",
+      "facts": {
+        "dispatched_at": "2026-05-22T10:00:00Z",
+        "invoice_reference": "INV-DEV-S20261027-0046",
+        "recorded_items": [
+          {
+            "description": "Trade goods",
+            "quantity": 34
+          }
+        ]
+      },
+      "related_transaction_ids": [
+        "TX-DEV-S20261027-0046-01"
+      ],
+      "source": "synthetic_carrier_record",
+      "verification_status": "recorded"
+    }
+  ],
+  "schema_version": "1.0",
+  "transactions": [
+    {
+      "account_id": "ACC-DEV-S20261027-0046",
+      "amount": "28294.90",
+      "counterparty_id": "CP-DEV-S20261027-0046-01",
+      "currency": "EUR",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-05-24T10:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0046-01",
+      "transaction_type": "domestic_transfer"
+    },
+    {
+      "account_id": "ACC-DEV-S20261027-0046",
+      "amount": "1250.50",
+      "counterparty_id": "CP-DEV-S20261027-0046-01",
+      "currency": "EUR",
+      "description": "Fictional trade transaction",
+      "direction": "credit",
+      "occurred_at": "2026-05-24T12:00:00Z",
+      "transaction_id": "TX-DEV-S20261027-0046-02",
+      "transaction_type": "domestic_transfer"
+    }
+  ],
+  "verification_checks": [
+    {
+      "check_id": "CHK-DEV-S20261027-0046-01",
+      "check_type": "supplied_document_inventory",
+      "findings": [
+        "Supplied document types: payment_record, customer_explanation, supplier_invoice, dispatch_record.",
+        "Recorded sources have not been independently authenticated by this program."
+      ],
+      "status": "recorded",
+      "subject_evidence_ids": [
+        "EV-DEV-S20261027-0046-02",
+        "EV-DEV-S20261027-0046-03",
+        "EV-DEV-S20261027-0046-04",
+        "EV-DEV-S20261027-0046-05"
+      ]
+    }
+  ]
+}

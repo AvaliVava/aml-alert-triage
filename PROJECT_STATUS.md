@@ -1,6 +1,20 @@
 # Project Status — Source of Truth
 
-## Current local checkpoint — evidence relationship checks after PR #6
+## Current local checkpoint — Week 3 synthetic generator after PR #7
+
+- Base: `d0b8a6a`, the merged PR #7 checkpoint. The working tree was clean on `main`; the requested `feature/week-3-synthetic-generator` branch was created from that base before editing. Current work is uncommitted.
+- Added a seeded [synthetic generator](src/aml_triage/synthetic_generator.py), [generation CLI](scripts/generate_dev_cases.py), and [32 generator tests](tests/test_synthetic_generator.py). Count and output directory are configurable. Generation uses a local random instance, decimal money, stable identifiers and deterministic UTF-8 JSON bytes; every input passes the unchanged `InvestigationInput` contract before publication.
+- The actual [development batch](data/generated/development/) contains **50 investigations**, seed `20261027`, with **10 cases each** for incoming transfers, cash/sales records, supplier authorization, incomplete outgoing information and beneficiary comparisons. The five templates include 18 source-condition variants covering document coverage, reconciliation gaps, instruction timing, authorized changes, missing information and account-reference agreement.
+- The separate [manifest](data/generated/development/manifest.json) records case IDs, family IDs, generator/template versions, seed, conceptual source lineage and exact input SHA-256 digests. It is not candidate input and contains no adjudicated action labels. Cases share template lineage and are **development data, not independent held-out examples**.
+- All **51 artifact files** reproduced byte for byte in a separate temporary output directory; every delivered input and manifest hash was checked. Existing destinations are refused; complete validated bytes are staged and checked before directory publication. A narrow [Git attribute rule](.gitattributes) preserves generated JSON bytes through checkout. An interrupted process may leave a hidden staging directory or publication lock requiring inspection.
+- Fresh local verification: **269 tests passed** (237 existing plus 32 new), and `pip check` found no broken requirements. Existing contracts, tests, golden artifacts, auditor behavior, dependencies and evaluation policy are unchanged. The old foundation status CLI retains its historical flags; use the generation CLI for this checkpoint.
+- No classifier, recommendation baseline, LLM calls, real verification or general evaluation scoring is added. The Week 3 deterministic recommendation baseline remains pending; the formal evaluation protocol is still a draft and provisional-label adjudication remains open. Remote CI has not been verified for this branch. Stop for independent review before committing.
+
+The Week 3 checkpoint above is authoritative. Earlier checkpoint sections below are retained as historical records.
+
+---
+
+## Historical checkpoint — evidence relationship checks after PR #6
 
 - Base: `54b0cf8`, the merged PR #6 checkpoint on `main`; current work is uncommitted on `feature/phase-2-evidence-relation-checks`.
 - A separate [evidence relationship evaluator](src/aml_triage/evidence_relation_checks.py) compares explicitly annotated beneficiary references in G04's `EV-004` and `EV-005`, requiring their supplied `TX-105` links. It reports recorded relationship consistency separately from finding-level direct-source citation coverage.
@@ -8,7 +22,7 @@
 - Fresh local verification: **237 tests passed** (204 existing plus 33 new), and `pip check` found no broken requirements. Existing contracts, auditor reports, CLI behavior, tests and golden artifacts are unchanged.
 - No recommendation engine, LLM judge, independent authenticity verification or general semantic evaluator is added. Phase 2 is not complete; remote CI has not been checked for this branch. Independent review is next.
 
-The evidence-relationship checkpoint above is the authoritative current status. See [WORKLOG.md](WORKLOG.md) for the local checkpoint record.
+This evidence-relationship checkpoint is historical and is superseded by the Week 3 checkpoint above. See [WORKLOG.md](WORKLOG.md) for the checkpoint chronology.
 
 ---
 

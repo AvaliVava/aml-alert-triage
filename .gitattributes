@@ -1,0 +1,2 @@
+# Generated JSON digests identify exact bytes; never transform their line endings.
+data/generated/development/*.json -text
