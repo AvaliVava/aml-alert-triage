@@ -1,6 +1,18 @@
 # Project Status — Source of Truth
 
-## Current local checkpoint — Week 3 deterministic baseline after PR #8
+## Current local checkpoint — Week 4 OpenAI schema compatibility after PR #9
+
+- Preflight: clean working tree on `feature/week-4-openai-schema` at `3c4e3fd`, the PR #9 merge of the deterministic baseline into `main`. Earlier pending baseline review/merge descriptions below are historical.
+- Added the [OpenAI Structured Outputs compatibility report](docs/week-4/OPENAI_SCHEMA_COMPATIBILITY.md). Recursively inspected the generated output schema and official Responses documentation. Retain the existing `InvestigationOutput` class and prefer `responses.parse(text_format=InvestigationOutput)` for a separately authorized future smoke test; no adapter or transport model is justified by current local evidence.
+- Inspected published SDK 3.40.0 without installing it. Isolated schema/format helpers produced the unchanged raw schema plus the strict request envelope; the text parser invoked our Pydantic validation locally. This is not a full installed-SDK or live API test. No API client, credentials, hosted requests or dependency changes were introduced.
+- Fresh local verification: **324 tests passed**, dependency verification found no broken requirements, and syntax checks passed for all 22 tracked Python files. All 32 additional candidate probes produced expected structural/contextual/auditor results. Unsupported assertions with existing IDs still do not establish factual support; broad semantic dimensions remain unevaluated.
+- Existing contracts, baseline, evaluator, tests, policy and synthetic datasets remain unchanged. Live model/schema behavior and remote CI are unverified. Formal semantic evaluation and provisional-label adjudication remain open; Phase 2 is not declared complete. This documentation checkpoint is unstaged and uncommitted for independent review.
+
+This Week 4 checkpoint is authoritative. Earlier sections below preserve historical checkpoint context.
+
+---
+
+## Historical checkpoint — Week 3 deterministic baseline after PR #8
 
 - Preflight: clean working tree on `feature/week-3-deterministic-baseline` at `eeef96f`, the merged PR #8 generator checkpoint. This baseline work is uncommitted and awaiting independent review.
 - Added [deterministic_baseline.py](src/aml_triage/deterministic_baseline.py), [run_baseline.py](scripts/run_baseline.py) and [55 baseline tests](tests/test_deterministic_baseline.py). The public function accepts a validated `InvestigationInput`, returns the unchanged `InvestigationOutput` structure, and runs contextual citation validation before returning. Outputs separate factual findings, interpretations, questions, missing information and supported beneficiary-reference contradictions; all are preliminary and require human review.
@@ -12,7 +24,7 @@
 - Fresh local verification after the review correction: **324 tests passed** (269 pre-baseline tests plus 55 baseline tests); dependency verification found no broken requirements. The five original CLI demonstrations reproduced unchanged outputs; a conflicting-wire G03 counterfactual recommended investigation with direct-source citations. All five golden inputs and 50 generated development inputs produce structurally valid, citation-resolved outputs. Existing contracts, prior test assertions, auditor/checker interfaces, inputs, reference answers, manifest, policy and dependencies are unchanged. The CLI requires an explicit new destination and publishes complete validated bytes through an atomic no-overwrite hard link; unsupported filesystems fail without a partial output.
 - No LLM, RAG, agents, general policy engine, semantic evaluator, real verification or production AML/SAR decision logic is added. The historical foundation status command retains its original flags. Remote CI is unverified, and Phase 2 is not declared complete. Stop for independent review before staging or committing.
 
-This baseline checkpoint is authoritative. Earlier checkpoint sections below are retained as historical records.
+This baseline checkpoint is historical; PR #9 subsequently merged it as `3c4e3fd`. Current status is recorded in the Week 4 checkpoint above.
 
 ---
 
