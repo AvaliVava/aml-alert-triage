@@ -1,0 +1,19 @@
+# Tested application dependency closure; not a freeze of the developer environment.
+# Install from the repository root: python -m pip install -c constraints.txt -e .
+# Targets: CPython 3.11-3.13, Windows amd64 development / Linux x86_64 CI.
+# No optional SDK extras. Versions are pinned; build tools and artifact hashes are not.
+# See docs/week-4/OPENAI_INTEGRATION.md for verification and update procedures.
+annotated-types==0.8.0
+anyio==4.15.1
+h11==0.16.0
+httpcore2==2.16.0
+httpx2==2.16.0
+idna==3.20
+jiter==0.18.0
+openai==3.40.0
+pydantic==2.14.1
+pydantic-core==2.50.1
+sniffio==1.3.1
+truststore==0.10.5
+typing-extensions==4.16.0
+typing-inspection==0.4.4

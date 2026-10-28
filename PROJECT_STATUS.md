@@ -1,6 +1,20 @@
 # Project Status — Source of Truth
 
-## Current local checkpoint — Week 4 OpenAI schema compatibility after PR #9
+## Current local checkpoint — Week 4 OpenAI service after PR #10
+
+- Preflight: clean `feature/week-4-openai-integration` at `4e95484`, the PR #10 merge. The prior schema-compatibility checkpoint is merged; its pending-review descriptions below are historical.
+- Implemented the [versioned prompt](src/aml_triage/openai_prompt.py), [guarded Responses service](src/aml_triage/openai_service.py), [one-input CLI](scripts/run_openai_assessment.py) and [34 focused tests](tests/test_openai_service.py). The service uses the unchanged `InvestigationOutput` class through `responses.parse`, validates original candidate text and contextual citations, and preserves a separate mechanical audit and execution record. See [OPENAI_INTEGRATION.md](docs/week-4/OPENAI_INTEGRATION.md).
+- Pinned and installed SDK `openai==3.40.0`; existing Pydantic 2.14.1 and Python requirements are unchanged. Live execution defaults off, requires explicit model/token/allowance opt-in, permits at most one attempt per service instance and forces zero SDK/application retries. Requests use `store=False`. No credentials or hosted-model requests were used; active API-path tests use mocks/in-memory transports.
+- Dependency-review correction: [constraints.txt](constraints.txt) pins the 14 tested runtime dependencies, including the unchanged SDK 3.40.0 and Pydantic 2.14.1. Development setup and the CI matrix consume it with `python -m pip install -c constraints.txt -e .`; CI also runs `pip check`. Build tools and distribution hashes are outside this constraints mechanism's scope. Service, prompt, CLI, contracts and test source are unchanged by this correction.
+- Fresh local verification: **358 tests passed** (324 existing plus 34 new) in both the existing environment and a fresh constrained Python 3.11.9 environment; dependency and smoke checks passed. Targeted pip resolution/download succeeded for all 14 wheels on 3.11 Windows amd64 and Linux x86_64. Dependency metadata and published binary-wheel availability were checked for 3.11–3.13 on both targets. Four bounded 3.12/3.13 download probes and a Windows 3.12 retry outside the sandbox timed out; no completed install or runtime test on those interpreters is claimed. Remote CI remains unverified. See the [verification table](docs/week-4/OPENAI_INTEGRATION.md#dependency-and-compatibility-evidence).
+- A mocked demonstration preserved original candidate text in an ignored local bundle, passed structure/citation/mechanical checks and blocked a second attempt. Mock token counts are test metadata. Broad semantic evaluation, grounding quality and recommendation accuracy remain unevaluated. SDK parsing failures can leave original text/request ID/usage unavailable; the service records that limitation rather than inventing data.
+- Existing contracts, baseline, auditor, tests, golden/development artifacts and policy remain unchanged. First live request, approved model/budget, semantic adjudication and provisional-label review remain pending. This implementation is unstaged and uncommitted for independent review; Phase 2 is not declared complete.
+
+This service checkpoint is authoritative. Earlier sections below preserve historical context.
+
+---
+
+## Historical checkpoint — Week 4 OpenAI schema compatibility after PR #9
 
 - Preflight: clean working tree on `feature/week-4-openai-schema` at `3c4e3fd`, the PR #9 merge of the deterministic baseline into `main`. Earlier pending baseline review/merge descriptions below are historical.
 - Added the [OpenAI Structured Outputs compatibility report](docs/week-4/OPENAI_SCHEMA_COMPATIBILITY.md). Recursively inspected the generated output schema and official Responses documentation. Retain the existing `InvestigationOutput` class and prefer `responses.parse(text_format=InvestigationOutput)` for a separately authorized future smoke test; no adapter or transport model is justified by current local evidence.
@@ -8,7 +22,7 @@
 - Fresh local verification: **324 tests passed**, dependency verification found no broken requirements, and syntax checks passed for all 22 tracked Python files. All 32 additional candidate probes produced expected structural/contextual/auditor results. Unsupported assertions with existing IDs still do not establish factual support; broad semantic dimensions remain unevaluated.
 - Existing contracts, baseline, evaluator, tests, policy and synthetic datasets remain unchanged. Live model/schema behavior and remote CI are unverified. Formal semantic evaluation and provisional-label adjudication remain open; Phase 2 is not declared complete. This documentation checkpoint is unstaged and uncommitted for independent review.
 
-This Week 4 checkpoint is authoritative. Earlier sections below preserve historical checkpoint context.
+This compatibility checkpoint is historical; PR #10 subsequently merged it as `4e95484`. Current status is recorded in the service checkpoint above.
 
 ---
 
