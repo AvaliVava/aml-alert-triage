@@ -27,7 +27,8 @@ Windows PowerShell, from the repository root:
 ```powershell
 # Run this creation step only if .venv does not already exist.
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m pip install -c constraints.txt -e .
+.\.venv\Scripts\python.exe -m pip check
 .\.venv\Scripts\python.exe scripts\check_setup.py
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
@@ -39,12 +40,15 @@ Linux/macOS, using a supported `python3` interpreter:
 ```bash
 # Run this creation step only if .venv does not already exist.
 python3 -m venv .venv
-./.venv/bin/python -m pip install -e .
+./.venv/bin/python -m pip install -c constraints.txt -e .
+./.venv/bin/python -m pip check
 ./.venv/bin/python scripts/check_setup.py
 ./.venv/bin/python -m unittest discover -s tests -v
 ```
 
-Using the virtual environment's Python directly avoids requiring shell activation. In an already activated environment or configured Linux CI, the equivalent commands are `python -m pip install -e .`, `python scripts/check_setup.py`, and `python -m unittest discover -s tests -v`.
+Using the virtual environment's Python directly avoids requiring shell activation. In an already activated environment or configured Linux CI, the equivalent commands are `python -m pip install -c constraints.txt -e .`, `python -m pip check`, `python scripts/check_setup.py`, and `python -m unittest discover -s tests -v`.
+
+[constraints.txt](constraints.txt) pins the tested application dependency closure for development and CI, including the OpenAI SDK and Pydantic. Reuse it on subsequent installs; omitting `-c constraints.txt` allows different transitive versions. Build tools and distribution hashes are outside this constraints file's scope. See the [integration dependency notes](docs/week-4/OPENAI_INTEGRATION.md#dependency-and-compatibility-evidence) for verification limits and the update procedure.
 
 The smoke check exercises the original CLI; its historical `week-1-foundation` phase label does not describe the current milestone. The test command runs the complete suite. The verified local baseline at implementation checkpoint `1375d9f` is **99 passing tests**; remote feature-branch GitHub Actions results remain unverified. These checks need no API keys and do not perform AML analysis, execute verification activities, or call an LLM.
 

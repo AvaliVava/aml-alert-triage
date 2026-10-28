@@ -21,7 +21,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install project dependencies
-        run: python -m pip install -e .
+        run: python -m pip install -c constraints.txt -e .
+
+      - name: Check dependency consistency
+        run: python -m pip check
 
       - name: Run foundation smoke check
         run: python scripts/check_setup.py

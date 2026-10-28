@@ -51,7 +51,8 @@ Windows PowerShell:
 ```powershell
 # Run this creation step only if .venv does not already exist.
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m pip install -c constraints.txt -e .
+.\.venv\Scripts\python.exe -m pip check
 .\.venv\Scripts\python.exe scripts\check_setup.py
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
@@ -61,12 +62,13 @@ If the `python` command is unavailable, use `py -3.11 -m venv .venv` for the cre
 In an activated virtual environment, or Linux CI with a configured supported Python interpreter:
 
 ```bash
-python -m pip install -e .
+python -m pip install -c constraints.txt -e .
+python -m pip check
 python scripts/check_setup.py
 python -m unittest discover -s tests -v
 ```
 
-Editable installation makes the local package and its dependency available. The smoke check exercises the original foundation CLI; the unit-test command runs the **complete suite**, including foundation, fixture-integrity, and contract tests. Neither performs AML analysis nor calls an LLM. No API keys are needed for these checks.
+Editable installation uses [constraints.txt](constraints.txt) to pin the tested runtime dependency versions, including Pydantic and the OpenAI SDK, for development and CI. It does not pin build tools or distribution hashes. Use the constraint option whenever installing this project; a plain editable install does not reproduce the pinned environment. The smoke check exercises the original foundation CLI; the unit-test command runs the **complete suite**, including foundation, fixture-integrity, and contract tests. Neither performs AML analysis nor calls an LLM. No API keys are needed for these checks.
 
 The complete suite was rerun at `ce0cd4a`: **144 local tests passed**. Remote GitHub Actions results for the output-contract branch remain unverified. The smoke CLI's `week-1-foundation` phase label is historical; consult [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current milestone and [START_HERE.md](START_HERE.md) for detailed setup.
 
