@@ -17,7 +17,7 @@
 
 ## Current roadmap progress
 
-Phase 1 is complete; its documentation review and merge are recorded in PR #1 (`a5c68d0`). Phase 2 input contracts were merged through PR #3 (`327e600`), output contracts and reference validation through PR #4 (`ee03f08`), and the mechanical auditor and restricted factual checks through PRs #5–#7. The Week 3 generator was merged through PR #8 (`eeef96f`). The first limited deterministic baseline is now implemented locally on `feature/week-3-deterministic-baseline`, awaiting independent review. The sequence and planning dates above remain unchanged; milestone verification governs progression.
+Phase 1 is complete; its documentation review and merge are recorded in PR #1 (`a5c68d0`). Phase 2 input contracts were merged through PR #3 (`327e600`), output contracts and reference validation through PR #4 (`ee03f08`), and the mechanical auditor and restricted factual checks through PRs #5–#7. The Week 3 generator was merged through PR #8 (`eeef96f`) and the first limited deterministic baseline through PR #9 (`3c4e3fd`). Week 4 has begun with a local [OpenAI schema compatibility investigation](docs/week-4/OPENAI_SCHEMA_COMPATIBILITY.md); no hosted integration or live request is implemented by this checkpoint. The sequence and planning dates above remain unchanged; milestone verification governs progression.
 
 - [x] Create five synthetic golden-case inputs and five separate reference-answer artifacts, merged through PR #2 (`db212d4`); see [golden cases](data/golden_cases/).
 - [x] Implement individual Pydantic V2 input contracts and the `ExpectedMonthlyActivity` helper in [contracts.py](src/aml_triage/contracts.py).
@@ -28,11 +28,11 @@ Phase 1 is complete; its documentation review and merge are recorded in PR #1 (`
 - [x] Implement separate input/output reference validation at `ce0cd4a`, checking exact case/alert identities and typed citation existence in all eight record namespaces without assessing factual support.
 - [x] Confirm **144 passing local tests** at `ce0cd4a` during the output documentation checkpoint.
 - [x] Implement a seeded generator and publish 50 validated development investigations, with five scenario families, separate lineage/hash manifest and byte reproducibility checks; **269 local tests passed** during the historical generator checkpoint, subsequently merged through PR #8.
-- [x] Implement the first limited deterministic baseline, producing preliminary, cited outputs and abstention from supplied records; **316 local tests passed** during this uncommitted baseline checkpoint. Closure and general semantic scoring remain outside its scope.
+- [x] Implement the first limited deterministic baseline, producing preliminary, cited outputs and abstention from supplied records; **316 local tests passed** at its initial checkpoint and **324 passed** after the REF-01 bank-recipient reconciliation correction, subsequently merged through PR #9. Closure and general semantic scoring remain outside its scope.
 - [ ] Approve the formal evaluation protocol; an evaluation draft exists, with semantic judgments still pending.
 - [ ] Review the fictional [labeling vocabulary](specs/labeling_policy_v1.json) (`close`, `investigate`, `escalate`) and provisional [golden-case labels](data/golden_cases/references/).
 
-Phase 2 as a whole remains incomplete. The baseline is local and awaiting independent review; remote GitHub Actions results for its feature branch have not been verified. Local tests are not evidence of successful remote CI. The generated cases share development-template lineage and are not held-out evaluation data. Later LLM/integration work, semantic adjudication and held-out evaluation remain pending; this checkpoint establishes no classification-performance result.
+Phase 2 as a whole remains incomplete. The baseline is merged; the Week 4 schema compatibility documentation is local and awaiting independent review. Remote GitHub Actions results have not been verified in this checkpoint. Local tests are not evidence of successful remote CI. The generated cases share development-template lineage and are not held-out evaluation data. Hosted LLM/integration work, semantic adjudication and held-out evaluation remain pending; this checkpoint establishes no classification-performance result.
 
 ## Development rhythm
 
