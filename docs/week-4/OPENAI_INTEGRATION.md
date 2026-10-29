@@ -1,6 +1,6 @@
 # Week 4, Checkpoint 2 — OpenAI assessment service
 
-**Local implementation, verified with mocks only. No hosted requests or credentials used.**
+**Historical Checkpoint 2 implementation record (2026-10-28): verified with mocks only; no hosted requests or credentials used during that checkpoint.** The service was subsequently merged through PR #11 (`c6afb71`). The [Checkpoint 3A G02 review](G02_LIVE_ASSESSMENT_REVIEW.md) records the separately performed 2026-10-29 live attempts and their limitations. The first-live-test instructions and pending implementation review below retain their historical context; no service behavior changed in this documentation checkpoint.
 
 Preflight confirmed a clean `feature/week-4-openai-integration` branch at `4e95484`, the PR #10 merge. The existing contracts, baseline, policy and datasets are unchanged. This implements an API adapter, not evidence authentication, adjudicated AML policy or a measured classifier.
 
