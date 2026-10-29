@@ -1,6 +1,19 @@
 # Project Status — Source of Truth
 
-## Current local checkpoint — Week 4 OpenAI service after PR #10
+## Current local checkpoint — Week 4, Checkpoint 3A: first hosted G02 assessment
+
+- The OpenAI service is merged through PR #11 at `c6afb7149c0b0722e4638618ba41d2db8599e2ff`. Documentation verification began on `docs/week-4-g02-live-review` at that revision; only the supplied live-review document was initially untracked. See the [G02 live assessment review](docs/week-4/G02_LIVE_ASSESSMENT_REVIEW.md) for evidence, source pointers and open review questions.
+- Verified the original local successful bundle, `outputs/openai/G02-live-attempt2-20261029-113851.json`: case `CASE-G02`, model identifier `gpt-6-luna`, SDK `3.40.0`, prompt `aml-preliminary-1.0`, status `validated`, preliminary action `investigate` and required human review. Recorded usage is **1,491 input / 1,163 output / 2,654 total tokens**, with **10,905.025 ms** local operation latency. Settings record output cap `2400`, timeout `60s`, reasoning effort `none`, `store=False`, allowance `1` and zero SDK/application retries.
+- Kept the initial failed attempt separate: `outputs/openai/G02-live-luna-20261029-111651.json` records `failed` / `connection`, **11,464.831 ms**, one attempt, null assessment/candidate/audit, and no request ID or usage. It is not an abstention or model-quality result; server processing and billing remain unknown. Both raw bundles remain ignored and unchanged.
+- Offline verification recomputed file/canonical-input, prompt and candidate hashes, validated the original candidate and all submitted typed citations, and reproduced the saved auditor report exactly. Input structure, output structure and contextual references passed. The deterministic transaction-amount checker compared **0 of 6 findings**: all six were `not_checked` because their complete statements were outside its restricted grammar. All nine broad semantic categories remain `not_evaluated`.
+- Manual source comparison reviewed every factual finding with attribution and review-scope limits. The rationale and `interpretations[0]` call the profile range "customer's stated" without explicit source support for that attribution. Payer wording, completeness and evidence sufficiency remain review questions. Agreement with G02's **provisional** `investigate` reference is descriptive, not adjudicated accuracy. No billing-ledger reconciliation, semantic score, held-out result or measured baseline advantage is established.
+- This documentation-only checkpoint made no API requests, accessed no credentials and changed no implementation, tests, dependencies or datasets. Unit tests were not rerun; the recorded **358-test** implementation baseline remains applicable to unchanged code. Remote CI results were not fetched or independently verified. Formal semantic adjudication, provisional-label review and broader bounded experiments remain pending; Phase 2 and Week 4 are not declared complete.
+
+This evidence-verification checkpoint is authoritative. Earlier sections below preserve historical context.
+
+---
+
+## Historical checkpoint — Week 4 OpenAI service after PR #10
 
 - Preflight: clean `feature/week-4-openai-integration` at `4e95484`, the PR #10 merge. The prior schema-compatibility checkpoint is merged; its pending-review descriptions below are historical.
 - Implemented the [versioned prompt](src/aml_triage/openai_prompt.py), [guarded Responses service](src/aml_triage/openai_service.py), [one-input CLI](scripts/run_openai_assessment.py) and [34 focused tests](tests/test_openai_service.py). The service uses the unchanged `InvestigationOutput` class through `responses.parse`, validates original candidate text and contextual citations, and preserves a separate mechanical audit and execution record. See [OPENAI_INTEGRATION.md](docs/week-4/OPENAI_INTEGRATION.md).
@@ -10,7 +23,7 @@
 - A mocked demonstration preserved original candidate text in an ignored local bundle, passed structure/citation/mechanical checks and blocked a second attempt. Mock token counts are test metadata. Broad semantic evaluation, grounding quality and recommendation accuracy remain unevaluated. SDK parsing failures can leave original text/request ID/usage unavailable; the service records that limitation rather than inventing data.
 - Existing contracts, baseline, auditor, tests, golden/development artifacts and policy remain unchanged. First live request, approved model/budget, semantic adjudication and provisional-label review remain pending. This implementation is unstaged and uncommitted for independent review; Phase 2 is not declared complete.
 
-This service checkpoint is authoritative. Earlier sections below preserve historical context.
+This service checkpoint is historical; PR #11 subsequently merged it as `c6afb71`. The current live smoke-test evidence and limitations are recorded above.
 
 ---
 
