@@ -1,0 +1,1152 @@
+{
+  "format_version": "g02-hybrid-calibration-catalog-draft-0.1",
+  "review_status": "AI_PREPARED_NOT_HUMAN_REVIEWED",
+  "approved_semantic_rules": [],
+  "approved_scoring": false,
+  "candidate_source_hashes": {
+    "baseline": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+    "hosted": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b"
+  },
+  "input_file_sha256": "60cbf66dbbb24b59f0ae0a86e03a92d6f0dac0e68511ec05cd1953b96763326f",
+  "source_inventory_sha256": "8ac79e804346b510a374259154eaa36d6880530b2ac3339354bfc6ad0ed40cd5",
+  "frozen_packet_sha256": "7c53f5baa233ff0fcbd1f5597932d2e2aef24eff0f8ab21169dc5f293cd6a226",
+  "g02_is_exposed_development_case": true,
+  "selected_case_level_items": [
+    {
+      "item_id": "M03",
+      "status": "proposed_not_adjudicated",
+      "no_baseline_unit_for_omission": true
+    }
+  ],
+  "calibration_bundles": [
+    {
+      "id": "G02-C01",
+      "rank": 1,
+      "name": "Absent documents versus no corroboration",
+      "rule_ids": [
+        "H-00",
+        "H-02",
+        "H-03"
+      ],
+      "authority": [
+        "full_input_inventory",
+        "recorded_verification_check"
+      ],
+      "flaw": "H047 normalizes recorded check notes their absence into no corroboration, potentially changing meaning.",
+      "decision": "Distinguish inventory absence, recorded check conclusion and independent corroboration; preserve ambiguous syntax.",
+      "tests": [
+        {
+          "id": "C01-A",
+          "change": "Introduce a supplied invoice that is explicitly noncorroborating (hypothetical separate fixture).",
+          "fixed": "Frozen candidate sentence and recorded check conclusion; original G02 packet stays unchanged.",
+          "expected": "Inventory absence can no longer hold; check noncorroboration may still hold.",
+          "method": "human_semantics_plus_inventory_predicate"
+        },
+        {
+          "id": "C01-B",
+          "change": "Rewrite only the annotated normalized proposition to omit absence implication.",
+          "fixed": "Original source statement and source references.",
+          "expected": "Fidelity review must flag meaning change even when pointers and hashes are valid.",
+          "method": "human_required"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "H044",
+          "candidate_id": "hosted",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "379ade91fc6da9ca95a5988304ec79b82362ba9e5cb818efa8478d087e8deed6",
+          "exact_statement": "No invoice, purchase order, or independent corroborating record is included in the supplied review materials, and the recorded check specifically notes their absence for the claimed purpose.",
+          "span_start": 0,
+          "span_end": 10,
+          "exact_span": "No invoice",
+          "atomic_proposition_as_proposed": "No invoice is included in the supplied review materials.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "CHK-G02-01",
+              "record_type": "verification_check"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H045",
+          "candidate_id": "hosted",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "379ade91fc6da9ca95a5988304ec79b82362ba9e5cb818efa8478d087e8deed6",
+          "exact_statement": "No invoice, purchase order, or independent corroborating record is included in the supplied review materials, and the recorded check specifically notes their absence for the claimed purpose.",
+          "span_start": 12,
+          "span_end": 26,
+          "exact_span": "purchase order",
+          "atomic_proposition_as_proposed": "No purchase order is included in the supplied review materials.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "CHK-G02-01",
+              "record_type": "verification_check"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H046",
+          "candidate_id": "hosted",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "379ade91fc6da9ca95a5988304ec79b82362ba9e5cb818efa8478d087e8deed6",
+          "exact_statement": "No invoice, purchase order, or independent corroborating record is included in the supplied review materials, and the recorded check specifically notes their absence for the claimed purpose.",
+          "span_start": 31,
+          "span_end": 63,
+          "exact_span": "independent corroborating record",
+          "atomic_proposition_as_proposed": "No independent purpose-corroborating record is included in the supplied review materials.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "CHK-G02-01",
+              "record_type": "verification_check"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H047",
+          "candidate_id": "hosted",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "379ade91fc6da9ca95a5988304ec79b82362ba9e5cb818efa8478d087e8deed6",
+          "exact_statement": "No invoice, purchase order, or independent corroborating record is included in the supplied review materials, and the recorded check specifically notes their absence for the claimed purpose.",
+          "span_start": 114,
+          "span_end": 189,
+          "exact_span": "the recorded check specifically notes their absence for the claimed purpose",
+          "atomic_proposition_as_proposed": "The supplied check records no such corroboration of the claimed purpose.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "CHK-G02-01",
+              "record_type": "verification_check"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    },
+    {
+      "id": "G02-C02",
+      "rank": 2,
+      "name": "Amount, attribution, materiality and careful caveat",
+      "rule_ids": [
+        "H-00",
+        "H-01",
+        "H-03",
+        "H-05"
+      ],
+      "authority": [
+        "transaction_and_customer",
+        "human_semantic_interpretation"
+      ],
+      "flaw": "H032 and H003 spans include attribution, but normalized numeric claims omit it; stated may refer to profile or customer.",
+      "decision": "Preserve numeric comparison and disputed attribution as separate observations without certifying a policy threshold.",
+      "tests": [
+        {
+          "id": "C02-A",
+          "change": "Replace only customer's stated with recorded profile in a separate text fixture.",
+          "fixed": "Recorded amounts and the remainder of the statement.",
+          "expected": "Attribution concern should change; arithmetic should not.",
+          "method": "human_required"
+        },
+        {
+          "id": "C02-B",
+          "change": "Remove only the customer citation from a hypothetical candidate interpretation.",
+          "fixed": "Original input, candidate prose, transaction citation.",
+          "expected": "Numeric input relation stays supported by input; completeness of submitted evidence set changes.",
+          "method": "source_set_structural_plus_human"
+        },
+        {
+          "id": "C02-C",
+          "change": "Change only transaction currency from USD to EUR in a separate test fixture.",
+          "fixed": "Numeric magnitudes and profile USD currency.",
+          "expected": "Same-currency comparison precondition fails; do not automatically derive monetary exceedance.",
+          "method": "deterministic_guard"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "H003",
+          "candidate_id": "hosted",
+          "json_pointer": "/rationale/statement",
+          "statement_sha256": "040e49076c640b54c6137c56c3983b0689ede5741eccf7e6812de713bccc7a6f",
+          "exact_statement": "Further investigation is warranted because the recorded incoming payment exceeds the customer's stated maximum monthly activity, while the customer-supplied commercial-purpose explanation is not corroborated by the recorded check. The supplied information does not establish that the payment lacks a legitimate purpose.",
+          "span_start": 47,
+          "span_end": 127,
+          "exact_span": "recorded incoming payment exceeds the customer's stated maximum monthly activity",
+          "atomic_proposition_as_proposed": "The payment amount exceeds the profile maximum numerically.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            },
+            {
+              "record_id": "CHK-G02-01",
+              "record_type": "verification_check"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "H004",
+          "candidate_id": "hosted",
+          "json_pointer": "/rationale/statement",
+          "statement_sha256": "040e49076c640b54c6137c56c3983b0689ede5741eccf7e6812de713bccc7a6f",
+          "exact_statement": "Further investigation is warranted because the recorded incoming payment exceeds the customer's stated maximum monthly activity, while the customer-supplied commercial-purpose explanation is not corroborated by the recorded check. The supplied information does not establish that the payment lacks a legitimate purpose.",
+          "span_start": 85,
+          "span_end": 127,
+          "exact_span": "customer's stated maximum monthly activity",
+          "atomic_proposition_as_proposed": "The customer personally stated the profile maximum.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            },
+            {
+              "record_id": "CHK-G02-01",
+              "record_type": "verification_check"
+            }
+          ],
+          "proposed_support_category_not_approved": "not_established",
+          "proposed_citation_category_not_approved": "inadequate"
+        },
+        {
+          "unit_id": "H031",
+          "candidate_id": "hosted",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "83d3fed867eac2067da61aa48d577c0dfb619625dc8a8a18f6633b8649151211",
+          "exact_statement": "The $48,500.00 payment is materially above the customer's stated maximum monthly activity; this is a reason to clarify the activity, not by itself proof of wrongdoing.",
+          "span_start": 4,
+          "span_end": 22,
+          "exact_span": "$48,500.00 payment",
+          "atomic_proposition_as_proposed": "The referenced payment amount is USD 48,500.00.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "H032",
+          "candidate_id": "hosted",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "83d3fed867eac2067da61aa48d577c0dfb619625dc8a8a18f6633b8649151211",
+          "exact_statement": "The $48,500.00 payment is materially above the customer's stated maximum monthly activity; this is a reason to clarify the activity, not by itself proof of wrongdoing.",
+          "span_start": 37,
+          "span_end": 89,
+          "exact_span": "above the customer's stated maximum monthly activity",
+          "atomic_proposition_as_proposed": "The payment exceeds the profile maximum numerically.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "H033",
+          "candidate_id": "hosted",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "83d3fed867eac2067da61aa48d577c0dfb619625dc8a8a18f6633b8649151211",
+          "exact_statement": "The $48,500.00 payment is materially above the customer's stated maximum monthly activity; this is a reason to clarify the activity, not by itself proof of wrongdoing.",
+          "span_start": 26,
+          "span_end": 36,
+          "exact_span": "materially",
+          "atomic_proposition_as_proposed": "The numerical difference is material to investigation.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H034",
+          "candidate_id": "hosted",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "83d3fed867eac2067da61aa48d577c0dfb619625dc8a8a18f6633b8649151211",
+          "exact_statement": "The $48,500.00 payment is materially above the customer's stated maximum monthly activity; this is a reason to clarify the activity, not by itself proof of wrongdoing.",
+          "span_start": 47,
+          "span_end": 89,
+          "exact_span": "customer's stated maximum monthly activity",
+          "atomic_proposition_as_proposed": "The customer personally stated the profile maximum.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            }
+          ],
+          "proposed_support_category_not_approved": "not_established",
+          "proposed_citation_category_not_approved": "inadequate"
+        },
+        {
+          "unit_id": "H035",
+          "candidate_id": "hosted",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "83d3fed867eac2067da61aa48d577c0dfb619625dc8a8a18f6633b8649151211",
+          "exact_statement": "The $48,500.00 payment is materially above the customer's stated maximum monthly activity; this is a reason to clarify the activity, not by itself proof of wrongdoing.",
+          "span_start": 91,
+          "span_end": 131,
+          "exact_span": "this is a reason to clarify the activity",
+          "atomic_proposition_as_proposed": "The difference warrants clarification.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            }
+          ],
+          "proposed_support_category_not_approved": null,
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H036",
+          "candidate_id": "hosted",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "83d3fed867eac2067da61aa48d577c0dfb619625dc8a8a18f6633b8649151211",
+          "exact_statement": "The $48,500.00 payment is materially above the customer's stated maximum monthly activity; this is a reason to clarify the activity, not by itself proof of wrongdoing.",
+          "span_start": 133,
+          "span_end": 166,
+          "exact_span": "not by itself proof of wrongdoing",
+          "atomic_proposition_as_proposed": "The amount comparison alone does not establish wrongdoing.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "CUST-G02",
+              "record_type": "customer"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    },
+    {
+      "id": "G02-C03",
+      "rank": 3,
+      "name": "Ambiguous supporting records addressing purpose",
+      "rule_ids": [
+        "H-00",
+        "H-02"
+      ],
+      "authority": [
+        "customer_explanation",
+        "full_input_inventory",
+        "recorded_verification_check"
+      ],
+      "flaw": "EV-G02-02 describes purpose but does not independently substantiate it. Phrase supporting records has more than one plausible reading.",
+      "decision": "Record competing interpretations; avoid automatic generosity, automatic contradiction and unresolved-as-unassessable shortcuts.",
+      "tests": [
+        {
+          "id": "C03-A",
+          "change": "Clarify candidate text to independent commercial corroborating documents.",
+          "fixed": "G02 evidence input.",
+          "expected": "Removes reading that any record discussing purpose is absent; corroboration source review remains.",
+          "method": "human_required"
+        },
+        {
+          "id": "C03-B",
+          "change": "Clarify candidate text to any record describing the claimed purpose.",
+          "fixed": "G02 evidence input.",
+          "expected": "EV-G02-02 supplies counterevidence to explicit global absence.",
+          "method": "human_required"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "H048",
+          "candidate_id": "hosted",
+          "json_pointer": "/missing_information/1/statement",
+          "statement_sha256": "5feb75527f0a77639def73d4516e19dce35debcbcb01d92079b24bf3b0f92929",
+          "exact_statement": "The supplied review materials do not include further detail about the commercial relationship with CP-G02-01 or supporting records addressing the payment's purpose.",
+          "span_start": 30,
+          "span_end": 108,
+          "exact_span": "do not include further detail about the commercial relationship with CP-G02-01",
+          "atomic_proposition_as_proposed": "No further commercial-relationship details with CP-G02-01 are supplied.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H049",
+          "candidate_id": "hosted",
+          "json_pointer": "/missing_information/1/statement",
+          "statement_sha256": "5feb75527f0a77639def73d4516e19dce35debcbcb01d92079b24bf3b0f92929",
+          "exact_statement": "The supplied review materials do not include further detail about the commercial relationship with CP-G02-01 or supporting records addressing the payment's purpose.",
+          "span_start": 112,
+          "span_end": 163,
+          "exact_span": "supporting records addressing the payment's purpose",
+          "atomic_proposition_as_proposed": "No supporting records addressing the payment purpose are supplied.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    },
+    {
+      "id": "G02-C04",
+      "rank": 4,
+      "name": "Question with factual amount premise",
+      "rule_ids": [
+        "H-01",
+        "H-03",
+        "H-04"
+      ],
+      "authority": [
+        "transaction",
+        "question_form_and_contract"
+      ],
+      "flaw": "Questions can contain checkable factual premises without asserting a requested unknown answer.",
+      "decision": "Factual premise is reviewable; question need not claim goods existed. Empty question citations allowed structurally.",
+      "tests": [
+        {
+          "id": "C04-A",
+          "change": "Change question amount only from 48,500 to 99,999 in a separate fixture.",
+          "fixed": "Question form, unchanged original input.",
+          "expected": "Amount premise becomes contradicted while interrogative request remains a question.",
+          "method": "deterministic_guard_plus_human"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "H040",
+          "candidate_id": "hosted",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c785522e48580b86f0ea998b44ac57429fe930d6bf7eb61131573de43124026b",
+          "exact_statement": "What goods, order, or commercial arrangement does the $48,500.00 payment relate to, and can the customer provide supporting records?",
+          "span_start": 54,
+          "span_end": 72,
+          "exact_span": "$48,500.00 payment",
+          "atomic_proposition_as_proposed": "The question presupposes a USD 48,500.00 payment.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "H041",
+          "candidate_id": "hosted",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c785522e48580b86f0ea998b44ac57429fe930d6bf7eb61131573de43124026b",
+          "exact_statement": "What goods, order, or commercial arrangement does the $48,500.00 payment relate to, and can the customer provide supporting records?",
+          "span_start": 0,
+          "span_end": 132,
+          "exact_span": "What goods, order, or commercial arrangement does the $48,500.00 payment relate to, and can the customer provide supporting records?",
+          "atomic_proposition_as_proposed": "Requests commercial explanation/supporting records; does not assert the actual purpose.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [],
+          "proposed_support_category_not_approved": null,
+          "proposed_citation_category_not_approved": null
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    },
+    {
+      "id": "G02-C05",
+      "rank": 5,
+      "name": "Baseline implementation, execution and policy-scope claims",
+      "rule_ids": [
+        "H-01",
+        "H-04",
+        "H-06"
+      ],
+      "authority": [
+        "source_code_and_execution_context",
+        "output_contract",
+        "input_case_as_distinct_authority"
+      ],
+      "flaw": "CASE-G02 citation is not proof of program execution; review required is not review completed.",
+      "decision": "Use explicit assertion-authority map; never score process or contract assertions as ordinary transaction facts.",
+      "tests": [
+        {
+          "id": "C05-A",
+          "change": "Replace review is required with review has been completed in a separate candidate fixture.",
+          "fixed": "Input, required-review contract flag and citation.",
+          "expected": "Contract requirement does not support claim that human review actually occurred.",
+          "method": "human_plus_contract_guard"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "B003",
+          "candidate_id": "baseline",
+          "json_pointer": "/rationale/statement",
+          "statement_sha256": "5d51afd03dffbe776e37c97abe3ca1e996b69245c2aec08e15ca3cc58fcfcecd",
+          "exact_statement": "[BASE-01] Specific material questions remain in the supplied scope, identified below. No complete REF-01 conjunction was established by this limited detector. Recommend preliminary investigation for human review.",
+          "span_start": 86,
+          "span_end": 158,
+          "exact_span": "No complete REF-01 conjunction was established by this limited detector.",
+          "atomic_proposition_as_proposed": "The implemented detector did not establish its REF-01 conjunction.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B009",
+          "candidate_id": "baseline",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "308c8517724527ca71f92648743391094b0565535b3d0b7c3dca0c5fd7755ba7",
+          "exact_statement": "[BASE-01] This preliminary assessment applies limited fixed rules to supplied records. It performs no independent verification and establishes no fraud or fund tracing. Unreported issues are not certified absent. Human review is required.",
+          "span_start": 38,
+          "span_end": 85,
+          "exact_span": "applies limited fixed rules to supplied records",
+          "atomic_proposition_as_proposed": "The baseline applies fixed rules to supplied records.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "CASE-G02",
+              "record_type": "case"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B010",
+          "candidate_id": "baseline",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "308c8517724527ca71f92648743391094b0565535b3d0b7c3dca0c5fd7755ba7",
+          "exact_statement": "[BASE-01] This preliminary assessment applies limited fixed rules to supplied records. It performs no independent verification and establishes no fraud or fund tracing. Unreported issues are not certified absent. Human review is required.",
+          "span_start": 87,
+          "span_end": 126,
+          "exact_span": "It performs no independent verification",
+          "atomic_proposition_as_proposed": "The baseline performs no independent verification.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "CASE-G02",
+              "record_type": "case"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B011",
+          "candidate_id": "baseline",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "308c8517724527ca71f92648743391094b0565535b3d0b7c3dca0c5fd7755ba7",
+          "exact_statement": "[BASE-01] This preliminary assessment applies limited fixed rules to supplied records. It performs no independent verification and establishes no fraud or fund tracing. Unreported issues are not certified absent. Human review is required.",
+          "span_start": 131,
+          "span_end": 151,
+          "exact_span": "establishes no fraud",
+          "atomic_proposition_as_proposed": "The baseline does not establish fraud.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "CASE-G02",
+              "record_type": "case"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B012",
+          "candidate_id": "baseline",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "308c8517724527ca71f92648743391094b0565535b3d0b7c3dca0c5fd7755ba7",
+          "exact_statement": "[BASE-01] This preliminary assessment applies limited fixed rules to supplied records. It performs no independent verification and establishes no fraud or fund tracing. Unreported issues are not certified absent. Human review is required.",
+          "span_start": 155,
+          "span_end": 167,
+          "exact_span": "fund tracing",
+          "atomic_proposition_as_proposed": "The baseline does not establish fund tracing.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "CASE-G02",
+              "record_type": "case"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B013",
+          "candidate_id": "baseline",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "308c8517724527ca71f92648743391094b0565535b3d0b7c3dca0c5fd7755ba7",
+          "exact_statement": "[BASE-01] This preliminary assessment applies limited fixed rules to supplied records. It performs no independent verification and establishes no fraud or fund tracing. Unreported issues are not certified absent. Human review is required.",
+          "span_start": 169,
+          "span_end": 212,
+          "exact_span": "Unreported issues are not certified absent.",
+          "atomic_proposition_as_proposed": "Unreported issues are not certified absent.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "CASE-G02",
+              "record_type": "case"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B014",
+          "candidate_id": "baseline",
+          "json_pointer": "/interpretations/0/statement",
+          "statement_sha256": "308c8517724527ca71f92648743391094b0565535b3d0b7c3dca0c5fd7755ba7",
+          "exact_statement": "[BASE-01] This preliminary assessment applies limited fixed rules to supplied records. It performs no independent verification and establishes no fraud or fund tracing. Unreported issues are not certified absent. Human review is required.",
+          "span_start": 213,
+          "span_end": 238,
+          "exact_span": "Human review is required.",
+          "atomic_proposition_as_proposed": "Human review is required, not claimed completed.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "CASE-G02",
+              "record_type": "case"
+            }
+          ],
+          "proposed_support_category_not_approved": null,
+          "proposed_citation_category_not_approved": "unassessable"
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    },
+    {
+      "id": "G02-C06",
+      "rank": 6,
+      "name": "Repeated question, scoped absence and type-vocabulary mismatch",
+      "rule_ids": [
+        "H-00",
+        "H-02",
+        "H-05"
+      ],
+      "authority": [
+        "complete_input_evidence_inventory",
+        "baseline_implementation_as_distinct_authority"
+      ],
+      "flaw": "Two identical text occurrences must both remain visible but must not double count one material gap; B017 equates invoice with supplier_invoice evidence type.",
+      "decision": "Link repeated issue occurrences and distinguish type-label recognition from general invoice absence.",
+      "tests": [
+        {
+          "id": "C06-A",
+          "change": "Remove one duplicated baseline text occurrence in a separate fixture.",
+          "fixed": "Remaining occurrence and all input records.",
+          "expected": "Material-gap coverage unchanged; occurrence count changes.",
+          "method": "deterministic_duplicates_plus_human"
+        },
+        {
+          "id": "C06-B",
+          "change": "Use invoice rather than supplier_invoice type for an otherwise identical hypothetical invoice record.",
+          "fixed": "Invoice content and transaction linkage.",
+          "expected": "Generic invoice presence must not be controlled solely by baseline recognition vocabulary.",
+          "method": "human_required"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "B015",
+          "candidate_id": "baseline",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 8,
+          "span_end": 70,
+          "exact_span": "What document supports the customer explanation for TX-G02-01?",
+          "atomic_proposition_as_proposed": "Requests support for the recorded customer explanation.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": null,
+          "proposed_citation_category_not_approved": null
+        },
+        {
+          "unit_id": "B016",
+          "candidate_id": "baseline",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 35,
+          "span_end": 69,
+          "exact_span": "customer explanation for TX-G02-01",
+          "atomic_proposition_as_proposed": "A supplied customer explanation is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "B017",
+          "candidate_id": "baseline",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 71,
+          "span_end": 88,
+          "exact_span": "No linked invoice",
+          "atomic_proposition_as_proposed": "No supplied supplier_invoice evidence is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B018",
+          "candidate_id": "baseline",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 90,
+          "span_end": 104,
+          "exact_span": "purchase order",
+          "atomic_proposition_as_proposed": "No supplied purchase_order evidence is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B019",
+          "candidate_id": "baseline",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 108,
+          "span_end": 123,
+          "exact_span": "dispatch record",
+          "atomic_proposition_as_proposed": "No supplied dispatch_record evidence is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B020",
+          "candidate_id": "baseline",
+          "json_pointer": "/unresolved_questions/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 137,
+          "span_end": 204,
+          "exact_span": "this limited inventory check does not establish the claimed purpose",
+          "atomic_proposition_as_proposed": "The limited inventory check does not establish actual purpose.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B021",
+          "candidate_id": "baseline",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 8,
+          "span_end": 70,
+          "exact_span": "What document supports the customer explanation for TX-G02-01?",
+          "atomic_proposition_as_proposed": "Requests support for the recorded customer explanation.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": null,
+          "proposed_citation_category_not_approved": null
+        },
+        {
+          "unit_id": "B022",
+          "candidate_id": "baseline",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 35,
+          "span_end": 69,
+          "exact_span": "customer explanation for TX-G02-01",
+          "atomic_proposition_as_proposed": "A supplied customer explanation is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "B023",
+          "candidate_id": "baseline",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 71,
+          "span_end": 88,
+          "exact_span": "No linked invoice",
+          "atomic_proposition_as_proposed": "No supplied supplier_invoice evidence is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B024",
+          "candidate_id": "baseline",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 90,
+          "span_end": 104,
+          "exact_span": "purchase order",
+          "atomic_proposition_as_proposed": "No supplied purchase_order evidence is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B025",
+          "candidate_id": "baseline",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 108,
+          "span_end": 123,
+          "exact_span": "dispatch record",
+          "atomic_proposition_as_proposed": "No supplied dispatch_record evidence is linked to TX-G02-01.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "unassessable"
+        },
+        {
+          "unit_id": "B026",
+          "candidate_id": "baseline",
+          "json_pointer": "/missing_information/0/statement",
+          "statement_sha256": "c2a25c2dbb2d0e7f397b22bd6707ea5c8e3f9b69972c12ceb50accff3b77128d",
+          "exact_statement": "[MI-02] What document supports the customer explanation for TX-G02-01? No linked invoice, purchase order or dispatch record is supplied; this limited inventory check does not establish the claimed purpose.",
+          "span_start": 137,
+          "span_end": 204,
+          "exact_span": "this limited inventory check does not establish the claimed purpose",
+          "atomic_proposition_as_proposed": "The limited inventory check does not establish actual purpose.",
+          "candidate_sha256": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+          "submitted_citations": [
+            {
+              "record_id": "TX-G02-01",
+              "record_type": "transaction"
+            },
+            {
+              "record_id": "EV-G02-02",
+              "record_type": "evidence"
+            }
+          ],
+          "proposed_support_category_not_approved": "unassessable",
+          "proposed_citation_category_not_approved": "unassessable"
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    },
+    {
+      "id": "G02-C07",
+      "rank": 7,
+      "name": "Counterparty relationship case-level coverage gap",
+      "rule_ids": [
+        "H-05",
+        "H-07"
+      ],
+      "authority": [
+        "input_derived_material_inventory",
+        "whole_candidate_outputs"
+      ],
+      "flaw": "No baseline unit for relationship omission; omission cannot be detected through only submitted claims.",
+      "decision": "Preserve proposed inventory M03 independently; only adjudicated materiality can ground an omission verdict.",
+      "tests": [
+        {
+          "id": "C07-A",
+          "change": "Add a relationship-clarification question to baseline in a separate fixture.",
+          "fixed": "Other baseline text and original input.",
+          "expected": "Question coverage improves; factual status reporting may remain omitted.",
+          "method": "human_case_coverage"
+        },
+        {
+          "id": "C07-B",
+          "change": "Add accurate detail solely about the unflagged credit.",
+          "fixed": "Relationship gap and all case evidence.",
+          "expected": "Unrelated verbosity must not satisfy the relationship-coverage item.",
+          "method": "human_case_coverage"
+        }
+      ],
+      "source_units": [
+        {
+          "unit_id": "H024",
+          "candidate_id": "hosted",
+          "json_pointer": "/factual_findings/4/statement",
+          "statement_sha256": "a4928c879cad67ce5faaa3886202444dab95eace4ac0e6e803d0295d31a7a16e",
+          "exact_statement": "CP-G02-01, displayed as Orchid Distribution LLC, has a recorded relationship status of unverified.",
+          "span_start": 11,
+          "span_end": 47,
+          "exact_span": "displayed as Orchid Distribution LLC",
+          "atomic_proposition_as_proposed": "CP-G02-01 has recorded display name Orchid Distribution LLC.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "CP-G02-01",
+              "record_type": "counterparty"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "H025",
+          "candidate_id": "hosted",
+          "json_pointer": "/factual_findings/4/statement",
+          "statement_sha256": "a4928c879cad67ce5faaa3886202444dab95eace4ac0e6e803d0295d31a7a16e",
+          "exact_statement": "CP-G02-01, displayed as Orchid Distribution LLC, has a recorded relationship status of unverified.",
+          "span_start": 55,
+          "span_end": 97,
+          "exact_span": "recorded relationship status of unverified",
+          "atomic_proposition_as_proposed": "CP-G02-01 has recorded relationship_status unverified.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [
+            {
+              "record_id": "CP-G02-01",
+              "record_type": "counterparty"
+            }
+          ],
+          "proposed_support_category_not_approved": "supported",
+          "proposed_citation_category_not_approved": "adequate"
+        },
+        {
+          "unit_id": "H042",
+          "candidate_id": "hosted",
+          "json_pointer": "/unresolved_questions/1/statement",
+          "statement_sha256": "fe5aa530d97fb1931317ac5839ae7b07801392a263187893a58f62b41f169965",
+          "exact_statement": "What is the business relationship between the customer and CP-G02-01, and who is the underlying payer?",
+          "span_start": 0,
+          "span_end": 102,
+          "exact_span": "What is the business relationship between the customer and CP-G02-01, and who is the underlying payer?",
+          "atomic_proposition_as_proposed": "Requests business relationship and underlying payer clarification; does not assert that the recorded counterparty is absent.",
+          "candidate_sha256": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+          "submitted_citations": [],
+          "proposed_support_category_not_approved": null,
+          "proposed_citation_category_not_approved": null
+        }
+      ],
+      "status": "not_reviewed",
+      "rule_decisions": null,
+      "meaning_preservation_review": null,
+      "candidate_comparison_outcome": null,
+      "human_review": null
+    }
+  ],
+  "packet_artifact_sha256": {
+    "baseline_audit.json": "6afa76eaf348cba137b89cd0a7328ed8a48f17eb4df27c98e533de586a45b6cf",
+    "baseline_candidate.json": "4ad63a4c19e2c71a3cf8dbcc7ddf14aee30cafc198a93b32bea9ea5356918b07",
+    "claim_annotations.draft.json": "034b7a42e3a3f0b7361c6415654c531710091a8432a6fd4246e0a56cc1ea4ff1",
+    "evaluation_manifest.draft.json": "e729b9190b8c26e574e17d48d30008d5baef69df00053acc29a05e020eb69512",
+    "hosted_audit.json": "917ceda5469eb4c4ee20cbf01342308ef99ad031d16888be869dc26ba9b45786",
+    "hosted_candidate.json": "c44c89e49dc82443b2a5af45e8b0bb249e35551298764706355061099c62e82b",
+    "packet_manifest.draft.json": "101f24461aa06f52ac6ff7335d89dab8c7a73403ccd40bf9a6eaf2ecf240e53f",
+    "reference_comparison.draft.json": "d49057a617d7fb11aae885c3b6bc2dfe25cd481f13d5257fea66d2042093e198",
+    "source_inventory.draft.json": "8ac79e804346b510a374259154eaa36d6880530b2ac3339354bfc6ad0ed40cd5"
+  }
+}
