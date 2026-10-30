@@ -1,6 +1,18 @@
 # Project Status — Source of Truth
 
-## Current checkpoint — Week 5, Checkpoint 1A: controlled experiment specification draft
+## Current checkpoint — Week 5, Checkpoint 1B: offline experiment preflight
+
+- Verified `research/week-5-offline-preflight` at `0b0227d0648fedb16ceefdaafa2ca1707c684311`, the PR #15 merge, with no starting tracked changes. All five selected input IDs and raw/canonical hashes, the development manifest and 11 implementation/dependency/policy source hashes match the [merged draft specification](docs/week-5/CONTROLLED_EXPERIMENT_SPEC_DRAFT.md). The existing handoff ZIP and frozen G02 artifacts are preserved.
+- Executed the existing baseline CLI once for each selected development case. Cases 0001 and 0002 returned `unable_to_recommend` with null action; 0003 returned preliminary `escalate`; 0004 and 0005 returned preliminary `investigate`. All five output contracts, contextual references and three-stage mechanical audits passed. The restricted amount checker compared 9 of 17 findings: 9 matched their records, 0 conflicted and 8 were outside its grammar. All nine broad semantic dimensions remain `not_evaluated`; these observations are not classification accuracy or semantic approval.
+- Executed five hosted configuration dry runs with no `--live`, request allowance 0 and live execution disabled. Each recorded zero attempts/allowance usage, null token usage and no candidate assessment. The proposed model/settings were inspected offline only; no live client was constructed, credentials retrieved or provider request made. Five prospective hosted assessment slots remain unexecuted and unauthorized.
+- Preserved original baseline files, audits, dry-run bundles, command receipts, input/source identities and a separate local-only preflight inventory (`outputs/experiments/W5-OFFLINE-PREFLIGHT-20261030T182524Z/inventory.json`) with local-only SHA-256 checksums (`outputs/experiments/W5-OFFLINE-PREFLIGHT-20261030T182524Z/SHA256SUMS.txt`). These files are Git-ignored under `outputs/experiments/`, not committed evidence or results of an approved hosted experiment.
+- Two existing client-construction/dry-run safety tests passed, and `pip check` found no broken requirements. The full unit suite was not rerun because implementation is unchanged; the earlier 438-test result remains historical. Existing interfaces support the small manual workflow; no runner or new experiment software was added. Complete experiment release, model/settings, request allowance, monetary authorization and execution roles remain pending. No staging, commit, push, merge or GitHub action occurred.
+
+The following sections preserve historical checkpoints and their then-current review states.
+
+---
+
+## Historical checkpoint — Week 5, Checkpoint 1A: controlled experiment specification draft
 
 - PR #14 is merged at `e5e73054cfef7488862a38b3b27ecaae28af37a6`. Prepared the [Week 5 controlled experiment specification](docs/week-5/CONTROLLED_EXPERIMENT_SPEC_DRAFT.md) on `research/week-5-experiment-readiness`; it is a draft for owner review, not execution authorization.
 - Proposed an operational smoke test using the first manifest occurrence of each of five development families: five named cases and ten planned baseline/hosted assessment slots. The 50 inputs and manifest hashes were freshly checked; the draft records raw/canonical identities for the selected five, source versions, unequal policy access, manual attempt accounting and separate mechanical/descriptive reporting. The subset covers five of 18 family/condition combinations and supports no accuracy or held-out claim.
