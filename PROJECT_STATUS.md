@@ -1,6 +1,17 @@
 # Project Status — Source of Truth
 
-## Current local checkpoint — G02 non-scoring adjudication reconciliation
+## Current checkpoint — Week 5, Checkpoint 1A: controlled experiment specification draft
+
+- PR #14 is merged at `e5e73054cfef7488862a38b3b27ecaae28af37a6`. Prepared the [Week 5 controlled experiment specification](docs/week-5/CONTROLLED_EXPERIMENT_SPEC_DRAFT.md) on `research/week-5-experiment-readiness`; it is a draft for owner review, not execution authorization.
+- Proposed an operational smoke test using the first manifest occurrence of each of five development families: five named cases and ten planned baseline/hosted assessment slots. The 50 inputs and manifest hashes were freshly checked; the draft records raw/canonical identities for the selected five, source versions, unequal policy access, manual attempt accounting and separate mechanical/descriptive reporting. The subset covers five of 18 family/condition combinations and supports no accuracy or held-out claim.
+- Existing CLIs and the auditor can support a small serial run after approval. No runner, preflight checker, prompt change or new experiment software was introduced. Model/settings, monetary authorization, execution roles and source release remain pending; zero new API calls are authorized. No new baseline assessments, dry-run bundles or hosted responses were generated.
+- Only documentation changed. Unit tests were not rerun; the earlier **438-test** result below remains historical evidence, not a fresh pass. Remote CI was not queried. Merged G02 adjudications, frozen artifacts, strict original-byte hash checks, optional-packet test limitations and report-path portability limitations are preserved.
+
+Earlier sections below are historical checkpoints; their then-current uncommitted states and pending decisions are retained as recorded.
+
+---
+
+## Historical checkpoint — G02 non-scoring adjudication reconciliation
 
 - Added the research-only [G02 reconciler](research/evaluation_calibration/g02_reconciliation.py) and [35 focused tests](tests/test_g02_reconciliation.py) on `research/week-4-evaluation-design` at `010147592fd4e308063121eb411f900c52e8808c`, preserving the already modified and untracked calibration work. The supplied [reporting specification](docs/phase-2/G02_Reconciliation_Audit_and_Reporting_Spec_v0.1_DRAFT.md) and [owner adjudication register](data/evaluation/G02_Adjudication_Register_v0.1_DRAFT.json) remain unchanged draft sources.
 - Reused the existing packet verifier, catalog bindings and mechanical auditor. The new layer validates all 75 original atomic identities, spans, offsets, pointers and citations, all 21 statement occurrences, source hashes and declared populations. It carries frozen draft annotations alongside recorded owner decisions without rewriting either. Original-file hashes and validated canonical-input hashes remain distinct; directory verification does not certify historical ZIP-container bytes.
@@ -10,7 +21,7 @@
 - Fresh local verification on Python 3.11.9: **438 tests passed**, including all 403 pre-existing tests and 35 new tests, with no skips. `pip check` found no broken requirements; new Python files passed syntax checks. The saved report matches the register and regenerates byte for byte. Unauthorized scoring requests are rejected; rates remain null and all nine broad auditor semantic dimensions remain `not_evaluated`.
 - The register's pending P01–P05 entries are reported verbatim; this implementation does not release the draft adjudication/report schema, approve denominator eligibility or certify source sufficiency. No numerical performance rates, rankings, held-out claims or independent AML expert validation are produced. Remote CI remains unverified. Existing application behavior, frozen artifacts, policy and dependencies are unchanged; no network/model requests or credential access occurred. Work remains unstaged and uncommitted for project-owner review.
 
-Earlier checkpoints below preserve their historical findings and pending decisions; this reconciliation checkpoint is the current local status.
+Earlier checkpoints below preserve their historical findings and pending decisions; current Week 5 status is recorded above.
 
 ---
 
