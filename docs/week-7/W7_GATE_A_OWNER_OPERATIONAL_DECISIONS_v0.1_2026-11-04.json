@@ -1,0 +1,211 @@
+{
+  "approval_provenance": {
+    "actor_id": "project_owner",
+    "approval_date": "2026-11-04",
+    "approved_scope": "Record A01-A06 and prepare planning/control package only; no held-out cases.",
+    "creation_time_is_not_approval_time": true,
+    "evidence_class": "explicit_owner_engineering_conversation_instruction_not_externally_authenticated_signature",
+    "exact_approval_time": null,
+    "source": "Current owner instruction WEEK 7 - GATE A OPERATIONAL DECISION RECORD AND AUTHORIZATION PREPARATION."
+  },
+  "approved_decisions": [
+    {
+      "clauses": [
+        "Project owner is accountable for source preparation, eligibility decisions and authorization.",
+        "Codex may assist with bounded preparation, mechanical validation and evidence-based ancestry recommendations when separately instructed.",
+        "ChatGPT may assist with explicitly owner-shared material.",
+        "Actual author/reviewer overlap and assistance must be documented.",
+        "No independence or AML expert-validation claim is authorized."
+      ],
+      "id": "A01",
+      "title": "Roles and responsibilities"
+    },
+    {
+      "clauses": [
+        "Allowed: approved contracts, generic record conventions, authorized fictional policy and general AML knowledge.",
+        "Historical development cases, outputs, references and generator recipes may be used for disclosed ancestry comparison, not as undisclosed construction templates.",
+        "Source-only construction precedes ancestry review wherever operationally feasible.",
+        "No candidate model assessment, API request or feedback-driven case tuning during Gate A.",
+        "Record actual tool/context exposure, including unknowns."
+      ],
+      "id": "A02",
+      "title": "Permitted construction context"
+    },
+    {
+      "clauses": [
+        "Every proposal receives mechanism-level ancestry screening.",
+        "Record material parent links, sibling/related-group relationships, exposure and uncertainty.",
+        "Cosmetic changes do not establish novelty.",
+        "Preserve the three existing eligibility dispositions.",
+        "Gate A screening remains provisional; F3 controls actual population release.",
+        "Quarantine unresolved material ancestry rather than silently treating it as unseen."
+      ],
+      "id": "A03",
+      "title": "Novelty and ancestry"
+    },
+    {
+      "clauses": [
+        "Maximum six candidate proposals for the initial bounded pilot.",
+        "Maximum intended coverage of three substantively distinct mechanism families.",
+        "Working hours remain open and flexible.",
+        "Progress is based on verified checkpoints, not calendar deadlines.",
+        "Every proposal or variant consumes a slot, including rejected and quarantined proposals.",
+        "No automatic replacement or replenishment.",
+        "Stop early if review capacity, source quality or credible coverage is insufficient.",
+        "Any expansion requires a separately approved prospective amendment.",
+        "The ceiling is an engineering pilot limit, not a statistical power claim."
+      ],
+      "id": "A04",
+      "title": "Capacity and intake"
+    },
+    {
+      "clauses": [
+        "Prefer the complete eligible roster from the bounded candidate intake.",
+        "Preserve all rejected, quarantined and eligible proposals in the intake history.",
+        "No outcome-dependent selection.",
+        "If sampling becomes necessary, obtain separate prospective approval for the selection unit, related-group handling and algorithm before using it.",
+        "Final eligibility and population release remain controlled by F3."
+      ],
+      "id": "A05",
+      "title": "Selection"
+    },
+    {
+      "clauses": [
+        "Use compact versioned JSON evidence records with clear rationale where appropriate.",
+        "Record authorization, intake IDs, source identities, mechanism/ancestry, exposures, decisions, incidents and preservation.",
+        "Distinguish exact raw bytes from validated canonical representations.",
+        "Proposed project-local destination convention: outputs/evaluation/week-7/W7-HELDOUT-20261104-001/.",
+        "Preserve originals through non-overwriting versions or append-only evidence.",
+        "New Gate A records are not assumed to be covered by the existing F1 preservation archives.",
+        "Keep Gate A construction, F2 source/reference review, F3 population release and assessment execution as separate permissions."
+      ],
+      "id": "A06",
+      "title": "Evidence and sequence"
+    }
+  ],
+  "approved_pilot_limits": {
+    "automatic_replenishment": false,
+    "every_proposal_or_variant_consumes_slot": true,
+    "expansion_requires_separate_prospective_owner_amendment": true,
+    "maximum_candidate_proposals": 6,
+    "maximum_intended_distinct_mechanism_families": 3,
+    "minimum_family_or_case_target": null,
+    "progress_basis": "verified_checkpoints_not_calendar_deadlines",
+    "rejected_and_quarantined_proposals_consume_slots": true,
+    "statistical_power_or_representativeness_claim": false,
+    "working_hours": "open_and_flexible"
+  },
+  "authority_and_compatibility": {
+    "earlier_draft_statuses": "Historical pending/zero-rights wording in earlier documents is not rewritten. Later approved directions and exact F1 completion govern their respective scope.",
+    "exposure": "Retain owner-confirmed v0.2 and C01-C04 uncertainties; no complete context history, independent authorship, blinding or expert status is inferred.",
+    "planning_versus_permission": "Approval of these six operational decisions does not grant Gate A authoring, F2/F3 release or execution.",
+    "policy_and_measurement": "Keep the as-configured comparison, unequal REF-01 policy access and original-candidate measurement boundary unchanged.",
+    "sampling": "A05 does not waive PF04/OP06 prospective authoring/selection safeguards. No sampler, seed or algorithm is approved; an after-the-fact sampling fallback is not implicitly authorized."
+  },
+  "authorization_state": "GATE_A_CASE_AUTHORING_NOT_YET_AUTHORIZED",
+  "created_at_utc": "2026-11-04T17:59:29.728606+00:00",
+  "document_binding_rule": "This decision record binds earlier governing/F1 evidence only. The later draft operational specification may bind this record digest; no reciprocal or self digest is embedded.",
+  "evaluation_boundaries": {
+    "P01": "approved_unchanged",
+    "P02": "approved_unchanged",
+    "P03": "unresolved_numerical_semantic_scoring_disabled",
+    "P04": "formal_release_separately_controlled",
+    "P05": "independence_and_expert_claims_not_established",
+    "W7_5B_01_through_05": "preserved",
+    "W7_OP01_through_OP08": "preserved",
+    "W7_PF01_through_PF14": "preserved",
+    "W7_S01_through_S07": "preserved",
+    "broad_semantic_evaluation": "not_evaluated"
+  },
+  "f1_bindings": {
+    "completion": {
+      "bytes": 52240,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/f1/W7_F1_RELEASE_COMPLETION_v0.1.json",
+      "sha256": "7e429cc5bf42d75de90a388b584a293b59be768d60661a0b888b0eceb0ec223c"
+    },
+    "completion_status": "F1_RELEASE_COMPLETED_AND_VERIFIED_WITH_DOCUMENTED_LIMITATIONS",
+    "custody": {
+      "bytes": 62877,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/f1/W7_F1_CUSTODY_EXPOSURE_RECORD_v0.2_PRE_RELEASE.json",
+      "sha256": "89167d4e99a145e2128c59ff79d3e93713ed12380f3781870be43714ba5ab730"
+    },
+    "manifest": {
+      "bytes": 58472,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/f1/W7_F1_DEVELOPMENT_SYSTEM_MANIFEST_v0.2_PRE_RELEASE.json",
+      "sha256": "cc0d75da7745cee713b2387924f48eba68897f6aef93562c38888cc36cb6c985"
+    },
+    "reopened": false
+  },
+  "governing_evidence": [
+    {
+      "bytes": 9054,
+      "digest_basis": "exact_file_bytes",
+      "path": "ROADMAP.md",
+      "sha256": "23c2dfa9e68f10adc1b11b81a769df1ca2cae2fcd57302fc3a99ac5fa2992192"
+    },
+    {
+      "bytes": 102859,
+      "digest_basis": "exact_file_bytes",
+      "path": "PROJECT_STATUS.md",
+      "sha256": "acd0b7967648e903f55c2f1d63084b6ecc81ad390136c4811b108261f9375f1a"
+    },
+    {
+      "bytes": 30514,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_STUDY_DESIGN_OWNER_DECISIONS_v0.1_2026-11-02.md",
+      "sha256": "671969b7e0e344abfaa9e7ecb59ffaf469b600e1da938ad3f9910fa867ba7222"
+    },
+    {
+      "bytes": 56731,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_POPULATION_ELIGIBILITY_AND_FREEZE_PLAN_v0.1_DRAFT.md",
+      "sha256": "f0169c1223a38d132220b61a9ce8aee02dc1fa3b8856c5e79a7e36dcb40223bf"
+    },
+    {
+      "bytes": 16685,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_CHECKPOINT_3C_OWNER_DECISIONS_v0.1_DRAFT.md",
+      "sha256": "f54d6ca8177abff37ae2c44498a18b1e79a7a998c7e7d3068602e330472b186d"
+    },
+    {
+      "bytes": 18030,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_CHECKPOINT_4C_OWNER_OPERATIONAL_DECISIONS_v0.1_DRAFT.md",
+      "sha256": "acfdbb4786cf89ad429398ccfc8b2125e0d799f91f5fe92c47c7eb75161eddab"
+    },
+    {
+      "bytes": 10324,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_CHECKPOINT_5B_F1_OPERATIONAL_READINESS_OWNER_DECISIONS_v0.1_DRAFT.md",
+      "sha256": "313735dbac9faa083f6a6874ca78ef95d4a02f0243d4a6c96759e13403b6930d"
+    }
+  ],
+  "milestone": "Week 7 - Controlled Held-Out Evaluation",
+  "permission_ledger": {
+    "F2_source_reference_adjudication_authorized": false,
+    "F3_population_release_authorized": false,
+    "baseline_execution_allowance": 0,
+    "candidate_proposals_created_by_this_record": 0,
+    "external_publication_authorized": false,
+    "gate_a_case_authoring_authorized": false,
+    "hosted_request_allowance": 0,
+    "new_backup_or_cloud_operation_authorized": false,
+    "numerical_semantic_scoring_authorized": false,
+    "planning_control_record_preparation_authorized": true,
+    "retry_allowance": 0,
+    "spending_allowance_usd": 0,
+    "week_7_complete": false
+  },
+  "prepared_by": "Codex under the owner-approved bounded decision-record and authorization-preparation task.",
+  "preservation_boundary": "This new record is local planning/control evidence outside existing F1 archive inventories. No new preservation copy, archive or upload is performed or implied.",
+  "record_format_version": "0.1",
+  "record_id": "W7_GATE_A_OWNER_OPERATIONAL_DECISIONS_v0.1_2026-11-04",
+  "record_type": "gate_a_owner_operational_decisions",
+  "record_version": "0.1",
+  "serialization": "UTF-8 without BOM; sorted keys; two-space indentation; finite JSON; LF plus terminal newline.",
+  "status": "OWNER_APPROVED_DECISIONS_RECORDED_NOT_CASE_AUTHORING_AUTHORIZATION",
+  "study_id": "W7-HELDOUT-20261104-001"
+}
