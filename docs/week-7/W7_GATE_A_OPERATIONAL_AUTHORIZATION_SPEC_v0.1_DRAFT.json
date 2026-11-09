@@ -1,0 +1,864 @@
+{
+  "approval_boundary": "A01-A06 are approved as recorded. Exact operational fields/layout and clarification defaults below are draft implementation choices for owner review; no case authoring or later-stage permission is granted.",
+  "authorization_state": "GATE_A_CASE_AUTHORING_NOT_YET_AUTHORIZED",
+  "construction_context": {
+    "allowed": [
+      "Approved contracts",
+      "Generic record conventions",
+      "Authorized fictional policy",
+      "General AML knowledge, which cannot establish absent source facts or invent policy requirements"
+    ],
+    "assessment_boundary": "No baseline/hosted candidate assessment, API request, feedback-driven tuning, reference-answer generation or numerical semantic scoring during Gate A.",
+    "generation_export": "Export only approved investigation input records. Keep ancestry, scenario/selection metadata, references, adjudications and accounting separate from producer input; generic source check conclusions are attributed records, not independent verification.",
+    "historical_material": "Development cases, outputs, references and generator recipes may be consulted for disclosed ancestry comparison, not as undisclosed construction templates.",
+    "ordering": "Source-only construction precedes ancestry comparison where operationally feasible. Record reasons for a different sequence and actual influences; never claim prior knowledge was erased or assistants blinded.",
+    "tools": "Manual versioned JSON and unchanged existing input validation/canonical hashing; actual Codex/ChatGPT assistance only as expressly instructed. No new software/helper implementation or external provider request is included."
+  },
+  "counting_and_capacity_rules": [
+    "Six distinct candidate proposals/variants maximum; every proposed variant spends its own slot even if later rejected, quarantined or withdrawn. No automatic replacement/replenishment.",
+    "Maximum intended coverage is three substantively distinct mechanism families, not a minimum or a claim that novelty is established. Record provisional family/group labels and substantive reasoning.",
+    "Do not proceed to a proposed fourth intended family or seventh proposal; hold for a separately approved prospective amendment.",
+    "Metadata versions and corrections to the same proposal do not by themselves create a new case. A genuinely different investigation/variant needs a new consumed slot. Ambiguity is held for owner disposition before further work.",
+    "Grouping, merging, withdrawal or relabelling never resets consumed slots or erases earlier intake/family history.",
+    "Hours stay flexible. Advance at verified checkpoints; stop early if review capacity, source traceability/quality or credible mechanism coverage is insufficient.",
+    "Valid missing/null/conflicting records are not inherently poor quality or exclusion grounds. Do not seek a desired action, balanced action labels or favorable system outcomes.",
+    "These are engineering pilot ceilings, not statistical power, independence, significance or representative-sampling claims."
+  ],
+  "created_at_utc": "2026-11-04T18:04:50.983485+00:00",
+  "destinations_and_preservation": {
+    "approval_needed": "Owner review of exact layout, record versions and preservation procedure before operational use; actual write/copy/archive/upload permissions must be explicit.",
+    "current_operations": "No population directory, archive, copy, backup or cloud operation is created/performed by this package.",
+    "git_ignore_observed": "Existing outputs/ rule; ignored is not independently preserved.",
+    "procedure": "Keep original source/control versions and exact inventories; separately identify local/off-device preservation scope, access, method/cadence and recovery verification under approved operations. Do not assume F1 archives cover new population records.",
+    "proposed_project_local_root": "outputs/evaluation/week-7/W7-HELDOUT-20261104-001/",
+    "proposed_relative_layout": {
+      "control/ancestry/": "Dossiers and parent/related-group links.",
+      "control/authorizations/": "Separate actual gate-specific permissions.",
+      "control/exposure/": "Actual author/assistant context and influence.",
+      "control/incidents/": "Holds and owner amendments.",
+      "control/intake/": "Versioned intake identities and counting history.",
+      "control/preservation/": "Approved scope/inventory and actual verification receipts.",
+      "references/": "Reserved for separately authorized F2; no references created or authorized here.",
+      "sources/": "Actual raw case inputs only after authoring release."
+    },
+    "root_created_by_this_task": false,
+    "root_exists_at_preparation": false
+  },
+  "evaluation_boundaries": {
+    "P01": "approved_unchanged",
+    "P02": "approved_unchanged",
+    "P03": "unresolved_numerical_semantic_scoring_disabled",
+    "P04": "formal_release_separately_controlled",
+    "P05": "independence_and_expert_claims_not_established",
+    "W7_5B_01_through_05": "preserved",
+    "W7_OP01_through_OP08": "preserved",
+    "W7_PF01_through_PF14": "preserved",
+    "W7_S01_through_S07": "preserved",
+    "broad_semantic_evaluation": "not_evaluated"
+  },
+  "f1_bindings": {
+    "completion": {
+      "bytes": 52240,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/f1/W7_F1_RELEASE_COMPLETION_v0.1.json",
+      "sha256": "7e429cc5bf42d75de90a388b584a293b59be768d60661a0b888b0eceb0ec223c"
+    },
+    "completion_status": "F1_RELEASE_COMPLETED_AND_VERIFIED_WITH_DOCUMENTED_LIMITATIONS",
+    "custody": {
+      "bytes": 62877,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/f1/W7_F1_CUSTODY_EXPOSURE_RECORD_v0.2_PRE_RELEASE.json",
+      "sha256": "89167d4e99a145e2128c59ff79d3e93713ed12380f3781870be43714ba5ab730"
+    },
+    "manifest": {
+      "bytes": 58472,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/f1/W7_F1_DEVELOPMENT_SYSTEM_MANIFEST_v0.2_PRE_RELEASE.json",
+      "sha256": "cc0d75da7745cee713b2387924f48eba68897f6aef93562c38888cc36cb6c985"
+    },
+    "reopened": false
+  },
+  "first_case_workflow_after_separate_authorization": [
+    {
+      "action": "Verify actual owner Gate A permission binds this reviewed package, completed F1 and approved role/tool/scope limits; check the next slot and intended family coverage before writing.",
+      "step": 1
+    },
+    {
+      "action": "Create the first actual intake identity and consume a non-reusable proposal slot; record actual author/assistant roles and known construction context. This is the first future case-related action, not an action performed now.",
+      "step": 2
+    },
+    {
+      "action": "Prepare a bounded source-only draft in the approved synthetic envelope. Preserve missing/conflicting supplied information and do not create expected AML labels, candidate assessments or reference answers.",
+      "step": 3
+    },
+    {
+      "action": "Record exact source bytes; run only separately permitted existing input-contract validation and canonical identity checks; preserve diagnostics and version any correction.",
+      "step": 4
+    },
+    {
+      "action": "Complete mechanism-level ancestry/exposure comparison using disclosed historical material, record parent/sibling groups and uncertainty; explain any infeasible source-first ordering.",
+      "step": 5
+    },
+    {
+      "action": "Record provisional screening and owner handling of contested/quarantined items. Rejected/quarantined proposals keep their spent slots; no F3 eligibility claim is made.",
+      "step": 6
+    },
+    {
+      "action": "Preserve source/control versions under the specifically approved procedure and verify the checkpoint. Stop early on insufficient capacity/quality/coverage; no assessment runs.",
+      "step": 7
+    },
+    {
+      "action": "Seek separate F2 source/reference review/freeze and later separate F3 roster/partition release; do not infer either from Gate A construction permission.",
+      "step": 8
+    }
+  ],
+  "gate_permissions": {
+    "F2_source_reference_review_authorized": false,
+    "F3_population_release_authorized": false,
+    "backup_archive_or_cloud_operation_authorized": false,
+    "baseline_execution_allowance": 0,
+    "current_state": "GATE_A_CASE_AUTHORING_NOT_YET_AUTHORIZED",
+    "formal_report_or_publication_authorized": false,
+    "gate_a_case_authoring_authorized": false,
+    "hosted_request_allowance": 0,
+    "numerical_semantic_scoring_authorized": false,
+    "planning_control_records_only": true,
+    "retry_allowance": 0,
+    "spending_allowance_usd": 0
+  },
+  "governing_evidence": [
+    {
+      "bytes": 9054,
+      "digest_basis": "exact_file_bytes",
+      "path": "ROADMAP.md",
+      "sha256": "23c2dfa9e68f10adc1b11b81a769df1ca2cae2fcd57302fc3a99ac5fa2992192"
+    },
+    {
+      "bytes": 102859,
+      "digest_basis": "exact_file_bytes",
+      "path": "PROJECT_STATUS.md",
+      "sha256": "acd0b7967648e903f55c2f1d63084b6ecc81ad390136c4811b108261f9375f1a"
+    },
+    {
+      "bytes": 30514,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_STUDY_DESIGN_OWNER_DECISIONS_v0.1_2026-11-02.md",
+      "sha256": "671969b7e0e344abfaa9e7ecb59ffaf469b600e1da938ad3f9910fa867ba7222"
+    },
+    {
+      "bytes": 56731,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_POPULATION_ELIGIBILITY_AND_FREEZE_PLAN_v0.1_DRAFT.md",
+      "sha256": "f0169c1223a38d132220b61a9ce8aee02dc1fa3b8856c5e79a7e36dcb40223bf"
+    },
+    {
+      "bytes": 16685,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_CHECKPOINT_3C_OWNER_DECISIONS_v0.1_DRAFT.md",
+      "sha256": "f54d6ca8177abff37ae2c44498a18b1e79a7a998c7e7d3068602e330472b186d"
+    },
+    {
+      "bytes": 18030,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_CHECKPOINT_4C_OWNER_OPERATIONAL_DECISIONS_v0.1_DRAFT.md",
+      "sha256": "acfdbb4786cf89ad429398ccfc8b2125e0d799f91f5fe92c47c7eb75161eddab"
+    },
+    {
+      "bytes": 10324,
+      "digest_basis": "exact_file_bytes",
+      "path": "docs/week-7/WEEK_7_CHECKPOINT_5B_F1_OPERATIONAL_READINESS_OWNER_DECISIONS_v0.1_DRAFT.md",
+      "sha256": "313735dbac9faa083f6a6874ca78ef95d4a02f0243d4a6c96759e13403b6930d"
+    }
+  ],
+  "identity_and_versioning": {
+    "canonical_validated_input": "Use the frozen existing validated InvestigationInput representation and recorded canonicalization basis, labelled separately from raw bytes: model_dump(mode=json), sorted-key compact JSON, ensure_ascii=false, allow_nan=false, UTF-8 without terminal newline.",
+    "hash_binding": "The decision record binds earlier F1/governance; this specification binds the decision/F1. A future actual authorization binds these exact reviewed bytes, never a reciprocal/self digest.",
+    "identifiers": "Allocate actual proposal/case/alert/family/group IDs only under authoring permission; unique within the study and compatible with unchanged contracts. No actual ID or reserved case instance is allocated here.",
+    "metadata_separation": "Control/ancestry/exposure/reference records remain separate from input, without changing InvestigationInput or hosted instructions.",
+    "raw_bytes": "Hash exact supplied source file bytes before validation; record original byte size and SHA-256. Never normalize/reconstruct originals.",
+    "validation": "Unchanged input contract and cross-record checks only. Passing establishes structural/reference validity, not authenticity, semantic support, eligibility or correct AML disposition.",
+    "versions": "Exclusive non-overwriting files or append-only events; each actual artifact retains bytes/hash/version and supersession links. No silent normalization, deletion or retroactive approval."
+  },
+  "initial_pilot_limits": {
+    "automatic_replenishment": false,
+    "every_proposal_or_variant_consumes_slot": true,
+    "expansion_requires_separate_prospective_owner_amendment": true,
+    "maximum_candidate_proposals": 6,
+    "maximum_intended_distinct_mechanism_families": 3,
+    "minimum_family_or_case_target": null,
+    "progress_basis": "verified_checkpoints_not_calendar_deadlines",
+    "rejected_and_quarantined_proposals_consume_slots": true,
+    "statistical_power_or_representativeness_claim": false,
+    "working_hours": "open_and_flexible"
+  },
+  "limitations": [
+    "Owner-led author/reviewer overlap and prior development exposure remain; no independent authorship, blinding, AML expertise or statistical significance is claimed.",
+    "F1 is complete within approved scope, not a held-out-family eligibility certificate.",
+    "P01/P02 remain settled. P03 scoring is unresolved/disabled; P04/P05 and later execution/report release remain separately controlled.",
+    "These are compact planning/control definitions, not application implementation, executed tests, an automatic novelty checker or an actual populated study ledger."
+  ],
+  "novelty_screen": {
+    "checks": [
+      "Evidence-dependency/source-authority mechanism and scope",
+      "Known development/recipe/example ancestors and construction aids",
+      "Generic versus material versus unresolved parent links",
+      "Sibling/counterfactual and material connected-group relationships",
+      "Cosmetic-change check and substantive distinction rationale",
+      "Known author/output influence and unresolved exposure",
+      "Reviewer reasoning, competing interpretations and preserved disposition"
+    ],
+    "existing_dispositions": [
+      "eligible under specified controls",
+      "ineligible for the claimed unseen family",
+      "quarantined pending evidence"
+    ],
+    "release_boundary": "Gate A screening is provisional. F3 alone controls actual population/partition release after applicable F2 evidence; no family or case is approved by this specification.",
+    "unknown_material_ancestry": "Quarantine affected eligibility; no silent unseen-family claim.",
+    "unreviewed_state": "Explicit null/pending, not eligible."
+  },
+  "owner_decision_reference": {
+    "bytes": 10766,
+    "digest_basis": "exact_file_bytes",
+    "path": "docs/week-7/W7_GATE_A_OWNER_OPERATIONAL_DECISIONS_v0.1_2026-11-04.json",
+    "sha256": "f6fd3d275b545313d4e02d4c31fd80377a662a14c4108fc9504f2cb640caef46"
+  },
+  "prepared_by": "Codex under bounded planning/control record preparation authorization.",
+  "record_format_version": "0.1_DRAFT",
+  "record_formats": {
+    "common_fields": {
+      "actor_ids": {
+        "description": "Actual preparers/reviewers/assistants; role overlap and unknown identities explicit.",
+        "required": true,
+        "type": "array[string]"
+      },
+      "authorization_reference": {
+        "description": "Actual applicable owner authorization and its scope, not this prospective specification alone. For the future_gate_a_authorization record itself this field is null, with actual owner approval provenance recorded inline; every other operational record must bind the exact released authorization file identity.",
+        "required": true,
+        "type": [
+          "file_identity",
+          "null"
+        ]
+      },
+      "created_at_utc": {
+        "description": "Actual record-creation timestamp, distinct from approval/event time.",
+        "required": true,
+        "type": "string"
+      },
+      "format_version": {
+        "description": "Version of the owner-reviewed control format used.",
+        "required": true,
+        "type": "string"
+      },
+      "rationale": {
+        "description": "Scope-bounded reason; hidden author intent is not evidence.",
+        "required": true,
+        "type": "string"
+      },
+      "record_id": {
+        "description": "Unique immutable control-record identity, assigned only when the actual authorized record is created.",
+        "required": true,
+        "type": "string"
+      },
+      "record_type": {
+        "description": "One documented record type below.",
+        "required": true,
+        "type": "string"
+      },
+      "record_version": {
+        "description": "Version of actual record; new version on correction, originals retained.",
+        "required": true,
+        "type": "string"
+      },
+      "study_id": {
+        "const": "W7-HELDOUT-20261104-001",
+        "description": "Exact approved study identifier.",
+        "required": true,
+        "type": "string"
+      },
+      "supersedes": {
+        "description": "Previous exact record identity, or null for first actual version.",
+        "required": true,
+        "type": [
+          "file_identity",
+          "null"
+        ]
+      }
+    },
+    "file_identity_fields": {
+      "bytes": {
+        "description": "Exact file size.",
+        "minimum": 0,
+        "required": true,
+        "type": "integer"
+      },
+      "digest_basis": {
+        "description": "Actual representation hashed; do not conflate checkout, Git blob, canonical JSON, original file or exact candidate text.",
+        "required": true,
+        "type": "string"
+      },
+      "path": {
+        "description": "Exact repository-relative source/control path; absolute destination locations explicitly labelled where appropriate.",
+        "required": true,
+        "type": "string"
+      },
+      "sha256": {
+        "description": "Lowercase SHA-256 of exact bytes.",
+        "pattern": "^[0-9a-f]{64}$",
+        "required": true,
+        "type": "string"
+      }
+    },
+    "formats": {
+      "ancestry_dossier": {
+        "description": "Mechanism-level screen and rationale, separate from the supplied investigation and later F3 release.",
+        "fields": {
+          "competing_interpretations_and_uncertainty": {
+            "description": "Disagreements/unknowns preserved; no invented consensus.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "disposition_scope": {
+            "const": "provisional_gate_a_not_f3_release",
+            "description": "Gate A provisional screen only; no actual population release.",
+            "required": true,
+            "type": "string"
+          },
+          "eligibility_disposition": {
+            "description": "Null while unreviewed; exact existing disposition if a provisional screen is recorded.",
+            "enum": [
+              null,
+              "eligible under specified controls",
+              "ineligible for the claimed unseen family",
+              "quarantined pending evidence"
+            ],
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "historical_comparison_references": {
+            "description": "Actual golden/development/recipe/output material consulted for ancestry comparison, exact context when available.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "known_author_influences": {
+            "description": "Actual prior development/output knowledge and uncertainty; source-only construction does not erase prior exposure.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "material_parent_edges": {
+            "description": "Each known parent artifact/version, relationship, supplied reference/hash, material/generic/unresolved classification, rationale and uncertainty.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "mechanism_and_source_roles": {
+            "description": "What evidence dependencies and authority/uncertainty structure are being tested; not an AML reference answer.",
+            "required": true,
+            "type": "string"
+          },
+          "proposal_ids": {
+            "description": "Actual linked proposals, all variants and rejected/quarantined versions retained.",
+            "required": true,
+            "type": "array[string]"
+          },
+          "provisional_family_and_group_ids": {
+            "description": "Actual proposed family/connected-group identities with unresolved links explicitly marked.",
+            "required": true,
+            "type": "object"
+          },
+          "reviewer_roles_and_evidence": {
+            "description": "Actual AI recommendations versus owner decisions, role overlap and supplied references.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "sibling_and_counterfactual_edges": {
+            "description": "Actual related variants and dependent source changes; retain material connected groups.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "substantive_difference_and_cosmetic_checks": {
+            "description": "Explain evidence-mechanism distinction; amounts/names/seeds/paraphrases alone do not establish novelty.",
+            "required": true,
+            "type": "string"
+          }
+        },
+        "required_fields": [
+          "proposal_ids",
+          "provisional_family_and_group_ids",
+          "mechanism_and_source_roles",
+          "material_parent_edges",
+          "historical_comparison_references",
+          "sibling_and_counterfactual_edges",
+          "substantive_difference_and_cosmetic_checks",
+          "known_author_influences",
+          "eligibility_disposition",
+          "disposition_scope",
+          "reviewer_roles_and_evidence",
+          "competing_interpretations_and_uncertainty"
+        ],
+        "rules": [
+          "Generic contract, identifier/serialization conventions and authorized fictional policy sharing alone are not material ancestry.",
+          "Reused answer-bearing recipes and combinations retain material parents. Cosmetic novelty and family labels do not erase ancestry.",
+          "Unresolved material ancestry/exposure is quarantined, not silently treated as unseen.",
+          "Source-author intent is not a source fact; no correctness label or disposition is manufactured.",
+          "Only separately authorized F3 releases actual eligible population/group/partition identities."
+        ]
+      },
+      "candidate_intake": {
+        "description": "One actual proposal/variant intake identity per consumed pilot slot after separate authoring authorization.",
+        "fields": {
+          "ancestry_dossier_reference": {
+            "description": "Actual dossier or explicit pending state.",
+            "required": true,
+            "type": [
+              "file_identity",
+              "null"
+            ]
+          },
+          "decision_and_revision_history": {
+            "description": "Actual event, actor, state, reason and version references; rejected/quarantined records retained.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "exposure_assistance_references": {
+            "description": "Actual context/tool/exposure history, including uncertainties.",
+            "required": true,
+            "type": "array[file_identity]"
+          },
+          "mechanism_scope": {
+            "description": "Source/evidence dependency and uncertainty problem; no desired action label.",
+            "required": true,
+            "type": "string"
+          },
+          "parent_proposal_id": {
+            "description": "Actual variant/counterfactual parent when present.",
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "proposal_id": {
+            "description": "Unique study-scoped proposal identity assigned only after authoring release; no real proposal ID is allocated in this specification.",
+            "required": true,
+            "type": "string"
+          },
+          "proposal_kind": {
+            "description": "Primary proposal or distinct variant.",
+            "enum": [
+              "proposal",
+              "variant"
+            ],
+            "required": true,
+            "type": "string"
+          },
+          "provisional_family_id": {
+            "description": "Actual proposed mechanism-family linkage; uncertainty explicit, not proof of novelty.",
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "related_group_id": {
+            "description": "Actual material connected/sibling group when established.",
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "slot_index": {
+            "description": "Unique non-reusable proposal slot within the initial pilot.",
+            "maximum": 6,
+            "minimum": 1,
+            "required": true,
+            "type": "integer"
+          },
+          "source_author_ids": {
+            "description": "Actual source preparers/assistants, not an invented independent author.",
+            "required": true,
+            "type": "array[string]"
+          },
+          "source_identity_records": {
+            "description": "Empty until actual source files exist. Thereafter record case/alert IDs, raw identities, validated-canonical identities and validation evidence separately.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "source_packet_state": {
+            "description": "Actual work state, independent from eligibility.",
+            "enum": [
+              "proposed",
+              "preparing",
+              "screened_provisionally",
+              "rejected",
+              "quarantined",
+              "withdrawn"
+            ],
+            "required": true,
+            "type": "string"
+          }
+        },
+        "required_fields": [
+          "proposal_id",
+          "slot_index",
+          "proposal_kind",
+          "parent_proposal_id",
+          "source_author_ids",
+          "provisional_family_id",
+          "related_group_id",
+          "source_packet_state",
+          "mechanism_scope",
+          "ancestry_dossier_reference",
+          "exposure_assistance_references",
+          "source_identity_records",
+          "decision_and_revision_history"
+        ],
+        "rules": [
+          "Every distinct proposal/variant consumes one slot immediately, regardless of subsequent rejection, quarantine or withdrawal.",
+          "Count distinct proposal identities, not number of versioned metadata files. Never reuse a slot or reset counters after relabelling/group merging.",
+          "Correction-versus-variant ambiguity requires owner disposition before proceeding, not a convenient relabel to evade the cap.",
+          "No Gate A state releases a case as an eligible held-out population member."
+        ]
+      },
+      "exposure_assistance": {
+        "description": "Actual material access/influence and AI assistance, not a claim of complete logs or independent review.",
+        "fields": {
+          "actor_role_and_access": {
+            "description": "Actual actor, task/role, permission and stage; unknowns explicit.",
+            "required": true,
+            "type": "object"
+          },
+          "affected_artifact_or_proposal_references": {
+            "description": "Actual versioned materials, digest basis and original-file/excerpt/summary distinction.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "eligibility_impact_and_owner_disposition": {
+            "description": "Actual recommendation/owner decision and incident reference when relevant.",
+            "required": true,
+            "type": "object"
+          },
+          "event_time_basis": {
+            "description": "Observed, owner-reported, documentary, inferred or unavailable; identify evidence.",
+            "required": true,
+            "type": "string"
+          },
+          "event_time_utc": {
+            "description": "Actual observed/supplied event time or null; record-creation time is not a substitute.",
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence_and_limitations": {
+            "description": "Support for the category and known context omissions.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "exposure_category": {
+            "description": "Use scoped exposure categories, not a universal clean label.",
+            "enum": [
+              "no observed unauthorized exposure within an audited boundary",
+              "confirmed contamination",
+              "uncertain exposure",
+              "unaudited context"
+            ],
+            "required": true,
+            "type": "string"
+          },
+          "supplied_context_and_purpose": {
+            "description": "What was actually supplied/consulted and whether it influenced construction or review.",
+            "required": true,
+            "type": "string"
+          },
+          "tools_versions_and_channels": {
+            "description": "Actual Codex/ChatGPT/manual tools or helpers; unknown version/context retained.",
+            "required": true,
+            "type": "array[object]"
+          }
+        },
+        "required_fields": [
+          "event_time_utc",
+          "event_time_basis",
+          "actor_role_and_access",
+          "affected_artifact_or_proposal_references",
+          "tools_versions_and_channels",
+          "supplied_context_and_purpose",
+          "exposure_category",
+          "evidence_and_limitations",
+          "eligibility_impact_and_owner_disposition"
+        ],
+        "rules": [
+          "Retain F1 exposure declaration and C01-C04 unknowns; do not reconstruct missing personal knowledge.",
+          "Repository access does not prove personal reading; AI assistance is not independent human/AML validation.",
+          "A no-observed-exposure statement requires a named audited boundary and evidence. Unknown/unaudited history is not clean.",
+          "Keep reference answers, adjudication/scoring metadata and evaluation feedback outside assessment-generation input."
+        ]
+      },
+      "future_gate_a_authorization": {
+        "description": "Definition of the separate actual authoring release still required; no such release is created by this package.",
+        "fields": {
+          "actual_role_and_access_assignments": {
+            "description": "Owner accountability plus actual separately instructed preparation/review assistance and permitted context.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "approval_date": {
+            "description": "Actual approved date; do not infer from creation timestamp.",
+            "required": true,
+            "type": "string"
+          },
+          "approval_source": {
+            "description": "Actual owner instruction and evidence classification; no unauthenticated signature claims.",
+            "required": true,
+            "type": "string"
+          },
+          "approved_scope_and_destinations": {
+            "description": "Bounded source-only manual preparation, exact record layout and permitted tool/context actions.",
+            "required": true,
+            "type": "object"
+          },
+          "decision_record_reference": {
+            "description": "Exact A01-A06 owner-decision bytes.",
+            "required": true,
+            "type": "file_identity"
+          },
+          "downstream_permissions": {
+            "description": "F2/F3 release, assessments, spending and scoring remain separately denied.",
+            "required": true,
+            "type": "object"
+          },
+          "exact_approval_time": {
+            "description": "Actual time if supplied, otherwise explicit null.",
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "f1_bindings": {
+            "description": "Exact approved manifest/completion identities, matching this study.",
+            "required": true,
+            "type": "object"
+          },
+          "gate_a_case_authoring_authorized": {
+            "description": "Must be an explicit owner-granted permission in the actual release, never inferred from decision approval.",
+            "required": true,
+            "type": "boolean"
+          },
+          "operational_specification_reference": {
+            "description": "Exact owner-reviewed version of this draft/successor; no self hash in this specification.",
+            "required": true,
+            "type": "file_identity"
+          },
+          "owner_actor_id": {
+            "description": "Actual owner authority; stable identity does not assert expert or independent status.",
+            "required": true,
+            "type": "string"
+          },
+          "pilot_limits": {
+            "description": "Six proposal slots maximum, intended mechanism-family coverage maximum three; no replenishment or unapproved expansion.",
+            "required": true,
+            "type": "object"
+          },
+          "preservation_procedure_and_permissions": {
+            "description": "Specify version retention, inventory/checksum, access and recovery method; state separately whether actual copy/archive/cloud operations are allowed.",
+            "required": true,
+            "type": "object"
+          },
+          "stop_conditions": {
+            "description": "Actual release stop conditions and amendment rules.",
+            "required": true,
+            "type": "array[string]"
+          }
+        },
+        "required_fields": [
+          "owner_actor_id",
+          "approval_date",
+          "exact_approval_time",
+          "approval_source",
+          "f1_bindings",
+          "decision_record_reference",
+          "operational_specification_reference",
+          "actual_role_and_access_assignments",
+          "approved_scope_and_destinations",
+          "pilot_limits",
+          "preservation_procedure_and_permissions",
+          "gate_a_case_authoring_authorized",
+          "downstream_permissions",
+          "stop_conditions"
+        ],
+        "rules": [
+          "Bind exact completed F1, decision and operational-specification digests before authoring.",
+          "Use null for this authorization record's common authorization_reference and record owner approval source/date/time inline; do not require a self digest or a separate prerequisite authorization artifact. Subsequent operational records bind this released record by exact digest.",
+          "No candidate creation or validation run is authorized merely by this field definition."
+        ]
+      },
+      "incident": {
+        "description": "Append-only hold, amendment and preserved evidence when a scope/identity/capacity/exposure problem arises.",
+        "fields": {
+          "affected_proposals_groups_and_files": {
+            "description": "Actual affected units/versions including all known related groups.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "capacity_slot_impact": {
+            "description": "No deleted/recycled slot or automatic replacement.",
+            "required": true,
+            "type": "string"
+          },
+          "expected_and_observed_evidence": {
+            "description": "Exact recorded observations, identities/pointers and uncertainty; preserve originals.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "immediate_hold": {
+            "description": "Hold the affected activity or claim on a material issue.",
+            "required": true,
+            "type": "boolean"
+          },
+          "observed_at_utc": {
+            "description": "Actual observation time, or explicit unknown with provenance.",
+            "required": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner_disposition_and_authorization": {
+            "description": "Actual owner amendment/decision reference; null while pending.",
+            "required": true,
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "superseding_record_references": {
+            "description": "Non-overwriting versions; no silent correction of approved evidence.",
+            "required": true,
+            "type": "array[file_identity]"
+          },
+          "trigger_and_phase": {
+            "description": "Actual mismatch, exposure, contamination, capacity/source-quality or permission issue and affected stage.",
+            "required": true,
+            "type": "string"
+          }
+        },
+        "required_fields": [
+          "observed_at_utc",
+          "trigger_and_phase",
+          "affected_proposals_groups_and_files",
+          "expected_and_observed_evidence",
+          "immediate_hold",
+          "capacity_slot_impact",
+          "owner_disposition_and_authorization",
+          "superseding_record_references"
+        ],
+        "rules": [
+          "Incidents apply whenever relevant; no new formal gate is introduced.",
+          "Do not overwrite/delete original source or failed/rejected/quarantined evidence.",
+          "Unapproved expansion, sampling, component change or feedback-driven selection must hold for a prospective owner decision."
+        ]
+      },
+      "preservation_evidence": {
+        "description": "Definition for later specifically authorized preservation; not a receipt for an operation now performed.",
+        "fields": {
+          "actual_operation_observations": {
+            "description": "Actor/time, independent local checks versus owner reports, copy/recovery outcomes and failures.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "approved_scope_and_method_reference": {
+            "description": "Actual permission for the specific preservation scope/method.",
+            "required": true,
+            "type": "file_identity"
+          },
+          "destinations_access_and_failure_boundary": {
+            "description": "Actual locations, control/access evidence and limitations; different paths do not prove physical independence.",
+            "required": true,
+            "type": "array[object]"
+          },
+          "file_inventory": {
+            "description": "Exact file membership and bytes/digests; no self or future receipt digest.",
+            "required": true,
+            "type": "array[file_identity]"
+          },
+          "inventory_fingerprint": {
+            "description": "Algorithm and deterministic serialization basis, distinct from inventory-file digest.",
+            "required": true,
+            "type": "object"
+          },
+          "remote_properties_and_unknowns": {
+            "description": "Remote permissions/retention/provenance unknown unless evidenced; no password values.",
+            "required": true,
+            "type": "object"
+          },
+          "verification_status": {
+            "description": "Actual pass/hold/not-performed with reasons; not inferred from a planned method.",
+            "required": true,
+            "type": "string"
+          }
+        },
+        "required_fields": [
+          "approved_scope_and_method_reference",
+          "file_inventory",
+          "inventory_fingerprint",
+          "destinations_access_and_failure_boundary",
+          "actual_operation_observations",
+          "remote_properties_and_unknowns",
+          "verification_status"
+        ],
+        "rules": [
+          "Existing F1 archives do not automatically cover new Gate A records or sources.",
+          "Use separately approved non-overwriting scope/method, exact-byte copy/read-back and recovery checks; no copying, encryption or cloud action is authorized by this specification.",
+          "Append later verification records without circular digest dependencies or rewriting originals."
+        ]
+      }
+    },
+    "instances_or_case_examples_included": false,
+    "kind": "documented_JSON_structure_not_a_new_application_schema_or_implemented_validator",
+    "version": "0.1_DRAFT"
+  },
+  "record_id": "W7_GATE_A_OPERATIONAL_AUTHORIZATION_SPEC_v0.1_DRAFT",
+  "record_type": "prospective_gate_a_operational_authorization_specification",
+  "record_version": "0.1",
+  "remaining_before_actual_authoring": [
+    "Owner review of this exact draft specification and documented formats; approved A01-A06 decisions are not reopened.",
+    "Separate explicit owner Gate A release and first preparation instruction identifying actual assistance/access and bounded scope.",
+    "Approve operational layout/preservation details and confirm safe non-overwriting paths before using the proposed root; no new backup permission is inferred."
+  ],
+  "roles": {
+    "ChatGPT": "Assistance only with material explicitly shared by owner; record actual context and influence.",
+    "Codex": "Bounded assistance, mechanical input validation/hashing and ancestry recommendations only when separately instructed; not independent human review.",
+    "all_actors": "Actual authors, reviewers, overlap and assistance recorded per task/proposal. No fixed hours or independent/AML-expert actor is invented.",
+    "project_owner": "Accountable for preparation, eligibility decisions and authorization. Actual F2/F3 decisions require their separate permissions."
+  },
+  "scope": "Manual, source-only synthetic case preparation within existing InvestigationInput and fictional-policy scope after a separate Gate A release. No new generator, runner, service, scoring logic or frozen contract change.",
+  "selection_rules": {
+    "final_roster": "F3 binds reviewed family/related-group and F2 source/reference identities before assessment generation; no actual roster/partition is selected here.",
+    "if_sampling_becomes_necessary": "HOLD. Obtain explicit prospective owner approval for selection unit, related-group handling and algorithm before use. If sources already exist, the amendment must explicitly address chronology and claim limitations; do not describe an after-the-fact rule as originally predeclared.",
+    "initial_preference": "Complete eligible roster from bounded candidate intake, subject to actual F2/F3 decisions and capacity.",
+    "outcome_dependent_selection": false,
+    "preserve_history": "Keep rejected, quarantined, withdrawn, eligible and superseded proposals with reasons and related-group links.",
+    "prospective_sampling_boundary": "A05 is read with PF04/OP06: selection strategy, authoring constraints and any sampling procedure must be prospective before source authoring. No automatic later sampling fallback is granted.",
+    "sampling_currently_authorized": false,
+    "sampling_unit_or_algorithm": null
+  },
+  "serialization": "UTF-8 without BOM; sorted keys; two-space indentation; finite JSON; LF plus terminal newline.",
+  "status": "DRAFT_FOR_OWNER_REVIEW_NOT_AN_AUTHORIZATION_EVENT",
+  "stop_conditions": [
+    "Missing/ambiguous actual authoring approval or package/F1 identity mismatch.",
+    "Unexpected frozen component, prompt, schema, model/configuration or runtime change; no silent repair or fallback.",
+    "A new proposal/variant or intended family would exceed the six/three ceilings; no replacement/replenishment.",
+    "Insufficient review capacity, traceable source quality or credible coverage at a verified checkpoint; no calendar-pressure override.",
+    "Unresolved material ancestry, contamination, exposure or related-group conflict: hold/quarantine affected eligibility, preserve evidence and seek owner disposition.",
+    "Unauthorized tools/context, candidate assessment/API use, reference generation, feedback-driven tuning or outcome-dependent selection.",
+    "Sampling needed without a separately approved prospective rule/amendment.",
+    "Invalid/untraceable source or ambiguous revision-versus-variant counting: version diagnostics and hold affected work; no source/frozen-system alteration outside scope.",
+    "Overwrite, missing required provenance, failed preservation/integrity check or operation outside approved permissions."
+  ],
+  "study_id": "W7-HELDOUT-20261104-001"
+}
